@@ -73,24 +73,10 @@ piglit_display(void)
 void
 piglit_init(int argc, char **argv)
 {
-	const char *glsl_version_string;
-	float glsl_version;
 	GLint ok;
 	GLuint prog;
 
-
-	piglit_require_GLSL();
-
-	glsl_version_string = (char *)
-		glGetString(GL_SHADING_LANGUAGE_VERSION);
-	glsl_version = (glsl_version_string == NULL)
-		? 0.0 : strtod(glsl_version_string, NULL);
-	if (glsl_version <= 1.299999) {
-		printf("Test requires GLSL version >= 1.3.  "
-		       "Actual version is %.1f.\n",
-		       glsl_version);
-		piglit_report_result(PIGLIT_SKIP);
-	}
+	piglit_require_GLSL_version(130);
 
 	prog = piglit_build_simple_program_unlinked(vert, frag);
 	glLinkProgram(prog);
