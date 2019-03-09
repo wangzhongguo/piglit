@@ -482,7 +482,6 @@ piglit_init(int argc, char **argv)
 
 	piglit_require_extension("GL_ARB_texture_multisample");
 	piglit_require_extension("GL_ARB_sample_shading");
-	piglit_require_GLSL_version(130);
 
 	partition_check_supported =
 		piglit_is_extension_supported("GL_ARB_gpu_shader5") &&

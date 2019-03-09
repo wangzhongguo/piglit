@@ -93,8 +93,6 @@ piglit_init(int argc, char **argv)
 		 use_cull, cull_distances);
 
 	piglit_require_gl_version(30);
-	piglit_require_GLSL();
-	piglit_require_GLSL_version(130);
 	piglit_require_extension("GL_ARB_cull_distance");
 
 	vs = piglit_compile_shader_text_nothrow(GL_VERTEX_SHADER, vert, true);

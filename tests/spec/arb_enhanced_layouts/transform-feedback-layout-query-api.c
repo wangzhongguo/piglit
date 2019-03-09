@@ -113,7 +113,6 @@ piglit_init(int argc, char **argv)
 	bool varying_idx[2] = { false, false };
 	GLuint prog;
 
-	piglit_require_GLSL_version(150);
 	piglit_require_extension("GL_ARB_transform_feedback3");
 	piglit_require_extension("GL_ARB_enhanced_layouts");
 

@@ -158,7 +158,6 @@ piglit_display(void)
 void
 piglit_init(int argc, char **argv)
 {
-	piglit_require_GLSL();
 	piglit_require_GLSL_version(130);
 	prog = piglit_build_simple_program(vert, frag);
 	glUseProgram(prog);

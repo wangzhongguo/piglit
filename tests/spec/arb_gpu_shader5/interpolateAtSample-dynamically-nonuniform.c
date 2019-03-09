@@ -234,7 +234,6 @@ piglit_init(int argc, char**argv)
 	int x, y, i, j;
 
 	piglit_require_extension("GL_ARB_gpu_shader5");
-	piglit_require_GLSL_version(150);
 
 	create_framebuffer(N_SAMPLES,
 			   &ms_fbo, &ms_rb);

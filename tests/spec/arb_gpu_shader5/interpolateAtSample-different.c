@@ -168,7 +168,6 @@ piglit_init(int argc, char**argv)
 	}
 
 	piglit_require_extension("GL_ARB_gpu_shader5");
-	piglit_require_GLSL_version(150);
 
 	if (use_uniform) {
 		programs[0] = create_program(-1);

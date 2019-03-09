@@ -155,8 +155,6 @@ void piglit_init(int argc, char **argv)
 	GLuint fs_prog_match[4];
 	GLuint fs_prog_unmatch[4];
 
-	piglit_require_vertex_shader();
-	piglit_require_fragment_shader();
 	piglit_require_GLSL_version(130); /* Support layout index on output color */
 	piglit_require_extension("GL_ARB_separate_shader_objects");
 	piglit_require_extension("GL_ARB_explicit_attrib_location");

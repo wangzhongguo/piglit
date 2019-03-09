@@ -84,8 +84,6 @@ piglit_init(int argc, char **argv)
 	piglit_require_extension("GL_ARB_gpu_shader_fp64");
 	piglit_require_extension("GL_ARB_shading_language_420pack");
 
-	piglit_require_GLSL_version(150);
-
 	prog = piglit_build_simple_program(vs_pass_thru_text, fs_source);
 
 	glUseProgram(prog);

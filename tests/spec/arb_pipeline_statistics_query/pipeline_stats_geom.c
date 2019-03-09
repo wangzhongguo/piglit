@@ -121,9 +121,6 @@ piglit_init(int argc, char *argv[])
 {
 	GLuint vs, gs, prog;
 
-	piglit_require_gl_version(15);
-	piglit_require_GLSL();
-
 	do_query_init(queries, ARRAY_SIZE(queries));
 
 	prog = glCreateProgram();

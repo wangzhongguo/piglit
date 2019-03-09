@@ -116,7 +116,6 @@ piglit_init(int argc, char **argv)
 	int i;
 
 	/* Set up test */
-	piglit_require_GLSL_version(150);
 	piglit_require_transform_feedback();
 	piglit_require_extension("GL_ARB_gpu_shader_fp64");
 

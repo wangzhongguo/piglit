@@ -129,7 +129,6 @@ piglit_init(int argc, char **argv)
 	GLuint xfb[2];
 	GLuint vao;
 
-	piglit_require_GLSL_version(150);
 	piglit_require_extension("GL_ARB_transform_feedback3");
 	piglit_require_extension("GL_ARB_enhanced_layouts");
 

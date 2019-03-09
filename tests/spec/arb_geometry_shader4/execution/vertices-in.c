@@ -78,7 +78,6 @@ piglit_init(int argc, char **argv)
 	bool pass = true;
 
 	/* Requirements */
-	piglit_require_GLSL_version(130);
 	piglit_require_extension("GL_ARB_geometry_shader4");
 	piglit_require_extension("GL_EXT_transform_feedback");
 

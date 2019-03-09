@@ -122,7 +122,6 @@ piglit_init(int argc, char **argv)
 	GLint num_vertex_ssbo;
 
 	piglit_require_extension("GL_ARB_shader_storage_buffer_object");
-        piglit_require_GLSL_version(130);
 
 	glGetIntegerv(GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS, &num_vertex_ssbo);
 	if (num_vertex_ssbo < 1)

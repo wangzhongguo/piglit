@@ -386,7 +386,6 @@ piglit_display(void)
 void
 piglit_init(int argc, char **argv)
 {
-	piglit_require_GLSL();
 	piglit_require_gl_version(20);
 
 	printf("Window quadrants show:\n");

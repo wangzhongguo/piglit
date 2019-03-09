@@ -622,7 +622,6 @@ piglit_init(int argc, char **argv)
 
 	piglit_require_extension("GL_ARB_texture_float");
 	piglit_require_extension("GL_ARB_texture_multisample");
-	piglit_require_GLSL_version(130);
 
 	if (maxSize == -1) {
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize);

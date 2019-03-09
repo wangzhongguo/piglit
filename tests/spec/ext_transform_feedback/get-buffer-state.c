@@ -205,7 +205,6 @@ piglit_init(int argc, char **argv)
 		print_usage_and_exit(argv[0]);
 	test = find_matching_test(argv[0], argv[1]);
 
-	piglit_require_GLSL();
 	piglit_require_transform_feedback();
 
 	piglit_report_result(do_test(test) ? PIGLIT_PASS : PIGLIT_FAIL);

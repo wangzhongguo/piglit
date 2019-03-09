@@ -118,8 +118,6 @@ piglit_init(int argc, char **argv)
 	GLint active_attribs = 0;
 	GLint max_length = 0;
 
-	piglit_require_GLSL_version(150);
-
 	prog = piglit_build_simple_program(vs_source, fs_source);
 	glUseProgram(prog);
 

@@ -166,8 +166,6 @@ void
 piglit_init(int argc, char **argv)
 {
 	piglit_require_gl_version(30);
-	piglit_require_GLSL();
-	piglit_require_GLSL_version(130);
 	piglit_require_extension("GL_ARB_cull_distance");
 	prog = piglit_build_simple_program(vert, frag);
 	glUseProgram(prog);

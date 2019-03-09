@@ -503,8 +503,6 @@ piglit_init(int argc, char **argv)
 	} else
 		print_usage_and_exit(argv[0]);
 
-	piglit_require_gl_version(20);
-	piglit_require_GLSL_version(glsl_version);
 	if (test_type->base == BASE_TYPE_DOUBLE)
 		piglit_require_extension("GL_ARB_gpu_shader_fp64");
 	glGetIntegerv(GL_MAX_VARYING_FLOATS, &max_varying_floats);

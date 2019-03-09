@@ -198,6 +198,4 @@ piglit_display(void)
 void
 piglit_init(int argc, char **argv)
 {
-        piglit_require_gl_version(20);
-        piglit_require_GLSL_version(110);
 }

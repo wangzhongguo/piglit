@@ -38,7 +38,7 @@ const int pattern_width = 258; const int pattern_height = 258;
 
 PIGLIT_GL_TEST_CONFIG_BEGIN
 
-	config.supports_gl_compat_version = 20;
+	config.supports_gl_compat_version = 21;
 
 	config.window_width = pattern_width * 2;
 	config.window_height = pattern_height;
@@ -180,7 +180,6 @@ blit_scaled_linear_glsl(const Fbo *src_fbo, GLint samples)
 void
 piglit_init(int argc, char **argv)
 {
-	piglit_require_gl_version(21);
 	piglit_require_extension("GL_ARB_vertex_array_object");
 	piglit_require_GLSL_version(130);
 

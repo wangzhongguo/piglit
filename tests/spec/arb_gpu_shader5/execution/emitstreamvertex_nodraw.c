@@ -136,7 +136,6 @@ piglit_init(int argc, char **argv)
 	GLint vs, fs, gs;
 	GLuint VertexArrayID;
 
-	piglit_require_GLSL_version(150);
 	piglit_require_extension("GL_ARB_gpu_shader5");
 
 	glGetIntegerv(GL_MAX_VERTEX_STREAMS, &max_streams);

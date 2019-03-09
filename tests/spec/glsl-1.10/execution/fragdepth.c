@@ -105,8 +105,6 @@ piglit_display(void)
 void
 piglit_init(int argc, char **argv)
 {
-	piglit_require_GLSL();
-
 	program = piglit_build_simple_program(vs_text, fs_text);
 
 	glClearColor(0.25f, 0.25f, 0.25f, 1.0f);

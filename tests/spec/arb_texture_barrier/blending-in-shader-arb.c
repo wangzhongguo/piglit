@@ -529,9 +529,7 @@ parse_args(int argc, char **argv)
 void
 piglit_init(int argc, char **argv)
 {
-        piglit_require_extension("GL_ARB_framebuffer_object");
         piglit_require_extension("GL_ARB_texture_barrier");
-        piglit_require_GLSL_version(130);
 
         parse_args(argc, argv);
 

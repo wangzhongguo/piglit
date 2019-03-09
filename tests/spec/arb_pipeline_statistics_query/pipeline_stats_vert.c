@@ -105,9 +105,6 @@ piglit_init(int argc, char *argv[])
 {
 	GLuint vs, prog;
 
-	piglit_require_gl_version(11);
-	piglit_require_GLSL();
-
 #ifndef DISPLAY
 	glEnable(GL_RASTERIZER_DISCARD);
 #endif

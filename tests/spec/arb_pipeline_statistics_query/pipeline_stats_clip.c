@@ -105,9 +105,6 @@ piglit_init(int argc, char *argv[])
 
 	piglit_ortho_projection(piglit_width, piglit_height, GL_FALSE);
 
-	piglit_require_gl_version(11);
-	piglit_require_GLSL();
-
 	do_query_init(queries, ARRAY_SIZE(queries));
 
 	vs = piglit_compile_shader_text(GL_VERTEX_SHADER, vs_src);

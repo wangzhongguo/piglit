@@ -380,7 +380,6 @@ piglit_init(int argc, char **argv)
         static GLuint tex;
 
 	piglit_require_gl_version(30);
-	piglit_require_GLSL_version(130);
 
 	program = piglit_build_simple_program(NULL, FragShaderText);
 	glUseProgram(program);

@@ -190,7 +190,6 @@ piglit_init(int argc, char **argv)
 
 	piglit_require_extension("GL_ARB_vertex_attrib_64bit");
 	piglit_require_extension("GL_ARB_gpu_shader_fp64");
-	piglit_require_GLSL_version(150);
 	compile_shader();
 	if (!piglit_check_gl_error(GL_NO_ERROR))
 		piglit_report_result(PIGLIT_FAIL);
