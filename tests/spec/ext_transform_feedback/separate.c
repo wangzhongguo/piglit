@@ -66,7 +66,7 @@ void piglit_init(int argc, char **argv)
 
 	/* Check the driver. */
 	piglit_require_gl_version(15);
-	piglit_require_GLSL();
+	piglit_require_vertex_shader();
 	piglit_require_transform_feedback();
 
 	glGetIntegerv(GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS_EXT, &maxattrs);

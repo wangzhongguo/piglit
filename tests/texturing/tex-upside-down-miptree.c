@@ -163,7 +163,7 @@ piglit_init(int argc, char **argv)
 		piglit_report_result(PIGLIT_SKIP);
 	}
 
-	piglit_require_GLSL_version(110);
+	piglit_require_fragment_shader();
 	prog = piglit_build_simple_program(NULL, fragShaderText);
 	setup_texture();
 }

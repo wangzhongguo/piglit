@@ -212,7 +212,7 @@ piglit_display(void)
 	}
 
 	if (Tests & TEST_GLSL) {
-		piglit_require_GLSL_version(110);
+		piglit_require_fragment_shader();
 		pass = test_glsl() && pass;
 	}
 

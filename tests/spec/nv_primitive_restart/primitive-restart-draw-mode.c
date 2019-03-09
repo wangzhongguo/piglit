@@ -181,7 +181,7 @@ piglit_init(int argc, char **argv)
 	if (test == NULL)
 		print_usage_and_exit(argv[0]);
 
-	piglit_require_GLSL_version(110);
+	piglit_require_vertex_shader();
 	if (!piglit_is_extension_supported("GL_NV_primitive_restart") &&
 	    piglit_get_gl_version() < 31) {
 		printf("GL_NV_primitive_restart or GL 3.1 required\n");

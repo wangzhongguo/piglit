@@ -65,7 +65,9 @@ piglit_init(int argc, char **argv)
 
 	expect = (int) strtol(argv[2], NULL, 0);
 
-	piglit_require_GLSL();
+	piglit_require_vertex_shader();
+	piglit_require_fragment_shader();
+
 	vs = piglit_compile_shader(GL_VERTEX_SHADER, argv[1]);
 	fs = piglit_compile_shader(GL_FRAGMENT_SHADER,
 				   "shaders/glsl-color.frag");

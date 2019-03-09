@@ -738,12 +738,13 @@ piglit_init(int argc, char **argv)
 	for (i = 1; i < argc; i++) {
 		if (!strcmp(argv[i], "array")) {
 			piglit_require_extension("GL_EXT_texture_array");
-			piglit_require_GLSL();
+			piglit_require_fragment_shader();
 			test_targets = array_targets;
 		} else if (!strcmp(argv[i], "cube_map_array")) {
 			piglit_require_extension
 				("GL_ARB_texture_cube_map_array");
-			piglit_require_GLSL();
+			piglit_require_vertex_shader();
+			piglit_require_fragment_shader();
 			test_targets = cube_map_array_targets;
 		} else if (!strcmp(argv[i], "pbo")) {
 			piglit_require_extension("GL_ARB_pixel_buffer_object");

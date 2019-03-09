@@ -1492,10 +1492,14 @@ test_ready:
 
 	/* Check the driver. */
 	piglit_require_gl_version(15);
-	piglit_require_GLSL();
 	piglit_require_transform_feedback();
 	if (!test->is_floating_point)
 		piglit_require_GLSL_version(130);
+	else {
+		piglit_require_vertex_shader();
+		piglit_require_fragment_shader();
+	}
+
 	if (test->is_transform_feedback3)
 		piglit_require_extension("GL_ARB_transform_feedback3");
 

@@ -64,8 +64,8 @@ void piglit_init(int argc, char **argv)
 	GLuint generated;
 	GLuint written;
 
+	piglit_require_vertex_shader();
 	piglit_require_transform_feedback();
-	piglit_require_GLSL();
 	piglit_require_extension("GL_ARB_transform_feedback2");
 
 	/* This is all just the boot-strap work for the test.

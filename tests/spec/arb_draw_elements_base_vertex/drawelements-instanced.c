@@ -86,7 +86,8 @@ piglit_init(int argc, char **argv)
 		}
 	}
 
-	piglit_require_GLSL();
+	piglit_require_vertex_shader();
+	piglit_require_fragment_shader();
 	if (!user_va)
 		piglit_require_extension("GL_ARB_vertex_buffer_object");
 	piglit_require_extension("GL_ARB_draw_instanced");

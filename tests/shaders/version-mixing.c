@@ -307,7 +307,10 @@ piglit_init(int argc, char **argv)
 	bool pass = true;
 	int max_glsl_version;
 
-	piglit_require_GLSL();
+	piglit_require_vertex_shader();
+	if (test_type != test_type_intrastage)
+		piglit_require_fragment_shader();
+
 	max_glsl_version = get_max_glsl_version();
 
 	for (i = 0; i < ARRAY_SIZE(all_glsl_versions); i++) {

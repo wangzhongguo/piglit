@@ -142,7 +142,7 @@ piglit_init(int argc, char **argv)
 	int num_varyings;
 	int mode;
 
-	piglit_require_GLSL();
+	piglit_require_vertex_shader();
 	piglit_require_transform_feedback();
 
 	for (mode = 0; mode < ARRAY_SIZE(modes); mode++) {

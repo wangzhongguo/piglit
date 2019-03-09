@@ -81,7 +81,7 @@ void piglit_init(int argc, char **argv)
 	GLenum status;
 	int i, dim;
 
-	piglit_require_GLSL();
+	piglit_require_fragment_shader();
 	piglit_require_extension("GL_EXT_framebuffer_object");
 	piglit_require_extension("GL_ARB_shader_texture_lod");
 

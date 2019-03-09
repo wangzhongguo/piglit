@@ -86,7 +86,7 @@ void piglit_init(int argc, char **argv)
 
 	piglit_require_extension("GL_EXT_framebuffer_object");
 	piglit_require_extension("GL_NV_texture_barrier");
-        piglit_require_GLSL();
+	piglit_require_fragment_shader();
 
 	srand(0);
 	for (i = 0; i < 16 * 16 * 4; ++i) {

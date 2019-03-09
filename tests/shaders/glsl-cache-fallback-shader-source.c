@@ -173,7 +173,8 @@ piglit_display(void)
 void
 piglit_init(int argc, char **argv)
 {
-	piglit_require_GLSL();
+	piglit_require_vertex_shader();
+	piglit_require_fragment_shader();
 
 	vs = glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
 	fs = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);

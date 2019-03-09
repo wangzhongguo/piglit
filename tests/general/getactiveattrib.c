@@ -543,6 +543,8 @@ void piglit_init(int argc, char **argv)
 		usage_and_fail(argv[0]);
 	}
 
+	piglit_require_vertex_shader();
+
 	for (i = 1; i < argc; i++) {
 		if (strcmp("110", argv[i]) == 0) {
 			pass = do_test(glsl110_tests,

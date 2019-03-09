@@ -208,8 +208,11 @@ piglit_init(int argc, char **argv)
 	else
 		print_usage_and_exit(argv[0]);
 
-	piglit_require_GLSL();
-	piglit_require_transform_feedback();
+	if (!use_gs) {
+		piglit_require_vertex_shader();
+		piglit_require_fragment_shader();
+		piglit_require_transform_feedback();
+	}
 
 	if (use_gs) {
 		vs = piglit_compile_shader_text(GL_VERTEX_SHADER, vstext_gs);

@@ -448,7 +448,7 @@ piglit_init(int argc, char **argv)
 		print_usage_and_exit(argv[0]);
 	test = find_matching_test(argv[0], argv[1]);
 
-	piglit_require_GLSL();
+	piglit_require_vertex_shader();
 	piglit_require_transform_feedback();
 	if (test->bind_mode == OFFSET) {
 		/* BindBufferOffset only exists in the EXT specification */

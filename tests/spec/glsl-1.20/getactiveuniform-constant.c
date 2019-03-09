@@ -99,6 +99,8 @@ piglit_init(int argc, char **argv)
 	int i;
 
 	piglit_require_GLSL_version(120);
+	piglit_require_vertex_shader();
+	piglit_require_fragment_shader();
 
 	vs = piglit_compile_shader_text(GL_VERTEX_SHADER, vs_code);
 	fs = piglit_compile_shader_text(GL_FRAGMENT_SHADER, fs_code);

@@ -304,8 +304,9 @@ piglit_init(int argc, char **argv)
 		piglit_require_extension("GL_ARB_vertex_program");
 		setup_arb_program();
 	} else if (use_glsl) {
-		piglit_require_GLSL();
 		piglit_require_GLSL_version(use_glsl_130 ? 130 : 110);
+		piglit_require_vertex_shader();
+		piglit_require_fragment_shader();
 		setup_glsl_programs();
 	}
 }

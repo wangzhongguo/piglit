@@ -478,6 +478,7 @@ piglit_init(int argc, char **argv)
 	test_to_run = find_matching_test(argv[0], argv[1]);
 
 	/* Set up test */
+	piglit_require_vertex_shader();
 	piglit_require_GLSL_version(test_to_run->version);
 	piglit_require_transform_feedback();
 	vs = piglit_compile_shader_text(GL_VERTEX_SHADER, test_to_run->vs);

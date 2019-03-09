@@ -181,6 +181,9 @@ make_program(void)
 	if (glsl_version > 0) {
 		p += sprintf(p, "#version %i\n", glsl_version);
 		piglit_require_GLSL_version(glsl_version);
+	} else {
+		piglit_require_vertex_shader();
+		piglit_require_fragment_shader();
 	}
 
 	if (sample_function->extension) {

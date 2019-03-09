@@ -57,7 +57,7 @@ void piglit_init(int argc, char **argv)
 
 	/* Check the driver. */
 	piglit_require_gl_version(15);
-	piglit_require_GLSL();
+	piglit_require_vertex_shader();
 	piglit_require_transform_feedback();
 
 	glGenQueries(1, &q);

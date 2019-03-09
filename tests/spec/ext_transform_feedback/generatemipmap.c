@@ -285,7 +285,7 @@ void piglit_init(int argc, char **argv)
 
 	if (buffer || prims_written) {
 		GLuint vs;
-		piglit_require_GLSL();
+		piglit_require_vertex_shader();
 		vs = piglit_compile_shader_text(GL_VERTEX_SHADER, vstext);
 		xfb_prog = glCreateProgram();
 		glAttachShader(xfb_prog, vs);

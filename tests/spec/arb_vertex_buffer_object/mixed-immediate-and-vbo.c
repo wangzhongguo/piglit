@@ -47,7 +47,7 @@ void
 piglit_init(int argc, char **argv)
 {
 	piglit_require_extension("GL_ARB_vertex_buffer_object");
-        piglit_require_GLSL();
+	piglit_require_vertex_shader();
 }
 
 const char *vs_source = {

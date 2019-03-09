@@ -67,7 +67,6 @@ piglit_init(int argc, char **argv)
 	GLuint id;
 
 	piglit_require_gl_version(15);
-	piglit_require_GLSL();
 	piglit_require_extension("GL_EXT_transform_feedback");
 	piglit_require_extension("GL_ARB_transform_feedback2");
 
