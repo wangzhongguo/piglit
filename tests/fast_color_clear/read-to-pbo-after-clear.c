@@ -79,7 +79,6 @@ piglit_init(int argc, char **argv)
 	GLuint vs, fs_paint_red, fs_sample;
 
 	/* Requirements */
-	piglit_require_gl_version(11);
 	piglit_require_vertex_shader();
 	piglit_require_fragment_shader();
 	piglit_require_extension("GL_ARB_pixel_buffer_object");

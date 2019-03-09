@@ -55,7 +55,6 @@ piglit_init(int argc, char **argv)
 	GLenum fb_status;
 
 	/* Requirements */
-	piglit_require_gl_version(11);
 	piglit_require_extension("GL_ARB_framebuffer_object");
 
 	/* Set up framebuffer */

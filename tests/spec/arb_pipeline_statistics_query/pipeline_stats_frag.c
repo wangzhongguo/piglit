@@ -101,7 +101,6 @@ piglit_init(int argc, char *argv[])
 {
 	GLuint prog;
 
-	piglit_require_gl_version(11);
 	piglit_require_vertex_shader();
 	piglit_require_fragment_shader();
 
