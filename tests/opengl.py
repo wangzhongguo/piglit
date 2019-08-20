@@ -4501,6 +4501,7 @@ with profile.test_list.group_manager(
     g(['arb_compute_shader-local-id'], 'local-id' + '-explosion')
     g(['arb_compute_shader-render-and-compute'], 'render-and-compute')
     g(['arb_compute_shader-zero-dispatch-size'], 'zero-dispatch-size')
+    g(['arb_compute_shader-compute-and-render-bug-109630'], 'compute-and-render-bug-109630')
 
 with profile.test_list.group_manager(
         PiglitGLTest,
