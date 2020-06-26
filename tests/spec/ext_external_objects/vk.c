@@ -254,14 +254,21 @@ create_renderpass(struct vk_ctx *ctx,
 	att_dsc[0].initialLayout = color_img_props->in_layout;
 	att_dsc[0].finalLayout = color_img_props->end_layout;
 	att_dsc[0].format = color_img_props->format;
+	att_dsc[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	att_dsc[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 
 	att_dsc[1].samples = get_num_samples(depth_img_props->num_samples);
 	/* We might want to reuse a depth buffer */
-	if (depth_img_props->in_layout != VK_IMAGE_LAYOUT_UNDEFINED)
+	if (depth_img_props->in_layout != VK_IMAGE_LAYOUT_UNDEFINED) {
 		att_dsc[1].loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
-	else
+		att_dsc[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+	}
+	else {
 		att_dsc[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+		att_dsc[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	}
 	att_dsc[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	att_dsc[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
 	att_dsc[1].initialLayout = depth_img_props->in_layout;
 	att_dsc[1].finalLayout = depth_img_props->end_layout;
 	att_dsc[1].format = depth_img_props->format;
