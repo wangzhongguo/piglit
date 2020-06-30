@@ -623,9 +623,6 @@ create_pipeline(struct vk_ctx *ctx,
 	front.reference = 0;
 
 	memset(&back, 0, sizeof back);
-	back.compareMask = ~0;
-	back.writeMask = ~0;
-	back.reference = 0;
 
 	/* VkPipelineDepthStencilStateCreateInfo */
 	memset(&ds_info, 0, sizeof ds_info);
@@ -1497,13 +1494,12 @@ vk_draw(struct vk_ctx *ctx,
 		VkImageMemoryBarrier *barrier = barriers;
 		for (uint32_t n = 0; n < n_attachments; n++, barrier++) {
 			struct vk_image_att *att = &attachments[n];
+			VkImageAspectFlagBits depth_stencil_flags =
+				get_aspect_from_depth_format(att->props.format);
+			bool is_depth = (depth_stencil_flags != 0);
 
 			/* Insert barrier to mark ownership transfer. */
 			barrier->sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-
-			bool is_depth =
-				get_aspect_from_depth_format(att->props.format) != 0;
-
 			barrier->oldLayout = is_depth ?
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL :
 				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -1514,7 +1510,7 @@ vk_draw(struct vk_ctx *ctx,
 			barrier->dstQueueFamilyIndex = VK_QUEUE_FAMILY_EXTERNAL;
 			barrier->image = att->obj.img;
 			barrier->subresourceRange.aspectMask = is_depth ?
-				VK_IMAGE_ASPECT_DEPTH_BIT :
+				depth_stencil_flags :
 				VK_IMAGE_ASPECT_COLOR_BIT;
 			barrier->subresourceRange.baseMipLevel = 0;
 			barrier->subresourceRange.levelCount = 1;
