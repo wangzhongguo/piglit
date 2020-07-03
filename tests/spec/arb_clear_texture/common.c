@@ -81,7 +81,7 @@ create_texture(GLenum internalFormat,
 }
 
 static void
-clear_texture(GLuint tex, GLenum format, GLenum type, GLsizei texelSize)
+clear_sub_texture(GLuint tex, GLenum format, GLenum type, GLsizei texelSize)
 {
 	/* Clear one region using a NULL (all zeroes) value */
 	glClearTexSubImage(tex,
@@ -105,6 +105,17 @@ clear_texture(GLuint tex, GLenum format, GLenum type, GLsizei texelSize)
 			   VALUE_CLEAR_WIDTH,
 			   VALUE_CLEAR_HEIGHT,
 			   1, /* depth */
+			   format,
+			   type,
+			   clearValue);
+}
+
+static void
+clear_whole_texture(GLuint tex, GLenum format, GLenum type, GLsizei texelSize)
+{
+	/* Clear to a known value */
+	glClearTexImage(tex,
+			   0,
 			   format,
 			   type,
 			   clearValue);
@@ -163,7 +174,7 @@ is_initial_value(const GLubyte *texel, GLsizei texelSize,
 }
 
 static bool
-check_texels(GLenum format, GLenum type, GLsizei texelSize)
+check_texels_partial_clear(GLenum format, GLenum type, GLsizei texelSize)
 {
 	const bool is_float = (format == GL_DEPTH_COMPONENT);
 	GLubyte *data, *p;
@@ -209,6 +220,38 @@ check_texels(GLenum format, GLenum type, GLsizei texelSize)
 	return success;
 }
 
+static bool
+check_texels_full_clear(GLenum format, GLenum type, GLsizei texelSize)
+{
+	const bool is_depth = format == GL_DEPTH_COMPONENT;
+	GLubyte *data, *p;
+	bool success = true;
+
+	data = malloc(TEX_WIDTH * TEX_HEIGHT * texelSize);
+
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+	glGetTexImage(GL_TEXTURE_2D,
+		      0, /* level */
+		      format, type,
+		      data);
+
+	p = data;
+
+	for (int y = 0; y < TEX_HEIGHT; y++) {
+		for (int x = 0; x < TEX_WIDTH; x++) {
+			if (!is_value_clear(p, texelSize, is_depth))
+				success = false;
+
+			p += texelSize;
+		}
+	}
+
+	free(data);
+
+	return success;
+}
+
 bool
 test_format(GLenum internalFormat,
 	    GLenum format,
@@ -232,14 +275,21 @@ test_format(GLenum internalFormat,
 	if (!piglit_check_gl_error(GL_NO_ERROR))
 		return false;
 
-	clear_texture(tex, format, type, texelSize);
+	clear_sub_texture(tex, format, type, texelSize);
 
 	if (!piglit_check_gl_error(GL_NO_ERROR))
 		return false;
 
 	glBindTexture(GL_TEXTURE_2D, tex);
 
-	pass = check_texels(format, type, texelSize);
+	pass = check_texels_partial_clear(format, type, texelSize);
+
+	clear_whole_texture(tex, format, type, texelSize);
+
+	if (!piglit_check_gl_error(GL_NO_ERROR))
+		return false;
+
+	pass = check_texels_full_clear(format, type, texelSize) && pass;
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
