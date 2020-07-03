@@ -111,13 +111,18 @@ clear_texture(GLuint tex, GLenum format, GLenum type, GLsizei texelSize)
 }
 
 static bool
-is_value_clear(const GLubyte *texel, GLsizei texelSize)
+is_value_clear(const GLubyte *texel, GLsizei texelSize, bool is_float)
 {
-	int i;
-
-	for (i = 0; i < texelSize; i++)
-		if (texel[i] != clearValue[i])
+	if (is_float) {
+		const float expected = ((float *) clearValue)[0];
+		const float actual = ((float *) texel)[0];
+		if (fabs((actual - expected) / expected) > 0.001)
 			return false;
+	} else {
+		for (int i = 0; i < texelSize; i++)
+			if (texel[i] != clearValue[i])
+				return false;
+	}
 
 	return true;
 }
@@ -135,11 +140,35 @@ is_zero_clear(const GLubyte *texel, GLsizei texelSize)
 }
 
 static bool
+is_initial_value(const GLubyte *texel, GLsizei texelSize,
+				GLuint offset, bool is_float)
+{
+	if (is_float) {
+		const char x = offset & 0xff;
+		const char expected_bytes[4] = {x, x + 1, x + 2, x + 3};
+		const float expected = ((float *) expected_bytes)[0];
+
+		float actual = ((float *) texel)[0];
+
+		if (fabs((actual - expected) / expected) > 0.001)
+			return false;
+	} else {
+		for (int b = 0; b < texelSize; b++) {
+			if (texel[b] != ((offset + b) & 0xff))
+				return false;
+		}
+	}
+
+	return true;
+}
+
+static bool
 check_texels(GLenum format, GLenum type, GLsizei texelSize)
 {
+	const bool is_float = (format == GL_DEPTH_COMPONENT);
 	GLubyte *data, *p;
 	bool success = true;
-	int x, y, b;
+	int x, y;
 
 	data = malloc(TEX_WIDTH * TEX_HEIGHT * texelSize);
 
@@ -158,7 +187,7 @@ check_texels(GLenum format, GLenum type, GLsizei texelSize)
 			    x < VALUE_CLEAR_X + VALUE_CLEAR_WIDTH &&
 			    y >= VALUE_CLEAR_Y &&
 			    y < VALUE_CLEAR_Y + VALUE_CLEAR_HEIGHT) {
-				if (!is_value_clear(p, texelSize))
+				if (!is_value_clear(p, texelSize, is_float))
 					success = false;
 			} else if (x >= ZERO_CLEAR_X &&
 				   x < ZERO_CLEAR_X + ZERO_CLEAR_WIDTH &&
@@ -167,9 +196,8 @@ check_texels(GLenum format, GLenum type, GLsizei texelSize)
 				if (!is_zero_clear(p, texelSize))
 					success = false;
 			} else {
-				for (b = 0; b < texelSize; b++)
-					if (p[b] != ((p + b - data) & 0xff))
-						success = false;
+				if (!is_initial_value(p, texelSize, p - data, is_float))
+					success = false;
 			}
 
 			p += texelSize;
