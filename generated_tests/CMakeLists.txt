@@ -227,6 +227,9 @@ piglit_make_generated_tests(
 piglit_make_generated_tests(
 	inout_64bit.list
 	gen_inout_64bit_tests.py)
+piglit_make_generated_tests(
+	interface_block_tests.list
+	gen_interface_block_tests.py)
 
 # OpenCL Test generators
 piglit_make_generated_tests(
@@ -297,6 +300,7 @@ add_custom_target(gen-gl-tests
 			vs_in_fp64.list
 			gpu_shader4_tests.list
 			inout_64bit.list
+			interface_block_tests.list
 )
 
 # Create a custom target for generating OpenCL tests
