@@ -1,0 +1,46 @@
+/* From section 5.7 "Structure and Array Operations" of the GLSL 1.30 spec:
+ *
+ *  "Behavior is undefined if a shader subscripts an array with an index less
+ *   than 0 or greater than or equal to the size the array was declared with."
+ *
+ * The behaviour becomes defined only in robustness extensions, however even
+ * if driver is technically allowed to crash or hang, it most likely
+ * doesn't want to.
+ *
+ * gl_ClipDistance may be handled differently in a driver than ordinary arrays.
+ */
+
+[require]
+GLSL >= 1.30
+
+[vertex shader]
+#version 130
+
+out float gl_ClipDistance[gl_MaxClipDistances];
+
+void main(void)
+{
+	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+
+	int idx1 = -1;
+	gl_ClipDistance[idx1] = 1.0;
+
+	int idx2 = 2147483647;
+	gl_ClipDistance[idx2] = 1.0;
+
+	int idx3 = 2147483647;
+	gl_ClipDistance[idx3 > 0 ? idx3 : -1] = -1.0;
+
+	int idx4 = -1;
+	gl_ClipDistance[idx4 * idx4 * idx4] = -1.0;
+}
+
+[fragment shader]
+#version 130
+void main(void)
+{
+	gl_FragColor = vec4(1.0);
+}
+
+[test]
+draw rect -1 -1 2 2
