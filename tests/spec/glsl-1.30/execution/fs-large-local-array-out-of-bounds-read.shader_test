@@ -1,0 +1,48 @@
+/* From section 5.7 "Structure and Array Operations" of the GLSL 1.30 spec:
+ *
+ *  "Behavior is undefined if a shader subscripts an array with an index less
+ *   than 0 or greater than or equal to the size the array was declared with."
+ *
+ * The behaviour becomes defined only in robustness extensions, however even
+ * if driver is technically allowed to crash or hang, it most likely
+ * doesn't want to.
+ *
+ * Large local array may be spilled, so out-of-bounds access should be tested
+ * for them separately.
+ */
+
+[require]
+GLSL >= 1.30
+
+[vertex shader passthrough]
+
+[fragment shader]
+
+uniform int i1 = 0;
+
+void main()
+{
+	int large_arr[512]; // Large enough to require spilling on most GPUs
+
+	int x = 0;
+
+	int idx1 = -1;
+	x += large_arr[idx1];
+
+	int idx2 = 2147483647;
+	x += large_arr[idx2];
+
+	int idx3 = 2147483647;
+	x += large_arr[idx3 > 0 ? idx3 : -1];
+
+	int idx4 = -1;
+	x += large_arr[idx4 * idx4 * idx4];
+
+	large_arr[i1] = 5; // Prevent driver from optimizing out the array
+
+	gl_FragColor.gba = vec3(1.0, 1.0, 1.0);
+	gl_FragColor.r = large_arr[x];
+}
+
+[test]
+draw rect -1 -1 2 2
