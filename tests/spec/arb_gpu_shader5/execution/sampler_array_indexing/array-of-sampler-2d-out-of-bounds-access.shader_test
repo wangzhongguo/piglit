@@ -1,0 +1,51 @@
+/* From section 5.7 "Structure and Array Operations" of the GLSL 1.30 spec:
+ *
+ * "Behavior is undefined if a shader subscripts an array with an index less
+ *  than 0 or greater than or equal to the size the array was declared with."
+ *
+ * The behaviour becomes defined only in robustness extensions, however even
+ * if driver is technically allowed to crash or hang, it most likely
+ * doesn't want to.
+ *
+ * Robustness extensions encourage to us to return zero on out-of-bounds
+ * read, however it's not clearly applicable to the array of opaque types.
+ * What will happen when we call a built-in function which expects the
+ * opaque type with the instance returned from oob access?
+ * In the spirit of the spec - I think neither compilation should fail nor
+ * a hang occur.
+ */
+
+[require]
+GLSL >= 1.50
+GL_ARB_gpu_shader5
+
+[vertex shader passthrough]
+
+[fragment shader]
+#version 150
+#extension GL_ARB_gpu_shader5: enable
+
+uniform sampler2D tex[3];
+
+void main()
+{
+	int x = 0;
+
+	int idx = -1;
+	x += textureSize(tex[idx], 0).x;
+
+	int idx2 = 2147483647;
+	x += textureSize(tex[idx2], 0).x;
+
+	int idx3 = 2147483647;
+	x += textureSize(tex[idx3 > 0 ? idx3 : -1], 0).x;
+
+	int idx4 = -1;
+	x += textureSize(tex[idx4 * idx4 * idx4], 0).x;
+
+	gl_FragColor = vec4(x);
+}
+
+[test]
+
+draw rect -1 -1 2 2
