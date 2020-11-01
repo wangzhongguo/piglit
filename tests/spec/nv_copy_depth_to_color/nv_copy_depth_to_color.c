@@ -34,6 +34,10 @@
 
 #include "piglit-util-gl.h"
 
+#ifdef HAVE_ENDIAN_H
+#include <endian.h>
+#endif
+
 #define IMAGE_WIDTH 60
 #define IMAGE_HEIGHT 60
 
