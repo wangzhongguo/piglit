@@ -272,7 +272,7 @@ class Test(object):
             relative probe rgb (0.75, 0.75) (0.0, 1.0, 0.0)
             """)
 
-        test = test.format(self=self, generator_command=" ".join(sys.argv))
+        test = test.format(self=self, generator_command="generated_tests/gen_tcs_input_tests.py")
 
         filename = self.filename()
         dirname = os.path.dirname(filename)
