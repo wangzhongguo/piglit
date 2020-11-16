@@ -138,7 +138,10 @@ def serializer(name, profile, outfile):
                 et.SubElement(env, 'env', name=k, value=v)
 
     tree = et.ElementTree(root)
-    with gzip.open(outfile, 'wb') as f:
+    reproducible_mtime = None
+    if 'SOURCE_DATE_EPOCH' in os.environ:
+        reproducible_mtime=os.environ['SOURCE_DATE_EPOCH']
+    with gzip.GzipFile(outfile, 'wb', mtime=reproducible_mtime) as f:
         tree.write(f, encoding='utf-8', xml_declaration=True)
 
 
