@@ -528,7 +528,11 @@ class TestProfile(object):
                 else:
                     opts[n] = self.test_list[n]
         else:
-            opts = self.test_list  # pylint: disable=redefined-variable-type
+            opts = collections.OrderedDict()
+            test_keys = list(self.test_list.keys())
+            test_keys.sort()
+            for k in test_keys:
+                opts[k] = self.test_list[k]
 
         for k, v in self.filters.run(opts.items()):
             yield k, v
