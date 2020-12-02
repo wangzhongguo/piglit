@@ -52,7 +52,9 @@ for basedir in [TESTS_DIR, GENERATED_TESTS_DIR]:
 for group, files in shader_tests.items():
     assert group not in profile.test_list, 'duplicate group: {}'.format(group)
 
-    # We'll end up with a list of tuples, split that into two lists
+    # This makes the xml output reproducible, as os.walk() order is random
+    files.sort()
+    # We'll end up with a list of tuples, split that into two list
     files, installedfiles = list(zip(*files))
     files = list(files)
     installedfiles = list(installedfiles)
