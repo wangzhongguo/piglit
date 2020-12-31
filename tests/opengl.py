@@ -1558,6 +1558,11 @@ with profile.test_list.group_manager(
     g(['arb_point_sprite-mipmap'])
     g(['arb_point_sprite-interactions', '1.0'])
 
+# Group OES_point_sprite
+with profile.test_list.group_manager(
+        PiglitGLTest, grouptools.join('spec', 'OES_point_sprite')) as g:
+    g(['arb_point_sprite-checkerboard_gles1'], run_concurrent=False)
+
 # Group ARB_tessellation_shader
 with profile.test_list.group_manager(
         PiglitGLTest, grouptools.join('spec', 'ARB_tessellation_shader')) as g:

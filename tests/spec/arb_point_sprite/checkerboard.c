@@ -37,6 +37,7 @@
 PIGLIT_GL_TEST_CONFIG_BEGIN
 
 	config.supports_gl_compat_version = 10;
+	config.supports_gl_es_version = 10;
 
 	config.window_width = 1+((BOX_SIZE+1)*TEST_COLS);
 	config.window_height = 1+((BOX_SIZE+1)*TEST_ROWS);
@@ -58,18 +59,22 @@ piglit_init(int argc, char **argv)
 	(void) argc;
 	(void) argv;
 
+#ifdef PIGLIT_USE_OPENGL
 	piglit_require_extension("GL_ARB_point_sprite");
+#else
+	piglit_require_extension("GL_OES_point_sprite");
+#endif
 
 	piglit_ortho_projection(piglit_width, piglit_height, GL_FALSE);
 
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_POINT_SPRITE_ARB);
+	glEnable(GL_POINT_SPRITE);
 
 	glGetFloatv(GL_POINT_SIZE_MAX, &realMaxSize);
 	maxSize = (realMaxSize > BOX_SIZE) ? BOX_SIZE : realMaxSize;
 
 	glClearColor(0.2, 0.2, 0.2, 1.0);
-	glColor3f(1.0, 1.0, 1.0);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
 
 	tex = piglit_checkerboard_texture(0, 0, 2, 2, 1, 1, black, white);
 	glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
@@ -82,8 +87,12 @@ piglit_init(int argc, char **argv)
 enum piglit_result
 piglit_display(void)
 {
-	static const GLenum origins[2] = { GL_UPPER_LEFT, GL_LOWER_LEFT	};
+#ifdef PIGLIT_USE_OPENGL
 	const unsigned num_rows = (piglit_get_gl_version() >= 20) ? 2 : 1;
+#else
+	const unsigned num_rows = 1;
+#endif
+	static const GLenum origins[2] = { GL_UPPER_LEFT, GL_LOWER_LEFT	};
 	GLboolean pass = GL_TRUE;
 	unsigned i;
 	unsigned j;
@@ -98,12 +107,14 @@ piglit_display(void)
 		const float *const lower_left = (origins[i] == GL_UPPER_LEFT)
 			? white : black;
 
+#ifdef PIGLIT_USE_OPENGL
 		/* OpenGL version must be at least 2.0 to support modifying
 		 * GL_POINT_SPRITE_COORD_ORIGIN.
 		 */
 		if (piglit_get_gl_version() >= 20)
 			glPointParameteri(GL_POINT_SPRITE_COORD_ORIGIN,
 					  origins[i]);
+#endif
 
 		for (j = 0; j < TEST_COLS; j++) {
 			const float x = 1 + (BOX_SIZE / 2) 
@@ -117,10 +128,22 @@ piglit_display(void)
 				continue;
 
 			glPointSize(size - 0.2);
-			glBegin(GL_POINTS);
-			glTexCoord2f(1.5, 1.5);
-			glVertex2f(x, y);
-			glEnd();
+
+			/* Vertex arrays are overkill for this case,
+			 * but they are necessary for OpenGL ES 1.x.
+			 */
+			GLfloat tcp[] = { 1.5, 1.5 };
+			GLfloat vp[] = { x, y };
+
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+			glTexCoordPointer(2, GL_FLOAT, 0, tcp);
+			glVertexPointer(2, GL_FLOAT, 0, vp);
+			glDrawArrays(GL_POINTS, 0, 1);
+
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 			if (!piglit_probe_pixel_rgb(x - (size / 4),
 						    y + (size / 4),
