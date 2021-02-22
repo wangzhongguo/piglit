@@ -1,5 +1,7 @@
 # coding=utf-8
 #
+# Copyright © 2021 Collabora Ltd.
+#
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
 # files (the "Software"), to deal in the Software without
@@ -272,9 +274,9 @@ class PiglitReplayerTest(PiglitBaseTest):
 
     RESULTS_PATH = None
 
-    def __init__(self, extra_args, **kwargs):
+    def __init__(self, subcommand, extra_args, **kwargs):
         super(PiglitReplayerTest, self).__init__(
-            ['replayer.py', 'compare', 'trace'], **kwargs)
+            ['replayer.py', subcommand, 'trace'], **kwargs)
         self.extra_args = extra_args
 
     @PiglitBaseTest.command.getter

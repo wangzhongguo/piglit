@@ -1,7 +1,7 @@
 # coding=utf-8
 #
 # Copyright (c) 2014, 2016-2017, 2019-2020 Intel Corporation
-# Copyright (c) 2019 Collabora Ltd
+# Copyright © 2019, 2021 Collabora Ltd.
 # Copyright © 2019-2020 Valve Corporation.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
@@ -38,10 +38,48 @@ from .abstract import DumpBackend, dump_handler
 from .register import Registry
 
 
+_LOOP_TIMES = core.get_option('PIGLIT_REPLAY_LOOP_TIMES',
+                              ('replay', 'loop_times'),
+                              default='150')
+
 __all__ = [
     'REGISTRY',
     'APITraceBackend',
 ]
+
+
+def _collect_frame_times(stream):
+    """
+    - `stream` Output stream of `apitrace replay` with the `--pframes "opengl:GPU Duration"` option enabled.
+    - `return` The frame times collected from parsing the stream.
+    """
+    assert len(stream) > 0
+    # Store frame times as we read lines
+    frame_times = []
+
+    for line in stream:
+        # Look for frame events
+        if not line.startswith('frame'):
+            continue
+        # Lines of the form "frame	22156000"
+        fields = line.rstrip('\r\n').split('\t')
+        frame_time = int(fields[1])
+        frame_times.append(frame_time)
+
+    return frame_times[-int(_LOOP_TIMES):]
+
+
+def _run_command(cmd, env):
+    ret = subprocess.run(cmd, stdout=subprocess.PIPE,
+                         stderr=subprocess.DEVNULL, env=env)
+    logoutput = '[profile_trace] Running: {}\n'.format(
+        ' '.join(cmd)).encode()
+    print(logoutput.decode(errors='replace'))
+    if ret.returncode:
+        raise RuntimeError(
+            '[profile_trace] Process failed with error code: {}'.format(
+                ret.returncode))
+    return ret
 
 
 class APITraceBackend(DumpBackend):
@@ -117,6 +155,23 @@ class APITraceBackend(DumpBackend):
                                    self._trace_path]
         self._run_logged_command(cmd, None)
 
+    @staticmethod
+    def profile(trace_path):
+        return APITraceBackend(trace_path)._profile()
+
+    def _profile(self):
+        # We need to run in singlethread mode to avoid a use after free bug
+        # in which the OpenGL context is queried for further results after
+        # it has been destroyed in the replay thread when replay finishes
+        cmd = self._retrace_cmd + ['--headless',
+                                   '--benchmark',
+                                   '--singlethread',
+                                   '--loop=%s' % _LOOP_TIMES,
+                                   '--pframes',
+                                   'opengl:GPU Duration',
+                                   self._trace_path]
+        ret = _run_command(cmd, None)
+        return _collect_frame_times(ret.stdout.decode().splitlines())
 
 REGISTRY = Registry(
     extensions=['.trace', '.trace-dxgi'],

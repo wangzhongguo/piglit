@@ -3,6 +3,7 @@
 #
 # Copyright (c) 2014, 2019 Intel Corporation
 # Copyright © 2020 Valve Corporation.
+# Copyright © 2021 Collabora Ltd.
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -83,6 +84,7 @@ import framework.replay.programs.query as query
 import framework.replay.programs.download as download
 import framework.replay.programs.checksum as checksum
 import framework.replay.programs.dump as dump
+import framework.replay.programs.profile as profile
 
 
 def main():
@@ -126,6 +128,12 @@ def main():
               'from a traces description file listing traces '
               'and their checksums for each device.'))
     parser_query.set_defaults(func=query.query)
+
+    parser_profile = subparsers.add_parser(
+        'profile',
+        add_help=False,
+        help=('Measure frame times of a trace file.'))
+    parser_profile.set_defaults(func=profile.profile)
 
     # Parse the known arguments (replayer compare or replayer query for
     # example), and then pass the arguments that this parser doesn't know about
