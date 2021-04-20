@@ -1,0 +1,51 @@
+[require]
+GLSL >= 1.30
+
+[vertex shader passthrough]
+
+[fragment shader]
+#version 130
+
+uniform float zero = 0.0;
+uniform float also_zero = 0.0;
+uniform float billion = 1000000000.0;
+uniform float flt_max = 3.40282347E+38;
+
+out vec4 piglit_fragcolor;
+
+void main()
+{
+    float inf = flt_max * flt_max;
+    float also_inf = flt_max * billion;
+
+    /* Trying very hard to trigger a potential sequence of
+     * optimizations in Mesa's compiler.  Specifically, MR !10012
+     * had a pattern
+     *
+     *    (('ior', ('ior(is_used_once)', ('flt(is_used_once)', a, c), d), ('flt', b, c)),
+     *     ('ior', ('flt', ('fmin', a, b), c), d)),
+     *
+     * Since this did not mark the replacement fmin as exact, it could
+     * allow another pattern like
+     *
+     *    (('~fmin', ('fmax', a, -1.0),  0.0),
+     *     ('fneg', ('fsat', ('fneg', a))), '!options->lower_fsat'),
+     *
+     * This would produce a different result when `a` is NaN.  The
+     * original min-of-max produces -1, but fsat produces 0.  If -1 <
+     * c < 0, then the comparison will produce a different result.
+     */
+    float a = max((zero / also_zero) + (inf - also_inf), -1.0);
+    const float b = 0.0;
+    float c = gl_FragCoord.x * -0.0001 -0.0001;  /* Always > -1.0 and < 0.0. */
+    bool d = gl_FragCoord.y > billion;           /* Always false. */
+
+    if (((a < c) || d) || (b < c))
+	piglit_fragcolor = vec4(0.0, 1.0, 0.0, 1.0);
+    else
+	piglit_fragcolor = vec4(1.0, 0.0, 0.0, 1.0);
+}
+
+[test]
+draw rect -1 -1 2 2
+probe all rgba 0.0 1.0 0.0 1.0
