@@ -16,5 +16,6 @@ piglit_add_executable (ext_clear_texture-cube cube.c common.c)
 piglit_add_executable (ext_clear_texture-3d 3d.c common.c)
 piglit_add_executable (ext_clear_texture-texview texview.c common.c)
 piglit_add_executable (ext_clear_texture-multisample multisample.c)
+piglit_add_executable (ext_clear_texture-depth depth.c common.c)
 
 # vim: ft=cmake:
