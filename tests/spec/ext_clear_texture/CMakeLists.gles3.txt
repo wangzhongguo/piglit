@@ -11,5 +11,6 @@ link_libraries (
 
 piglit_add_executable (ext_clear_texture-base-formats base-formats.c common.c)
 piglit_add_executable (ext_clear_texture-clear-max-level clear-max-level.c common.c)
+piglit_add_executable (ext_clear_texture-error error.c common.c)
 
 # vim: ft=cmake:
