@@ -5206,6 +5206,17 @@ with profile.test_list.group_manager(
     g(['nv_viewport_swizzle-errors'])
     g(['nv_viewport_swizzle-errors_gles3'])
 
+with profile.test_list.group_manager(
+        PiglitGLTest,
+        grouptools.join('spec', 'ext_clear_texture')) as g:
+    g(['ext_clear_texture-clear-max-level'])
+    g(['ext_clear_texture-error'])
+    g(['ext_clear_texture-3d'])
+    g(['ext_clear_texture-cube'])
+    g(['ext_clear_texture-multisample'])
+    g(['ext_clear_texture-base-formats'])
+    g(['ext_clear_texture-stencil'])
+    g(['ext_clear_texture-texview'])
 
 if platform.system() == 'Windows':
     profile.filters.append(lambda p, _: not p.startswith('glx'))
