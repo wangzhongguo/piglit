@@ -15,5 +15,6 @@ piglit_add_executable (ext_clear_texture-error error.c common.c)
 piglit_add_executable (ext_clear_texture-cube cube.c common.c)
 piglit_add_executable (ext_clear_texture-3d 3d.c common.c)
 piglit_add_executable (ext_clear_texture-texview texview.c common.c)
+piglit_add_executable (ext_clear_texture-multisample multisample.c)
 
 # vim: ft=cmake:
