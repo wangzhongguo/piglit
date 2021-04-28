@@ -33,7 +33,7 @@ import os
 
 from os import path
 
-from framework import exceptions
+from framework import exceptions, status
 from framework.replay import backends
 from framework.replay import compare_replay
 from framework.replay.options import OPTIONS
@@ -146,7 +146,7 @@ class TestCompareReplay(object):
         f = io.StringIO()
         with contextlib.redirect_stdout(f):
             assert (compare_replay.from_yaml('empty.yml')
-                    is compare_replay.Result.MATCH)
+                    is status.PASS)
         self.m_qty_load_yaml.assert_called_once()
         s = f.getvalue()
         assert s == ''
@@ -157,7 +157,7 @@ class TestCompareReplay(object):
         f = io.StringIO()
         with contextlib.redirect_stdout(f):
             assert (compare_replay.from_yaml('no-device.yml')
-                    is compare_replay.Result.MATCH)
+                    is status.PASS)
         self.m_qty_load_yaml.assert_called_once()
         s = f.getvalue()
         assert s == ''
@@ -168,7 +168,7 @@ class TestCompareReplay(object):
         f = io.StringIO()
         with contextlib.redirect_stdout(f):
             assert (compare_replay.from_yaml('one-trace.yml')
-                    is compare_replay.Result.MATCH)
+                    is status.PASS)
         self.m_qty_load_yaml.assert_called_once()
         self.m_ensure_file.assert_called_once()
         self.m_backends_dump.assert_called_once()
@@ -196,7 +196,7 @@ class TestCompareReplay(object):
         f = io.StringIO()
         with contextlib.redirect_stdout(f):
             assert (compare_replay.from_yaml('two-traces.yml')
-                    is compare_replay.Result.MATCH)
+                    is status.PASS)
         self.m_qty_load_yaml.assert_called_once()
         assert self.m_ensure_file.call_count == 2
         assert self.m_backends_dump.call_count == 2
@@ -235,7 +235,7 @@ class TestCompareReplay(object):
         f = io.StringIO()
         with contextlib.redirect_stdout(f):
             assert (compare_replay.trace(self.trace_path, self.exp_checksum)
-                    is compare_replay.Result.MATCH)
+                    is status.PASS)
         self.m_qty_load_yaml.assert_not_called()
         self.m_ensure_file.assert_called_once()
         self.m_backends_dump.assert_called_once()
@@ -263,7 +263,7 @@ class TestCompareReplay(object):
         f = io.StringIO()
         with contextlib.redirect_stdout(f):
             assert (compare_replay.trace(self.trace_path, self.exp_checksum)
-                    is compare_replay.Result.MATCH)
+                    is status.PASS)
         self.m_qty_load_yaml.assert_not_called()
         self.m_ensure_file.assert_called_once()
         self.m_backends_dump.assert_called_once()
@@ -291,7 +291,7 @@ class TestCompareReplay(object):
         f = io.StringIO()
         with contextlib.redirect_stdout(f):
             assert (compare_replay.trace(self.trace_path, wrong_checksum)
-                    is compare_replay.Result.DIFFER)
+                    is status.FAIL)
         self.m_qty_load_yaml.assert_not_called()
         self.m_ensure_file.assert_called_once()
         self.m_backends_dump.assert_called_once()
@@ -324,7 +324,7 @@ class TestCompareReplay(object):
         f = io.StringIO()
         with contextlib.redirect_stdout(f):
             assert (compare_replay.trace(trace_path, third_exp_checksum)
-                    is compare_replay.Result.FAILURE)
+                    is status.CRASH)
         self.m_qty_load_yaml.assert_not_called()
         self.m_ensure_file.assert_called_once()
         self.m_backends_dump.assert_called_once()
@@ -353,7 +353,7 @@ class TestCompareReplay(object):
         f = io.StringIO()
         with contextlib.redirect_stdout(f):
             assert (compare_replay.trace(trace_path, third_exp_checksum)
-                    is compare_replay.Result.FAILURE)
+                    is status.CRASH)
         self.m_qty_load_yaml.assert_not_called()
         self.m_ensure_file.assert_called_once()
         self.m_backends_dump.assert_called_once()

@@ -33,9 +33,9 @@ import textwrap
 
 from os import path
 
+from framework import status
 from framework.replay import backends
 from framework.replay.programs import compare
-from framework.replay.compare_replay import Result
 
 from .backends import testtrace
 
@@ -72,7 +72,7 @@ def run_compare(extra_args):
             result = compare.compare(["yaml",
                                       "--device-name", "gl-test-device",
                                       "--yaml-file", "./tests/traces.yml"] + extra_args)
-    if result is not Result.MATCH:
+    if result is not status.PASS:
         return result
     with open(TESTS_OUTPUT, 'a') as f:
         with contextlib.redirect_stdout(f):
@@ -143,7 +143,7 @@ def check_test_output(filename, expectations):
 
 
 def test_compare_succeeds_if_all_images_match():
-    assert run_compare([]) is Result.MATCH
+    assert run_compare([]) is status.PASS
     expectations = [
         "actual: 5efda83854befe0155ff8517a58d5b51",
         "expected: 5efda83854befe0155ff8517a58d5b51",
@@ -157,7 +157,7 @@ def test_compare_fails_on_image_mismatch():
     content = content.replace("5efda83854befe0155ff8517a58d5b51",
                               "8e0a801367e1714463475a824dab363b")
     write_to(content, filename)
-    assert run_compare([]) is Result.DIFFER
+    assert run_compare([]) is status.FAIL
     expectations = [
         "actual: 5efda83854befe0155ff8517a58d5b51",
         "expected: 8e0a801367e1714463475a824dab363b",
@@ -183,7 +183,7 @@ def test_compare_traces_with_and_without_checksum():
     filename = "./replayer-db/trace1/red.testtrace"
     content = "ff0000ff"
     write_to(content, filename)
-    assert run_compare([]) is Result.MATCH
+    assert run_compare([]) is status.PASS
 
 
 def test_compare_only_traces_without_checksum():
@@ -202,14 +202,14 @@ def test_compare_only_traces_without_checksum():
     filename = "./replayer-db/trace1/red.testtrace"
     content = "ff0000ff"
     write_to(content, filename)
-    assert run_compare([]) is Result.MATCH
+    assert run_compare([]) is status.PASS
 
 
 def test_compare_with_no_traces():
     filename = "./tests/traces.yml"
     content = 'traces:'
     write_to(content, filename)
-    assert run_compare([]) is Result.MATCH
+    assert run_compare([]) is status.PASS
     # Check the file is empty
     assert len(read_from(TESTS_OUTPUT)) == 0
 
@@ -229,7 +229,7 @@ def test_compare_fails_on_dump_image_error():
 
 
 def test_compare_stores_only_logs_on_checksum_match():
-    assert run_compare([]) is Result.MATCH
+    assert run_compare([]) is status.PASS
     assert not path.exists(TRACE_PNG_TEST1)
     assert not path.exists(TRACE_PNG_TEST2)
 
@@ -240,12 +240,12 @@ def test_compare_stores_images_on_checksum_mismatch():
     content = content.replace("5efda83854befe0155ff8517a58d5b51",
                               "8e0a801367e1714463475a824dab363b")
     write_to(content, filename)
-    assert run_compare([]) is Result.DIFFER
+    assert run_compare([]) is status.FAIL
     assert not path.exists(TRACE_PNG_TEST1)
     assert path.exists(TRACE_PNG_TEST2)
 
 
 def test_compare_stores_images_on_request():
-    assert run_compare(["--keep-image"]) is Result.MATCH
+    assert run_compare(["--keep-image"]) is status.PASS
     assert path.exists(TRACE_PNG_TEST1)
     assert path.exists(TRACE_PNG_TEST2)

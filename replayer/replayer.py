@@ -77,12 +77,12 @@ def setup_module_search_path():
 
 
 setup_module_search_path()
+from framework import status
 import framework.replay.programs.compare as compare
 import framework.replay.programs.query as query
 import framework.replay.programs.download as download
 import framework.replay.programs.checksum as checksum
 import framework.replay.programs.dump as dump
-from framework.replay.compare_replay import Result
 
 
 def main():
@@ -138,8 +138,8 @@ def main():
         sys.exit(1)
 
     result = runner(args)
-    if result is not Result.MATCH:
-        sys.exit(1 if result is Result.FAILURE else 2)
+    if result is not status.PASS:
+        sys.exit(1 if result is status.CRASH else 2)
 
 
 if __name__ == '__main__':

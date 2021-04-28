@@ -44,16 +44,8 @@ from framework.replay.image_checksum import hexdigest_from_image
 from framework.replay.options import OPTIONS
 
 
-__all__ = ['Result',
-           'from_yaml',
+__all__ = ['from_yaml',
            'trace']
-
-
-@unique
-class Result(Enum):
-    FAILURE = -1
-    MATCH = 0
-    DIFFER = 1
 
 
 def _replay(trace_path, results_path):
@@ -104,21 +96,21 @@ def _check_trace(trace_path, expected_checksum):
 
     if checksum is None:
         json_result['images'][0]['image_render'] = None
-        return Result.FAILURE, json_result
+        return status.CRASH, json_result
 
     if checksum == expected_checksum:
         if not OPTIONS.keep_image:
             os.remove(image_file)
         print('[check_image] Images match for:\n  {}\n'.format(trace_path))
-        result = Result.MATCH
+        result = status.PASS
     else:
         print('[check_image] Images differ for:\n  {}'.format(trace_path))
         print('[check_image] For more information see '
               'https://gitlab.freedesktop.org/'
               'mesa/piglit/blob/master/replayer/README.md\n')
-        result = Result.DIFFER
+        result = status.FAIL
 
-    if result is not Result.MATCH or OPTIONS.keep_image:
+    if result is not status.PASS or OPTIONS.keep_image:
         root, ext = path.splitext(image_file)
         image_file_dest = '{}-{}{}'.format(root, checksum, ext)
         shutil.move(image_file, image_file_dest)
@@ -129,12 +121,7 @@ def _check_trace(trace_path, expected_checksum):
 
 def _print_result(result, trace_path, json_result):
     output = 'PIGLIT: '
-    if result is Result.FAILURE:
-        json_result['result'] = str(status.CRASH)
-    elif result is Result.DIFFER:
-        json_result['result'] = str(status.FAIL)
-    else:
-        json_result['result'] = str(status.PASS)
+    json_result['result'] = str(result)
 
     output += json.dumps(json_result)
     print(output)
@@ -145,13 +132,13 @@ def from_yaml(yaml_file):
 
     OPTIONS.set_download_url(qty.download_url(y))
 
-    global_result = Result.MATCH
+    global_result = status.PASS
     # TODO: print in subtest format
     # json_results = {}
     t_list = qty.traces(y, device_name=OPTIONS.device_name, checksum=True)
     for t in t_list:
         result, json_result = _check_trace(t['path'], t['checksum'])
-        if result is not Result.MATCH and global_result is not Result.FAILURE:
+        if result is not status.PASS and global_result is not status.CRASH:
             global_result = result
         # json_results.update(json_result)
         # _print_result(result, t['path'], json_result)
