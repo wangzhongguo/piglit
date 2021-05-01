@@ -20,6 +20,6 @@ piglit_add_executable (gl-3.2-pointsprite-coord pointsprite-coord.c)
 piglit_add_executable (gl-3.2-pointsprite-origin pointsprite-origin.c)
 piglit_add_executable (gl-3.2-texture-border-deprecated texture-border-deprecated.c)
 piglit_add_executable (glsl-resource-not-bound glsl-resource-not-bound.c)
-piglit_add_executable (gl-coord-replace-doesnt-eliminate-frag-tex-coords gl-coord-replace-doesnt-eliminate-frag-tex-coords)
+piglit_add_executable (gl-coord-replace-doesnt-eliminate-frag-tex-coords gl-coord-replace-doesnt-eliminate-frag-tex-coords.c)
 piglit_add_executable (gl-get-active-attrib-returns-all-inputs get-active-attrib-returns-all-inputs.c)
 # vim: ft=cmake:
