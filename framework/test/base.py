@@ -205,7 +205,7 @@ class Test(metaclass=abc.ABCMeta):
         * For 'returncode', the value will be the numeric exit code/value.
         * For 'command', the value will be command line program and arguments.
         """
-        self.result.command = ' '.join(self.command)
+        self.result.command = ' '.join(map(str, self.command))
         self.result.environment = " ".join(
             '{0}="{1}"'.format(k, v) for k, v in itertools.chain(
                 OPTIONS.env.items(), self.env.items()))
@@ -271,7 +271,7 @@ class Test(metaclass=abc.ABCMeta):
         fullenv = {str(k): str(v) for k, v in _base}
 
         try:
-            proc = subprocess.Popen(command,
+            proc = subprocess.Popen(map(str, command),
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
                                     cwd=self.cwd,
