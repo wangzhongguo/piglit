@@ -158,7 +158,7 @@ initTexData(GLenum target, uint64_t sideLength)
 	return ((GLfloat *) calloc(nPixels * COLOR_COMPONENTS, sizeof(float)));
 }
 
-static void
+static enum piglit_result
 test_proxy_texture_size(GLenum target, GLenum internalformat)
 {
 	int maxSide;
@@ -225,6 +225,7 @@ test_proxy_texture_size(GLenum target, GLenum internalformat)
 	piglit_report_subtest_result(result, "%s-%s",
 				     piglit_get_gl_enum_name(getProxyTarget(target)),
 				     piglit_get_gl_enum_name(internalformat));
+	return result;
 }
 
 /* If there were any errors, abort the current test in progress.
@@ -245,7 +246,7 @@ test_proxy_texture_size(GLenum target, GLenum internalformat)
 		}                                                   \
 	} while (0);
 
-static void
+static enum piglit_result
 test_non_proxy_texture_size(GLenum target, GLenum internalformat)
 {
 	GLuint tex;
@@ -342,12 +343,14 @@ out:
 	piglit_report_subtest_result(result, "%s-%s",
 				     piglit_get_gl_enum_name(target),
 				     piglit_get_gl_enum_name(internalformat));
+	return result;
 }
 
-static void
-for_targets_and_formats(void(*test)(GLenum, GLenum))
+static enum piglit_result
+for_targets_and_formats(enum piglit_result (*test)(GLenum, GLenum))
 {
 	int i, j;
+	enum piglit_result ret = PIGLIT_SKIP;
 	for (i = 0; i < ARRAY_SIZE(target); i++) {
 		for (j = 0; j < ARRAY_SIZE(internalformat); j++) {
 			/* Skip floating point formats if
@@ -357,17 +360,20 @@ for_targets_and_formats(void(*test)(GLenum, GLenum))
 			    internalformat[j] == GL_RGBA32F) &&
 			    !piglit_is_extension_supported("GL_ARB_texture_float"))
 				continue;
-			 test(target[i], internalformat[j]);
+
+			piglit_merge_result(&ret, test(target[i], internalformat[j]));
 		}
 	}
+	return ret;
 }
 
 void
 piglit_init(int argc, char **argv)
 {
-	for_targets_and_formats(test_proxy_texture_size);
-	for_targets_and_formats(test_non_proxy_texture_size);
-	exit(0);
+	enum piglit_result ret = PIGLIT_SKIP;
+	piglit_merge_result(&ret, for_targets_and_formats(test_proxy_texture_size));
+	piglit_merge_result(&ret, for_targets_and_formats(test_non_proxy_texture_size));
+	piglit_report_result(ret);
 }
 
 enum piglit_result
