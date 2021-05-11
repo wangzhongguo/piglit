@@ -44,18 +44,15 @@ get_num_samples(uint32_t num_samples);
 static VkAccessFlagBits
 get_access_mask(const VkImageLayout layout)
 {
+	/* dstAccessMask of barriers must be supported from the pipeline
+	 * stage, see also access scopes and this table:
+	 * https://www.khronos.org/registry/vulkan/specs/1.2-extensions/html/vkspec.html#synchronization-access-types-supported
+	 */
 	switch (layout) {
 	case VK_IMAGE_LAYOUT_UNDEFINED:
 		return 0;
 	case VK_IMAGE_LAYOUT_GENERAL:
-		return VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-		       VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
-		       VK_ACCESS_TRANSFER_WRITE_BIT | VK_ACCESS_TRANSFER_READ_BIT |
-		       VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_HOST_WRITE_BIT |
-		       VK_ACCESS_HOST_READ_BIT | VK_ACCESS_INPUT_ATTACHMENT_READ_BIT |
-		       VK_ACCESS_COLOR_ATTACHMENT_READ_BIT |
-		       VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT |
-		       VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
+		return VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
 	case VK_IMAGE_LAYOUT_PREINITIALIZED:
 		return VK_ACCESS_HOST_WRITE_BIT;
 	case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
