@@ -75,7 +75,7 @@ PIGLIT_GL_TEST_CONFIG_BEGIN
 
 PIGLIT_GL_TEST_CONFIG_END
 
-static GLuint prog[2], uniform_loc, tex[8], ubo[4], tbo[8];
+static GLuint prog[2], uniform_loc, tex[8], ubo[4], tbo[8], stream;
 static bool indexed;
 static GLenum enable_enum;
 
@@ -236,6 +236,13 @@ setup_shaders_and_resources(unsigned num_vbos,
 		}
 	}
 	glUseProgram(prog[0]);
+
+        static const float stream_data[32];
+
+        glGenBuffers(1, &stream);
+        glBindBuffer(GL_UNIFORM_BUFFER, stream);
+        glBufferData(GL_UNIFORM_BUFFER, sizeof(stream_data), stream_data,
+                     GL_DYNAMIC_DRAW);
 
 	for (i = 0; i < num_ubos; i++) {
 		static const float data[10*4];
@@ -509,6 +516,27 @@ draw_many_imgbo_change(unsigned count)
 }
 
 static void
+draw_subdata_change(unsigned count)
+{
+	unsigned i;
+	static const float stream_data[32];
+	glBindBufferBase(GL_UNIFORM_BUFFER, 0, stream);
+	if (indexed) {
+		for (i = 0; i < count; i++) {
+			glBufferData(GL_UNIFORM_BUFFER, sizeof(stream_data), stream_data,
+				     GL_DYNAMIC_DRAW);
+			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL);
+		}
+	} else {
+		for (i = 0; i < count; i++) {
+			glBufferData(GL_UNIFORM_BUFFER, sizeof(stream_data), stream_data,
+				     GL_DYNAMIC_DRAW);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+	}
+}
+
+static void
 draw_one_ubo_change(unsigned count)
 {
 	unsigned i;
@@ -754,6 +782,13 @@ perf_draw_variant(const char *call, bool is_indexed)
 	perf_run(call, num_vbos, num_ubos, num_textures, num_tbos, num_images,
 		 num_imgbos, "no state", draw, base_rate);
 
+	num_ubos = 1;
+	num_textures = 1;
+	setup_shaders_and_resources(num_vbos, num_ubos, num_textures, num_tbos,
+				    num_images, num_imgbos);
+	perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
+		 num_images, num_imgbos,
+		 "buffer replacement", draw_subdata_change, base_rate);
 	/* Test state changes. */
 	num_ubos = 8;
 	num_textures = 8;
