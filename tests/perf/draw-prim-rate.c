@@ -517,7 +517,7 @@ run_test(unsigned debug_num_iterations, enum draw_method draw_method,
 	if (debug_num_iterations)
 		run_draw(debug_num_iterations);
 	else
-		rate = perf_measure_cpu_rate(run_draw, 0.15);
+		rate = perf_measure_gpu_rate(run_draw, 0.05);
 
 	if (cull_method == RASTERIZER_DISCARD)
 		glDisable(GL_RASTERIZER_DISCARD);
@@ -595,9 +595,9 @@ run(enum draw_method draw_method, enum cull_method cull_method,
 
 				if (gpu_freq_mhz) {
 					rate /= gpu_freq_mhz * 1000000.0;
-					printf(",%6.2f", rate);
+					printf(",%7.4f", rate);
 				} else {
-					printf(",%6.2f", rate / 1000000000);
+					printf(",%7.4f", rate / 1000000000);
 				}
 				fflush(stdout);
 			}
@@ -648,7 +648,7 @@ piglit_display(void)
 		if (prog)
 			printf("   ");
 		for (int i = 0; i < ARRAY_SIZE(num_prims); i++)
-			printf(", %4uK", num_prims[i] / 1000);
+			printf(",  %4uK", num_prims[i] / 1000);
 	}
 	printf("\n");
 
