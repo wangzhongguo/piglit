@@ -700,7 +700,7 @@ perf_run(const char *call, unsigned num_vbos, unsigned num_ubos,
 	if (selected_test_index != -1 && test_index != selected_test_index)
 		return 0;
 
-	double rate = perf_measure_rate(f, 0.5);
+	double rate = perf_measure_cpu_rate(f, 1);
 	double ratio = base_rate ? rate / base_rate : 1;
 
 	const char *ratio_color = base_rate == 0 ? COLOR_RESET :

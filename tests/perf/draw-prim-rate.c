@@ -517,7 +517,7 @@ run_test(unsigned debug_num_iterations, enum draw_method draw_method,
 	if (debug_num_iterations)
 		run_draw(debug_num_iterations);
 	else
-		rate = perf_measure_rate(run_draw, 0.15);
+		rate = perf_measure_cpu_rate(run_draw, 0.15);
 
 	if (cull_method == RASTERIZER_DISCARD)
 		glDisable(GL_RASTERIZER_DISCARD);

@@ -25,7 +25,10 @@
 typedef void (*perf_rate_func)(unsigned count);
 
 double
-perf_measure_rate(perf_rate_func f, double minDuration);
+perf_measure_cpu_rate(perf_rate_func f, double minDuration);
+
+double
+perf_measure_gpu_rate(perf_rate_func f, double minDuration);
 
 #endif /* COMMON_H */
 

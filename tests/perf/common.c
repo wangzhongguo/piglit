@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009  VMware, Inc.  All Rights Reserved.
+ * Copyright (C) 2021  Advanced Micro Devices, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -26,72 +27,88 @@
 #include "piglit-util-gl.h"
 #include "common.h"
 
-/** Return time in seconds */
 static double
-perf_get_time(void)
+measure_rate(perf_rate_func f, double duration, unsigned initial_iterations,
+	     double (*measure_time)(perf_rate_func f, unsigned iterations))
 {
-	return piglit_time_get_nano() * 0.000000001;
+	unsigned iterations = initial_iterations;
+
+	while (1) {
+		double t = measure_time(f, iterations);
+
+		/* Allow iterations to go 5% over. */
+		double time_adjusted = t - t * 0.05;
+		double multiplier = time_adjusted ? duration / time_adjusted : 0;
+
+		bool accepted = t >= duration;
+		bool converging = (unsigned)(iterations * multiplier) > iterations;
+
+		if (0) {
+			printf("\niterations %7u, time %f, multiplier %f%s", iterations, t, multiplier,
+			       accepted ? " - accepted" : (converging ? "" : " - stuck"));
+		}
+
+		/* Find the time it takes to run the test at duration. */
+		if (!accepted) {
+			if (converging) {
+				iterations *= multiplier;
+			} else {
+				/* Force convergence. */
+				if (iterations > 20)
+					iterations *= iterations / 20;
+				iterations += 5;
+			}
+			continue;
+		}
+
+		/* Return iterations per second. */
+		return iterations / t;
+	}
+}
+
+static double
+measure_cpu_time(perf_rate_func f, unsigned iterations)
+{
+	intptr_t t0 = piglit_time_get_nano();
+	f(iterations); /* call the rendering function */
+	glFinish();
+	return (piglit_time_get_nano() - t0) * 0.000000001;
+}
+
+static double
+measure_gpu_time(perf_rate_func f, unsigned iterations)
+{
+	/* Run a few iterations to wake up power management - this helps AMD. */
+	f(iterations);
+	f(iterations);
+
+	/* Measure the execution time. */
+	GLuint query;
+	glGenQueries(1, &query);
+	glBeginQuery(GL_TIME_ELAPSED, query);
+
+	f(iterations);
+
+	int64_t nsecs;
+	glEndQuery(GL_TIME_ELAPSED);
+	glGetQueryObjecti64v(query, GL_QUERY_RESULT, &nsecs);
+	glDeleteQueries(1, &query);
+
+	return nsecs * 0.000000001;
 }
 
 /**
- * Run function 'f' for enough iterations to reach a steady state.
- * Return the rate (iterations/second).
+ * Return iterations/second for the duration.
+ * Use a longer duration if you want more precision.
  */
 double
-perf_measure_rate(perf_rate_func f, double minDuration)
+perf_measure_cpu_rate(perf_rate_func f, double duration)
 {
-	double rate = 0.0, prevRate = 0.0;
-	unsigned subiters;
+	return measure_rate(f, duration, 1, measure_cpu_time);
+}
 
-	/* Compute initial number of iterations to try.
-	 * If the test function is pretty slow this helps to avoid
-	 * extraordinarily long run times.
-	 */
-	subiters = 2;
-	{
-		const double t0 = perf_get_time();
-		double t1;
-		do {
-			f(subiters); /* call the rendering function */
-			glFinish();
-			t1 = perf_get_time();
-			subiters *= 2;
-		} while (t1 - t0 < 0.1 * minDuration);
-	}
-	/*printf("initial subIters = %u\n", subiters);*/
-
-	while (1) {
-		const double t0 = perf_get_time();
-		unsigned iters = 0;
-		double t1;
-
-		do {
-			f(subiters); /* call the rendering function */
-			glFinish();
-			t1 = perf_get_time();
-			iters += subiters;
-		} while (t1 - t0 < minDuration);
-
-		rate = iters / (t1 - t0);
-
-		if (0)
-			printf("prevRate %f  rate  %f  ratio %f  iters %u\n",
-			       prevRate, rate, rate/prevRate, iters);
-
-		/* Try and speed the search up by skipping a few steps: */
-		if (rate > prevRate * 1.6)
-			subiters *= 8;
-		else if (rate > prevRate * 1.2)
-			subiters *= 4;
-		else if (rate > prevRate * 1.05)
-			subiters *= 2;
-		else
-			break;
-
-		prevRate = rate;
-	}
-
-	if (0)
-		printf("%s returning iters %u  rate %f\n", __FUNCTION__, subiters, rate);
-	return rate;
+double
+perf_measure_gpu_rate(perf_rate_func f, double duration)
+{
+	return measure_rate(f, duration, 5, measure_gpu_time);
 }
