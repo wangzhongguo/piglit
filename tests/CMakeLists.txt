@@ -31,6 +31,7 @@ add_subdirectory (shaders)
 add_subdirectory (texturing)
 add_subdirectory (spec)
 add_subdirectory (fast_color_clear)
+add_subdirectory (llvmpipe)
 add_subdirectory (perf)
 add_subdirectory (wgl)
 

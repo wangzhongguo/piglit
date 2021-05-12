@@ -1,0 +1,5 @@
+Stretched textures
+Rotated textures
+BGRX RGBA textures
+Wrap modes
+Filtering modes
