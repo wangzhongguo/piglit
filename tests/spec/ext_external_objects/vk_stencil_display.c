@@ -203,9 +203,10 @@ run_subtest(int case_num)
 
 	glDisable(GL_DEPTH_TEST);
 
+	/* This may fail if the GL driver does not support the format with memory objects. */
 	if (!gl_subtest_init()) {
-		fprintf(stderr, "Failed to initialize the GL part of subtest\n");
-		goto fail;
+		piglit_report_subtest_result(res, "%s", depth_stencil_formats[case_num].name);
+		return res;
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
