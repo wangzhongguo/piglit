@@ -1,0 +1,152 @@
+# pass an interleaved array through vs->tcs->tes->fs via a named interface block
+
+[require]
+GLSL >= 1.50
+GL_ARB_arrays_of_arrays
+GL_ARB_enhanced_layouts
+GL_ARB_tessellation_shader
+GL_ARB_separate_shader_objects
+
+[vertex shader]
+#extension GL_ARB_enhanced_layouts: require
+#extension GL_ARB_separate_shader_objects: require
+
+in vec4 vertex;
+
+out TheBlock {
+   // consume X/Y/Z components of 6 vectors
+   layout(location = 0) out vec3 a[6];
+
+   // consumes W component of 6 vectors
+   layout(location = 0, component = 3) out float b[6];
+} vsBlock;
+
+void main()
+{
+	gl_Position = vertex;
+
+	vsBlock.a[0] = vec3(0.0);
+	vsBlock.a[1] = vec3(1.0);
+	vsBlock.a[2] = vec3(2.0);
+	vsBlock.a[3] = vec3(3.0);
+	vsBlock.a[4] = vec3(4.0);
+	vsBlock.a[5] = vec3(5.0);
+	vsBlock.b[0] = 6.0;
+	vsBlock.b[1] = 7.0;
+	vsBlock.b[2] = 8.0;
+	vsBlock.b[3] = 9.0;
+	vsBlock.b[4] = 10.0;
+	vsBlock.b[5] = 11.0;
+}
+
+
+[tessellation control shader]
+#extension GL_ARB_arrays_of_arrays: require
+#extension GL_ARB_enhanced_layouts: require
+#extension GL_ARB_tessellation_shader: require
+#extension GL_ARB_separate_shader_objects: require
+
+layout(vertices = 3) out;
+
+in TheBlock {
+   // consume X/Y/Z components of 6 vectors
+   layout(location = 0) in vec3 a[6];
+
+   // consumes W component of 6 vectors
+   layout(location = 0, component = 3) in float b[6];
+} vsBlock[];
+
+out TheBlock {
+   // consume X/Y/Z components of 6 vectors
+   layout(location = 0) out vec3 a[6];
+
+   // consumes W component of 6 vectors
+   layout(location = 0, component = 3) out float b[6];
+} tcBlock[];
+
+void main() {
+	gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
+	gl_TessLevelOuter = float[4](1.0, 1.0, 1.0, 0.0);
+	gl_TessLevelInner = float[2](0.0, 0.0);
+
+	tcBlock[gl_InvocationID].a = vsBlock[gl_InvocationID].a;
+	tcBlock[gl_InvocationID].b = vsBlock[gl_InvocationID].b;
+}
+
+
+[tessellation evaluation shader]
+#extension GL_ARB_arrays_of_arrays: require
+#extension GL_ARB_enhanced_layouts: require
+#extension GL_ARB_tessellation_shader: require
+#extension GL_ARB_separate_shader_objects: require
+
+layout(triangles) in;
+
+in TheBlock {
+   // consume X/Y/Z components of 6 vectors
+   layout(location = 0) in vec3 a[6];
+
+   // consumes W component of 6 vectors
+   layout(location = 0, component = 3) in float b[6];
+} tcBlock[];
+
+out TheBlock {
+   // consume X/Y/Z components of 6 vectors
+   layout(location = 0) out vec3 a[6];
+
+   // consumes W component of 6 vectors
+   layout(location = 0, component = 3) out float b[6];
+} tesBlock;
+
+void main() {
+	gl_Position = gl_in[0].gl_Position * gl_TessCoord[0]
+	            + gl_in[1].gl_Position * gl_TessCoord[1]
+	            + gl_in[2].gl_Position * gl_TessCoord[2];
+
+	tesBlock.a = tcBlock[0].a;
+	tesBlock.b = tcBlock[0].b;
+}
+
+
+[fragment shader]
+#extension GL_ARB_enhanced_layouts: require
+#extension GL_ARB_separate_shader_objects: require
+
+in TheBlock {
+   // consume X/Y/Z components of 6 vectors
+   layout(location = 0) in vec3 a[6];
+
+   // consumes W component of 6 vectors
+   layout(location = 0, component = 3) in float b[6];
+} tesBlock;
+
+void main()
+{
+	gl_FragColor = vec4(1, 0, 0, 1);
+
+	for (int i = 0; i < 6; i++) {
+		if (tesBlock.a[i] != vec3(float(i)))
+			gl_FragColor = vec4(0, 1, 0, 1);
+	}
+
+	for (int i = 6; i < 12; i++) {
+		if (tesBlock.b[i-6] != float(i))
+			gl_FragColor = vec4(0, 1, 0, 1);
+	}
+}
+
+[vertex data]
+vertex/float/2
+-1.0 -1.0
+ 1.0 -1.0
+-1.0  1.0
+-1.0  1.0
+ 1.0 -1.0
+ 1.0  1.0
+
+[test]
+clear color 0.1 0.1 0.1 0.1
+clear
+patch parameter vertices 3
+draw arrays GL_PATCHES 0 6
+probe all rgba 1.0 0.0 0.0 1.0
