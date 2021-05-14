@@ -706,6 +706,7 @@ with profile.test_list.group_manager(
     g(['getteximage-targets', '2D'])
     g(['teximage-scale-bias'])
     g(['tex-upside-down-miptree'])
+    g(['vertex-fallbacks'])
 
     for prim in ['GL_POINTS', 'GL_LINE_LOOP', 'GL_LINE_STRIP', 'GL_LINES',
                  'GL_TRIANGLES', 'GL_TRIANGLE_STRIP', 'GL_TRIANGLE_FAN',
