@@ -29,6 +29,7 @@ import pytest
 
 import os
 import subprocess
+import sys
 
 from os import path
 
@@ -48,7 +49,7 @@ def config(mocker):
 class TestAPITraceBackend(object):
     """Tests for the APITraceBackend class."""
 
-    def mock_apitrace_subprocess_run(self, cmd, stdout, env=None):
+    def mock_apitrace_subprocess_run(self, cmd, stdout, stderr, env=None):
         get_last_call_args = ['dump', '--calls=frame']
         replay_retrace_args = ['--headless']
         if cmd[1:-1] == get_last_call_args:
@@ -212,12 +213,12 @@ class TestAPITraceBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.apitrace, 'dump', '--calls=frame', trace_path],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.eglretrace, '--headless',
                         '--snapshot=' + calls,
                         '--snapshot-prefix=' + snapshot_prefix, trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_apitrace_subprocess_run.call_count == 2
         self.m_apitrace_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -239,12 +240,12 @@ class TestAPITraceBackend(object):
                                     path.basename(trace_path) + '-')
         m_calls = [self.mocker.call(
             [self.apitrace, 'dump', '--calls=frame', trace_path],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.eglretrace, '--headless',
                         '--snapshot=' + calls,
                         '--snapshot-prefix=' + snapshot_prefix, trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_apitrace_subprocess_run.call_count == 2
         self.m_apitrace_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -267,7 +268,7 @@ class TestAPITraceBackend(object):
             [self.eglretrace, '--headless',
              '--snapshot=' + calls,
              '--snapshot-prefix=' + snapshot_prefix, trace_path],
-            env=None, stdout=subprocess.PIPE)
+            env=None, stdout=subprocess.PIPE, stderr=sys.stderr)
         for call in calls.split(','):
             assert path.exists(snapshot_prefix + call.zfill(10) + '.png')
 
@@ -288,7 +289,7 @@ class TestAPITraceBackend(object):
             [self.eglretrace, '--headless',
              '--snapshot=' + calls,
              '--snapshot-prefix=' + snapshot_prefix, trace_path],
-            env=None, stdout=subprocess.PIPE)
+            env=None, stdout=subprocess.PIPE, stderr=sys.stderr)
         for call in calls.split(','):
             assert not path.exists(snapshot_prefix + call.zfill(10) + '.png')
 
@@ -305,12 +306,12 @@ class TestAPITraceBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.apitrace, 'dump', '--calls=frame', trace_path],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.eglretrace, '--headless',
                         '--snapshot=' + calls,
                         '--snapshot-prefix=' + snapshot_prefix, trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_apitrace_subprocess_run.call_count == 2
         self.m_apitrace_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -329,12 +330,12 @@ class TestAPITraceBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.apitrace, 'dump', '--calls=frame', trace_path],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.eglretrace, '--headless',
                         '--snapshot=' + calls,
                         '--snapshot-prefix=' + snapshot_prefix, trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_apitrace_subprocess_run.call_count == 2
         self.m_apitrace_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -371,12 +372,12 @@ class TestAPITraceBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.wine, self.apitrace, 'dump', '--calls=frame', trace_path],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.wine, self.d3dretrace, '--headless',
                         '--snapshot=' + calls,
                         '--snapshot-prefix=' + snapshot_prefix, trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_apitrace_subprocess_run.call_count == 2
         self.m_apitrace_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -398,12 +399,12 @@ class TestAPITraceBackend(object):
                                     path.basename(trace_path) + '-')
         m_calls = [self.mocker.call(
             [self.wine, self.apitrace, 'dump', '--calls=frame', trace_path],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.wine, self.d3dretrace, '--headless',
                         '--snapshot=' + calls,
                         '--snapshot-prefix=' + snapshot_prefix, trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_apitrace_subprocess_run.call_count == 2
         self.m_apitrace_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -426,7 +427,7 @@ class TestAPITraceBackend(object):
             [self.wine, self.d3dretrace, '--headless',
              '--snapshot=' + calls,
              '--snapshot-prefix=' + snapshot_prefix, trace_path],
-            env=None, stdout=subprocess.PIPE)
+            env=None, stdout=subprocess.PIPE, stderr=sys.stderr)
         for call in calls.split(','):
             assert path.exists(snapshot_prefix + call.zfill(10) + '.png')
 
@@ -447,7 +448,7 @@ class TestAPITraceBackend(object):
             [self.wine, self.d3dretrace, '--headless',
              '--snapshot=' + calls,
              '--snapshot-prefix=' + snapshot_prefix, trace_path],
-            env=None, stdout=subprocess.PIPE)
+            env=None, stdout=subprocess.PIPE, stderr=sys.stderr)
         for call in calls.split(','):
             assert not path.exists(snapshot_prefix + call.zfill(10) + '.png')
 
@@ -464,12 +465,12 @@ class TestAPITraceBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.wine, self.apitrace, 'dump', '--calls=frame', trace_path],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.wine, self.d3dretrace, '--headless',
                         '--snapshot=' + calls,
                         '--snapshot-prefix=' + snapshot_prefix, trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_apitrace_subprocess_run.call_count == 2
         self.m_apitrace_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -488,12 +489,12 @@ class TestAPITraceBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.wine, self.apitrace, 'dump', '--calls=frame', trace_path],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.wine, self.d3dretrace, '--headless',
                         '--snapshot=' + calls,
                         '--snapshot-prefix=' + snapshot_prefix, trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_apitrace_subprocess_run.call_count == 2
         self.m_apitrace_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):

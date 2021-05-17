@@ -29,6 +29,7 @@ import pytest
 
 import os
 import subprocess
+import sys
 import textwrap
 
 from os import path
@@ -49,7 +50,7 @@ def config(mocker):
 class TestGFXReconstructBackend(object):
     """Tests for the GFXReconstructBackend class."""
 
-    def mock_gfxreconstruct_subprocess_run(self, cmd, stdout, env=None):
+    def mock_gfxreconstruct_subprocess_run(self, cmd, stdout, stderr, env=None):
         if cmd[0].endswith(self.gfxrecon_info):
             # VK get_last_call
             ret = subprocess.CompletedProcess(cmd, 0)
@@ -211,16 +212,16 @@ class TestGFXReconstructBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.gfxrecon_replay, '--version'],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_info, trace_path],
-                       stdout=subprocess.PIPE),
+                       stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_replay,
                         '--screenshots', calls,
                         '--screenshot-dir', path.dirname(trace_path),
                         trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_gfxreconstruct_subprocess_run.call_count == 3
         self.m_gfxreconstruct_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -253,17 +254,17 @@ class TestGFXReconstructBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.gfxrecon_replay, '--version'],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_info, trace_path],
-                       stdout=subprocess.PIPE),
+                       stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_replay] +
                        gfxrecon_replay_extra.split() +
                        ['--screenshots', calls,
                         '--screenshot-dir', path.dirname(trace_path),
                         trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_gfxreconstruct_subprocess_run.call_count == 3
         self.m_gfxreconstruct_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -285,16 +286,16 @@ class TestGFXReconstructBackend(object):
                                     path.basename(trace_path) + '-')
         m_calls = [self.mocker.call(
             [self.gfxrecon_replay, '--version'],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_info, trace_path],
-                       stdout=subprocess.PIPE),
+                       stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_replay,
                         '--screenshots', calls,
                         '--screenshot-dir', self.output_dir,
                         trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_gfxreconstruct_subprocess_run.call_count == 3
         self.m_gfxreconstruct_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -315,13 +316,13 @@ class TestGFXReconstructBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.gfxrecon_replay, '--version'],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_replay,
                         '--screenshots', calls,
                         '--screenshot-dir', path.dirname(trace_path),
                         trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_gfxreconstruct_subprocess_run.call_count == 2
         self.m_gfxreconstruct_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -342,13 +343,13 @@ class TestGFXReconstructBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.gfxrecon_replay, '--version'],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_replay,
                         '--screenshots', calls,
                         '--screenshot-dir', path.dirname(trace_path),
                         trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_gfxreconstruct_subprocess_run.call_count == 2
         self.m_gfxreconstruct_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -367,16 +368,16 @@ class TestGFXReconstructBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.gfxrecon_replay, '--version'],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_info, trace_path],
-                       stdout=subprocess.PIPE),
+                       stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_replay,
                         '--screenshots', calls,
                         '--screenshot-dir', path.dirname(trace_path),
                         trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_gfxreconstruct_subprocess_run.call_count == 3
         self.m_gfxreconstruct_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -395,16 +396,16 @@ class TestGFXReconstructBackend(object):
         snapshot_prefix = trace_path + '-'
         m_calls = [self.mocker.call(
             [self.gfxrecon_replay, '--version'],
-            stdout=subprocess.PIPE),
+            stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_info, trace_path],
-                       stdout=subprocess.PIPE),
+                       stdout=subprocess.PIPE, stderr=sys.stderr),
                    self.mocker.call(
                        [self.gfxrecon_replay,
                         '--screenshots', calls,
                         '--screenshot-dir', path.dirname(trace_path),
                         trace_path],
-                       env=None, stdout=subprocess.PIPE)]
+                       env=None, stdout=subprocess.PIPE, stderr=sys.stderr)]
         assert self.m_gfxreconstruct_subprocess_run.call_count == 3
         self.m_gfxreconstruct_subprocess_run.assert_has_calls(m_calls)
         for call in calls.split(','):
@@ -432,6 +433,6 @@ class TestGFXReconstructBackend(object):
         snapshot_prefix = trace_path + '-'
         self.m_gfxreconstruct_subprocess_run.assert_called_once_with(
             [self.gfxrecon_replay, '--version'],
-            stdout=subprocess.PIPE)
+            stdout=subprocess.PIPE, stderr=sys.stderr)
         for call in calls.split(','):
             assert not path.exists(snapshot_prefix + call + '.png')

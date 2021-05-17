@@ -29,6 +29,7 @@
 
 import os
 import subprocess
+import sys
 
 from os import path
 
@@ -94,7 +95,7 @@ class APITraceBackend(DumpBackend):
                                            default='apitrace')
         cmd = cmd_wrapper + [apitrace_bin,
                              'dump', '--calls=frame', self._trace_path]
-        ret = subprocess.run(cmd, stdout=subprocess.PIPE)
+        ret = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=sys.stderr)
         logoutput = '[dump_trace_images] Running: {}\n'.format(
             ' '.join(cmd)) + ret.stdout.decode(errors='replace')
         print(logoutput)

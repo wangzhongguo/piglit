@@ -48,7 +48,7 @@ def config(mocker):
 class TestRenderDocBackend(object):
     """Tests for the RenderDocBackend class."""
 
-    def mock_renderdoc_subprocess_run(self, cmd, stdout, env=None):
+    def mock_renderdoc_subprocess_run(self, cmd, stdout, stderr, env=None):
         ret = subprocess.CompletedProcess(cmd, 0)
         if len(cmd) > 3:
             calls = cmd[3:]

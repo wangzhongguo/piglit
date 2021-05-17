@@ -30,6 +30,7 @@
 import os
 import re
 import subprocess
+import sys
 
 from packaging import version
 from os import path
@@ -79,7 +80,7 @@ class GFXReconstructBackend(DumpBackend):
             ('replay', 'gfxrecon-info_bin'),
             default='gfxrecon-info')
         cmd = [gfxrecon_info_bin, self._trace_path]
-        ret = subprocess.run(cmd, stdout=subprocess.PIPE)
+        ret = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=sys.stderr)
         lines = ret.stdout.decode(errors='replace').splitlines()
         print(ret.stdout.decode(errors='replace'))
         try:
@@ -90,7 +91,7 @@ class GFXReconstructBackend(DumpBackend):
 
     def _check_version(self, gfxrecon_replay_bin):
         cmd = [gfxrecon_replay_bin, '--version']
-        ret = subprocess.run(cmd, stdout=subprocess.PIPE)
+        ret = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=sys.stderr)
         lines = ret.stdout.decode(errors='replace').splitlines()
         print(ret.stdout.decode(errors='replace'))
         try:

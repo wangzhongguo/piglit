@@ -33,6 +33,7 @@ This module provides a base class for replayer dump backend modules.
 import abc
 import functools
 import subprocess
+import sys
 
 from os import path
 
@@ -89,7 +90,12 @@ class DumpBackend(metaclass=abc.ABCMeta):
 
     @staticmethod
     def _run_logged_command(cmd, env):
-        ret = subprocess.run(cmd, stdout=subprocess.PIPE, env=env)
+        # Explicitly send the stderr to the fd at sys.stderr in case it was
+        # redirected for the parent process.
+        # See:
+        # https://bugs.python.org/issue44158
+        ret = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=sys.stderr,
+                             env=env)
         logoutput = '[dump_trace_images] Running: {}\n'.format(
             ' '.join(cmd)).encode() + ret.stdout
         print(logoutput.decode(errors='replace'))
