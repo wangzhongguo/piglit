@@ -9,5 +9,6 @@ link_libraries (
 )
 
 piglit_add_executable (gl-4.4-max_vertex_attrib_stride gl_max_vertex_attrib_stride.c)
+piglit_add_executable (gl-4.4-clear_tex_image gl_clear_tex_image.c)
 
 # vim: ft=cmake:
