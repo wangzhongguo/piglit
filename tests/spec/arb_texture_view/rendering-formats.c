@@ -1454,7 +1454,7 @@ create_test_clear_program(const struct format_info *base,
 	GLuint prog;
 	const char *sampler = "";
 	const char *conv = "";
-	unsigned expected[4] = { 0 };
+	unsigned expected[8] = { 0 };
 	unsigned i;
 	unsigned base_num_components = get_num_components(base);
 	bool test_nan = false;
@@ -1837,6 +1837,38 @@ create_test_clear_program(const struct format_info *base,
 			      is_any_integer(base) ? (i == 3 ? 1 : 0) :
 						     (i == 3 ? 0x3f800000 : 0);
 
+	for (i = 0; i < 4; i++) {
+		/* Converting unorm values to float isn't fully defined in GLSL,
+		 * so let's "white-list" some alternative float-results. In
+		 * particular, these alternative values is what we get when we
+		 * replace the division with a multiply by the 32-bit float
+		 * reciprocal. For example:
+		 *
+		 * 127 / 255.0f ~= 127 * 1.0f / 255
+		 *
+		 * These two values of calculating give slightly different
+		 * values, and neither are wrong. There's more values that are
+		 * technically speaking legal, but it doesn't seem there's any
+		 * reasonable way of ending up with those in the first place.
+		 */
+		switch (expected[i]) {
+		case 0x3e70f0f1: /* 60 / 255.0f */
+			expected[i+4] = 0x3e70f0f2; /* 60 * (1.0f / 255) */
+			break;
+
+		case 0x3e7cfcfd: /* 63 / 255.0 */
+			expected[i+4] = 0x3e7cfcfe; /* 63 * (1.0f / 255) */
+			break;
+
+		case 0x3efefeff: /* 127 / 255.0 */
+			expected[i+4] = 0x3efeff00; /* 127 * (1.0f / 255) */
+			break;
+
+		default:
+			expected[i+4] = expected[i];
+		}
+	}
+
 	if (is_any_integer(base)) {
 		if (is_signed(base)) {
 			sampler = "isampler2D";
@@ -1865,10 +1897,12 @@ create_test_clear_program(const struct format_info *base,
 		 "#endif\n"
 		 "out vec4 color;\n"
 		 "uniform %s s;\n"
-		 "uniform uvec4 expected;\n"
+		 "uniform uvec4 expected[2];\n"
 		 "uvec4 test_nan(vec4 v) { return uvec4(isnan(v)); }\n"
 		 "void main() { \n"
-		 "	if (%s(texelFetch(s, ivec2(0), 0)) == expected) {\n"
+		 "	uvec4 value = %s(texelFetch(s, ivec2(0), 0));\n"
+		 "	if (value == expected[0] ||\n"
+		 "	    value == expected[1]) {\n"
 		 "		color = vec4(0,1,0,0);\n"
 		 "	} else {\n"
 		 "		color = vec4(1,0,0,0);\n"
@@ -1879,7 +1913,7 @@ create_test_clear_program(const struct format_info *base,
 	prog = piglit_build_simple_program(vs, fs);
 	glUseProgram(prog);
 	glUniform1i(glGetUniformLocation(prog, "s"), 0);
-	glUniform4uiv(glGetUniformLocation(prog, "expected"), 1, expected);
+	glUniform4uiv(glGetUniformLocation(prog, "expected"), 2, expected);
 	return prog;
 }
 
