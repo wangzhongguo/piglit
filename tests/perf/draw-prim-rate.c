@@ -419,9 +419,9 @@ run_draw(unsigned iterations)
 enum cull_method {
 	NONE,
 	BACK_FACE_CULLING,
+	RASTERIZER_DISCARD,
 	VIEW_CULLING,
 	SUBPIXEL_PRIMS,
-	RASTERIZER_DISCARD,
 	DEGENERATE_PRIMS,
 	NUM_CULL_METHODS,
 };
@@ -539,8 +539,7 @@ run(enum draw_method draw_method, enum cull_method cull_method,
 	static double quad_sizes_in_pixels[] = {1.0 / 7, 0.25, 0.5};
 
 	if (cull_method == BACK_FACE_CULLING ||
-	    cull_method == VIEW_CULLING ||
-	    cull_method == DEGENERATE_PRIMS) {
+	    cull_method == VIEW_CULLING) {
 		num_subtests = ARRAY_SIZE(cull_percentages);
 	} else if (cull_method == SUBPIXEL_PRIMS) {
 		num_subtests = ARRAY_SIZE(quad_sizes_in_pixels);
@@ -655,15 +654,9 @@ piglit_display(void)
 	for (int cull_method = 0; cull_method < NUM_CULL_METHODS; cull_method++)
 		run(INDEXED_TRIANGLES, cull_method, num_quads_per_dim, num_prims, ARRAY_SIZE(num_prims));
 
-	/* glDrawArrays: Test NONE and BACK_FACE_CULLING first. */
+	/* glDrawArrays: Only test NONE, BACK_FACE_CULLING, and RASTERIZER_DISCARD. */
 	for (int draw_method = TRIANGLES; draw_method < NUM_DRAW_METHODS; draw_method++) {
-		for (int cull_method = 0; cull_method < VIEW_CULLING; cull_method++)
-			run(draw_method, cull_method, num_quads_per_dim, num_prims, ARRAY_SIZE(num_prims));
-	}
-
-	/* glDrawArrays: Test the rest. */
-	for (int draw_method = TRIANGLES; draw_method < NUM_DRAW_METHODS; draw_method++) {
-		for (int cull_method = VIEW_CULLING; cull_method < NUM_CULL_METHODS; cull_method++)
+		for (int cull_method = 0; cull_method <= RASTERIZER_DISCARD; cull_method++)
 			run(draw_method, cull_method, num_quads_per_dim, num_prims, ARRAY_SIZE(num_prims));
 	}
 
