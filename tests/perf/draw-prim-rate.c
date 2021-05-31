@@ -106,6 +106,7 @@ piglit_init(int argc, char **argv)
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnable(GL_CULL_FACE);
+	glPrimitiveRestartIndex(UINT32_MAX);
 }
 
 static void
@@ -385,6 +386,7 @@ enum draw_method {
 	TRIANGLES,
 	TRIANGLE_STRIP,
 	INDEXED_TRIANGLE_STRIP,
+	INDEXED_TRIANGLE_STRIP_PRIM_RESTART,
 	NUM_DRAW_METHODS,
 };
 
@@ -406,7 +408,8 @@ run_draw(unsigned iterations)
 			glDrawArrays(GL_TRIANGLES, (vb_size / 12) * duplicate_index, count);
 		} else if (global_draw_method == TRIANGLE_STRIP) {
 			glDrawArrays(GL_TRIANGLE_STRIP, (vb_size / 12) * duplicate_index, count);
-		} else if (global_draw_method == INDEXED_TRIANGLE_STRIP) {
+		} else if (global_draw_method == INDEXED_TRIANGLE_STRIP ||
+			   global_draw_method == INDEXED_TRIANGLE_STRIP_PRIM_RESTART) {
 			glDrawElements(GL_TRIANGLE_STRIP, count,
 				       GL_UNSIGNED_INT,
 				       (void*)(long)(ib_size * duplicate_index));
@@ -442,12 +445,14 @@ run_test(unsigned debug_num_iterations, enum draw_method draw_method,
 	unsigned *indices = NULL;
 
 	if (draw_method == INDEXED_TRIANGLES ||
-	    draw_method == INDEXED_TRIANGLE_STRIP)
+	    draw_method == INDEXED_TRIANGLE_STRIP ||
+	    draw_method == INDEXED_TRIANGLE_STRIP_PRIM_RESTART)
 		indices = (unsigned*)malloc(max_indices * 4);
 
 	unsigned num_vertices = 0, num_indices = 0;
 	if (draw_method == TRIANGLE_STRIP ||
-	    draw_method == INDEXED_TRIANGLE_STRIP) {
+	    draw_method == INDEXED_TRIANGLE_STRIP ||
+	    draw_method == INDEXED_TRIANGLE_STRIP_PRIM_RESTART) {
 		gen_triangle_strip_tile(num_quads_per_dim, quad_size_in_pixels,
 					cull_percentage,
 					cull_method == BACK_FACE_CULLING,
@@ -501,6 +506,8 @@ run_test(unsigned debug_num_iterations, enum draw_method draw_method,
 	/* Test */
 	if (cull_method == RASTERIZER_DISCARD)
 		glEnable(GL_RASTERIZER_DISCARD);
+	if (draw_method == INDEXED_TRIANGLE_STRIP_PRIM_RESTART)
+		glEnable(GL_PRIMITIVE_RESTART);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vb);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -521,6 +528,8 @@ run_test(unsigned debug_num_iterations, enum draw_method draw_method,
 
 	if (cull_method == RASTERIZER_DISCARD)
 		glDisable(GL_RASTERIZER_DISCARD);
+	if (draw_method == INDEXED_TRIANGLE_STRIP_PRIM_RESTART)
+		glDisable(GL_PRIMITIVE_RESTART);
 
 	/* Cleanup. */
 	glDeleteBuffers(1, &vb);
@@ -561,7 +570,9 @@ run(enum draw_method draw_method, enum cull_method cull_method,
 		printf("  %-14s, ",
 		       draw_method == INDEXED_TRIANGLES ? "glDrawElements" :
 		       draw_method == TRIANGLES ? "glDrawArraysT" :
-		       draw_method == TRIANGLE_STRIP ? "glDrawArraysTS" : "glDrawElemsTS");
+		       draw_method == TRIANGLE_STRIP ? "glDrawArraysTS" :
+		       draw_method == INDEXED_TRIANGLE_STRIP ? "glDrawElemsTS" :
+		       "glDrawTS_PrimR");
 
 		if (cull_method == NONE ||
 		    cull_method == RASTERIZER_DISCARD) {
