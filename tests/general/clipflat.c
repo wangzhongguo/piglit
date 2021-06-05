@@ -415,8 +415,8 @@ reportSubtest(GLenum mode, int drawMode,
 
 	piglit_report_subtest_result(pass ? PIGLIT_PASS : PIGLIT_FAIL,
 				     "%s(%s), glFrontFace(%s), glPolygonMode(%s), "
-				     "quadrant: %s",
-				     d, m, f, p, q);
+				     "quadrant: %s PV: %s",
+				     d, m, f, p, q, testing_first_pv ? "FIRST" : "LAST");
 
 	free(q);
 }
