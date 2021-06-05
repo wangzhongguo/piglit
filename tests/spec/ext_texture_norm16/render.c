@@ -371,9 +371,6 @@ test_format(const struct fmt_test *test)
 		render_texture(texture, GL_TEXTURE_2D, 0);
 		bool render_test = verify_contents_float(test);
 		piglit_present_results();
-		piglit_report_subtest_result(PIGLIT_RESULT(render_test),
-					     "format %s",
-					     piglit_get_gl_enum_name(test->iformat));
 		glDeleteTextures(1, &texture);
 		pass &= render_test;
 		return pass;
