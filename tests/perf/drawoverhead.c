@@ -763,7 +763,7 @@ perf_draw_variant(const char *call, bool is_indexed)
 	unsigned num_imgbos = 0;
 	unsigned num_vbos;
 
-	for (num_vbos = 1; num_vbos <= 16; num_vbos *= 4) {
+	for (num_vbos = 1; num_vbos <= 16; num_vbos *= 16) {
 		setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
 					    num_tbos, num_images, num_imgbos);
 
@@ -782,6 +782,17 @@ perf_draw_variant(const char *call, bool is_indexed)
 	perf_run(call, num_vbos, num_ubos, num_textures, num_tbos, num_images,
 		 num_imgbos, "no state", draw, base_rate);
 
+	num_ubos = 8;
+	num_textures = 8;
+	for (num_vbos = 1; num_vbos <= 16; num_vbos *= 16) {
+		setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
+					    num_tbos, num_images, num_imgbos);
+		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
+			 num_images, num_imgbos,
+			 "no state", draw, base_rate);
+	}
+
+	num_vbos = 1;
 	num_ubos = 1;
 	num_textures = 1;
 	setup_shaders_and_resources(num_vbos, num_ubos, num_textures, num_tbos,
@@ -789,22 +800,26 @@ perf_draw_variant(const char *call, bool is_indexed)
 	perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
 		 num_images, num_imgbos,
 		 "buffer replacement", draw_subdata_change, base_rate);
+
 	/* Test state changes. */
 	num_ubos = 8;
 	num_textures = 8;
 	for (num_vbos = 1; num_vbos <= 16; num_vbos *= 16) {
 		setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
 					    num_tbos, num_images, num_imgbos);
-
 		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
 			 num_images, num_imgbos,
-			 "no state", draw, base_rate);
+			 num_vbos == 1 ? "1 vertex attrib" : "16 vertex attribs",
+			 draw_vertex_attrib_change, base_rate);
+	}
+
+	num_vbos = 8;
+	setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
+				    num_tbos, num_images, num_imgbos);
+	{
 		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
 			 num_images, num_imgbos,
 			 "shader program", draw_shader_change, base_rate);
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 "vertex attrib", draw_vertex_attrib_change, base_rate);
 		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
 			 num_images, num_imgbos,
 			 "1 texture", draw_one_texture_change, base_rate);
