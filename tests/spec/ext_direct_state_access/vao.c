@@ -693,11 +693,6 @@ piglit_init(int argc, char **argv)
 			test_VertexArrayVertexOffsetEXT,
 		},
 		{
-			"VertexArrayVertexOffsetEXT",
-			NULL,
-			test_VertexArrayVertexOffsetEXT
-		},
-		{
 			"VertexArrayColorOffsetEXT",
 			NULL,
 			test_VertexArrayColorOffsetEXT
