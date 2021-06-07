@@ -28,6 +28,7 @@
 static bool color = true;
 static bool is_compat;
 static int selected_test_index = -1;
+static int duration = 1;
 
 PIGLIT_GL_TEST_CONFIG_BEGIN
 
@@ -59,6 +60,19 @@ PIGLIT_GL_TEST_CONFIG_BEGIN
 			}
 
 			printf("Running only test %d\n", selected_test_index);
+			i++;
+		}
+		if (!strcmp(argv[i], "-duration")) {
+			if (i == argc - 1) {
+				fprintf(stderr, "-duration requires an argument\n");
+				exit(1);
+			}
+
+			const char *testnum = argv[i + 1];
+			char *endptr;
+			duration = strtol(testnum, &endptr, 10);
+
+			printf("Duration forced to %i seconds\n", duration);
 			i++;
 		}
 
@@ -700,7 +714,7 @@ perf_run(const char *call, unsigned num_vbos, unsigned num_ubos,
 	if (selected_test_index != -1 && test_index != selected_test_index)
 		return 0;
 
-	double rate = perf_measure_cpu_rate(f, 1);
+	double rate = perf_measure_cpu_rate(f, duration);
 	double ratio = base_rate ? rate / base_rate : 1;
 
 	const char *ratio_color = base_rate == 0 ? COLOR_RESET :
