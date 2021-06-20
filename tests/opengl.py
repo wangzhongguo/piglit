@@ -2227,6 +2227,7 @@ with profile.test_list.group_manager(
     g(['ext_external_objects-vk-stencil-display'], 'vk-stencil-display')
     g(['ext_external_objects-vk-semaphores'], 'vk-semaphores')
     g(['ext_external_objects-vk-semaphores-2'], 'vk-semaphores-2')
+    g(['ext_external_objects-vk-image-display-multiple-textures'], 'vk-image-display-muliple-textures')
 
 # Group EXT_external_objects_fd tests
 with profile.test_list.group_manager(
