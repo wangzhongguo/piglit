@@ -808,47 +808,45 @@ piglit_display(void)
 	}
 
 	num_vbos = 8;
-	{
-		perf_run(call, 0, "shader program", draw_shader_change, base_rate);
-		perf_run(call, 0, "1 texture", draw_one_texture_change, base_rate);
-		perf_run(call, 0, "8 textures", draw_many_texture_change, base_rate);
+	perf_run(call, 0, "shader program", draw_shader_change, base_rate);
+	perf_run(call, 0, "1 texture", draw_one_texture_change, base_rate);
+	perf_run(call, 0, "8 textures", draw_many_texture_change, base_rate);
 
-		if (!is_compat) {
-			num_textures = 0;
+	if (!is_compat) {
+		num_textures = 0;
 
-			num_tbos = 8;
-			perf_run(call, 0, "1 TBO", draw_one_tbo_change, base_rate);
-			perf_run(call, 0, "8 TBOs", draw_many_tbo_change, base_rate);
-			num_tbos = 0;
+		num_tbos = 8;
+		perf_run(call, 0, "1 TBO", draw_one_tbo_change, base_rate);
+		perf_run(call, 0, "8 TBOs", draw_many_tbo_change, base_rate);
+		num_tbos = 0;
 
-			num_images = 8;
-			perf_run(call, 0, "1 image", draw_one_img_change, base_rate);
-			perf_run(call, 0,  "8 images", draw_many_img_change, base_rate);
-			num_images = 0;
+		num_images = 8;
+		perf_run(call, 0, "1 image", draw_one_img_change, base_rate);
+		perf_run(call, 0,  "8 images", draw_many_img_change, base_rate);
+		num_images = 0;
 
-			num_imgbos = 8;
-			perf_run(call, 0, "1 image buffer", draw_one_imgbo_change, base_rate);
-			perf_run(call, 0, "8 image buffers", draw_many_imgbo_change, base_rate);
-			num_imgbos = 0;
+		num_imgbos = 8;
+		perf_run(call, 0, "1 image buffer", draw_one_imgbo_change, base_rate);
+		perf_run(call, 0, "8 image buffers", draw_many_imgbo_change, base_rate);
+		num_imgbos = 0;
 
-			num_textures = 8;
-			num_tbos = 0;
-		}
+		num_textures = 8;
+		num_tbos = 0;
+	}
 
-		perf_run(call, 0, "1 UBO", draw_one_ubo_change, base_rate);
-		perf_run(call, 0, "8 UBOs", draw_many_ubo_change, base_rate);
+	perf_run(call, 0, "1 UBO", draw_one_ubo_change, base_rate);
+	perf_run(call, 0, "8 UBOs", draw_many_ubo_change, base_rate);
 
-		perf_run(call, 0, "few uniforms / 1", draw_uniform_change, base_rate);
-		perf_run(call, 1, "many uniforms / 1", draw_uniform_change, base_rate);
+	perf_run(call, 0, "few uniforms / 1", draw_uniform_change, base_rate);
+	perf_run(call, 1, "many uniforms / 1", draw_uniform_change, base_rate);
 
-		perf_run(call, 0, "scissor", draw_scissor_change, base_rate);
-		perf_run(call, 0, "viewport", draw_viewport_change, base_rate);
+	perf_run(call, 0, "scissor", draw_scissor_change, base_rate);
+	perf_run(call, 0, "viewport", draw_viewport_change, base_rate);
 
-		for (int state = 0; state < ARRAY_SIZE(enable_states); state++) {
-			enable_enum = enable_states[state].enable;
-			perf_run(call, 0, enable_states[state].name,
-				 draw_state_change, base_rate);
-		}
+	for (int state = 0; state < ARRAY_SIZE(enable_states); state++) {
+		enable_enum = enable_states[state].enable;
+		perf_run(call, 0, enable_states[state].name,
+			 draw_state_change, base_rate);
 	}
 
 	exit(0);
