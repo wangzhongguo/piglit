@@ -793,34 +793,18 @@ piglit_display(void)
 	call = "DrawElements";
 	indexed = true;
 
-	for (num_vbos = 1; num_vbos <= 16; num_vbos *= 16) {
-		setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
-					    num_tbos, num_images, num_imgbos);
+	setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
+				    num_tbos, num_images, num_imgbos);
+	base_rate = perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
+			     num_images, num_imgbos, "no state", draw, base_rate);
 
-		double rate = perf_run(call, num_vbos, num_ubos, num_textures,
-				       num_tbos, num_images, num_imgbos,
-				       "no state", draw, base_rate);
-		if (num_vbos == 1)
-			base_rate = rate;
-	}
-
-	num_vbos = 1;
-	num_ubos = 0;
 	num_textures = 16;
-	setup_shaders_and_resources(num_vbos, num_ubos, num_textures, num_tbos,
-				    num_images, num_imgbos);
+	num_ubos = 8;
+	num_vbos = 16;
+	setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
+				    num_tbos, num_images, num_imgbos);
 	perf_run(call, num_vbos, num_ubos, num_textures, num_tbos, num_images,
 		 num_imgbos, "no state", draw, base_rate);
-
-	num_ubos = 8;
-	num_textures = 8;
-	for (num_vbos = 1; num_vbos <= 16; num_vbos *= 16) {
-		setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
-					    num_tbos, num_images, num_imgbos);
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 "no state", draw, base_rate);
-	}
 
 	num_vbos = 1;
 	num_ubos = 1;
