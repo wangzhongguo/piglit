@@ -89,7 +89,7 @@ PIGLIT_GL_TEST_CONFIG_BEGIN
 
 PIGLIT_GL_TEST_CONFIG_END
 
-static GLuint prog[2], uniform_loc, tex[8], ubo[4], tbo[8], stream;
+static GLuint prog[2], uniform_loc, tex[8], ubo[8], tbo[8], stream;
 static bool indexed;
 static GLenum enable_enum;
 
@@ -271,7 +271,7 @@ setup_shaders_and_resources(unsigned prog_index)
 
 		glBindBufferBase(GL_UNIFORM_BUFFER, i, ub);
 		/* Save the last UBOs for testing UBO changes. */
-		ubo[i % 4] = ub;
+		ubo[i % 8] = ub;
 	}
 	/* setup VBO w/ vertex data, we need a different buffer in each attrib */
 	for (i = 0; i < num_vbos; i++) {
@@ -575,14 +575,14 @@ draw_many_ubo_change(unsigned count)
 	unsigned i,j;
 	if (indexed) {
 		for (i = 0; i < count; i++) {
-			for (j = 0; j < 4; j++)
-				glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo[(i + j) % 4]);
+			for (j = 0; j < 8; j++)
+				glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo[(i + j) % 8]);
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL);
 		}
 	} else {
 		for (i = 0; i < count; i++) {
-			for (j = 0; j < 4; j++)
-				glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo[(i + j) % 4]);
+			for (j = 0; j < 8; j++)
+				glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo[(i + j) % 8]);
 			glDrawArrays(GL_TRIANGLES, 0, 3);
 		}
 	}
