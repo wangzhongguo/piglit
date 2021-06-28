@@ -828,16 +828,18 @@ piglit_display(void)
 	perf_run(call, 0, "1/8 texture", draw_one_texture_change, base_rate);
 	perf_run(call, 0, "8/8 textures", draw_many_texture_change, base_rate);
 
-	if (!is_compat) {
-		num_textures = 0;
+	num_textures = 0;
 
+	if (piglit_get_gl_version() >= 31) {
 		num_tbos = 1;
 		perf_run(call, 0, "1/1 TBO", draw_one_tbo_change, base_rate);
 		num_tbos = 8;
 		perf_run(call, 0, "1/8 TBO", draw_one_tbo_change, base_rate);
 		perf_run(call, 0, "8/8 TBOs", draw_many_tbo_change, base_rate);
 		num_tbos = 0;
+	}
 
+	if (piglit_is_extension_supported("GL_ARB_shader_image_load_store")) {
 		num_images = 1;
 		perf_run(call, 0, "1/1 image", draw_one_img_change, base_rate);
 		num_images = 8;
@@ -851,11 +853,9 @@ piglit_display(void)
 		perf_run(call, 0, "1/8 image buffer", draw_one_imgbo_change, base_rate);
 		perf_run(call, 0, "8/8 image buffers", draw_many_imgbo_change, base_rate);
 		num_imgbos = 0;
-
-		num_textures = 8;
-		num_tbos = 0;
 	}
 
+	num_textures = 8;
 	num_ubos = 1;
 	perf_run(call, 0, "1/1 UBO", draw_one_ubo_change, base_rate);
 	num_ubos = 8;
