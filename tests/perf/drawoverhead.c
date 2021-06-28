@@ -93,6 +93,13 @@ static GLuint prog[2], uniform_loc, tex[8], ubo[4], tbo[8], stream;
 static bool indexed;
 static GLenum enable_enum;
 
+static unsigned num_ubos;
+static unsigned num_textures;
+static unsigned num_tbos;
+static unsigned num_images;
+static unsigned num_imgbos;
+static unsigned num_vbos;
+
 void
 piglit_init(int argc, char **argv)
 {
@@ -173,12 +180,7 @@ get_fs_text(char *s, unsigned num_ubos, unsigned num_textures,
 }
 
 static void
-setup_shaders_and_resources(unsigned num_vbos,
-			    unsigned num_ubos,
-			    unsigned num_textures,
-			    unsigned num_tbos,
-			    unsigned num_images,
-			    unsigned num_imgbos)
+setup_shaders_and_resources(unsigned prog_index)
 {
 	const unsigned max = 16;
 	char vs[4096], fs[4096];
@@ -249,7 +251,7 @@ setup_shaders_and_resources(unsigned num_vbos,
 			glUniformBlockBinding(prog[p], index, i);
 		}
 	}
-	glUseProgram(prog[0]);
+	glUseProgram(prog[prog_index]);
 
         static const float stream_data[32];
 
@@ -706,16 +708,19 @@ draw_vertex_attrib_change(unsigned count)
 #define COLOR_CYAN	"\033[1;36m"
 
 static double
-perf_run(const char *call, unsigned num_vbos, unsigned num_ubos,
-	 unsigned num_textures, unsigned num_tbos, unsigned num_images,
-	 unsigned num_imgbos,
-	 const char *change, perf_rate_func f, double base_rate)
+perf_run(const char *call, unsigned prog_index, const char *change,
+	 perf_rate_func f, double base_rate)
 {
 	static unsigned test_index;
 	test_index++;
 
 	if (selected_test_index != -1 && test_index != selected_test_index)
 		return 0;
+
+	setup_shaders_and_resources(prog_index);
+
+	if (f == draw_uniform_change)
+		uniform_loc = glGetUniformLocation(prog[prog_index], "u");
 
 	double rate = perf_measure_cpu_rate(f, duration);
 	double ratio = base_rate ? rate / base_rate : 1;
@@ -771,150 +776,77 @@ piglit_display(void)
 {
 	double base_rate = 0;
 
-	/* Test different shader resource usage without state changes. */
-	unsigned num_ubos = 0;
-	unsigned num_textures = 0;
-	unsigned num_tbos = 0;
-	unsigned num_images = 0;
-	unsigned num_imgbos = 0;
-	unsigned num_vbos = 1;
-
 	puts("   #, Test name                                              ,    Thousands draws/s, Difference vs the 1st");
 
 	const char *call = "DrawArrays";
 	indexed = false;
 
-	setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
-				    num_tbos, num_images, num_imgbos);
-
-	perf_run(call, num_vbos, num_ubos, num_textures, num_tbos, num_images,
-		 num_imgbos, "no state", draw, 0);
+	num_vbos = 1;
+	perf_run(call, 0, "no state", draw, 0);
 
 	call = "DrawElements";
 	indexed = true;
 
-	setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
-				    num_tbos, num_images, num_imgbos);
-	base_rate = perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			     num_images, num_imgbos, "no state", draw, base_rate);
+	base_rate = perf_run(call, 0, "no state", draw, base_rate);
 
 	num_textures = 16;
 	num_ubos = 8;
 	num_vbos = 16;
-	setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
-				    num_tbos, num_images, num_imgbos);
-	perf_run(call, num_vbos, num_ubos, num_textures, num_tbos, num_images,
-		 num_imgbos, "no state", draw, base_rate);
+	perf_run(call, 0,  "no state", draw, base_rate);
 
 	num_vbos = 1;
 	num_ubos = 1;
 	num_textures = 1;
-	setup_shaders_and_resources(num_vbos, num_ubos, num_textures, num_tbos,
-				    num_images, num_imgbos);
-	perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-		 num_images, num_imgbos,
-		 "buffer replacement", draw_subdata_change, base_rate);
+	perf_run(call, 0, "buffer replacement", draw_subdata_change, base_rate);
 
 	/* Test state changes. */
 	num_ubos = 8;
 	num_textures = 8;
 	for (num_vbos = 1; num_vbos <= 16; num_vbos *= 16) {
-		setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
-					    num_tbos, num_images, num_imgbos);
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 num_vbos == 1 ? "1 vertex attrib" : "16 vertex attribs",
+		perf_run(call, 0, num_vbos == 1 ? "1 vertex attrib" : "16 vertex attribs",
 			 draw_vertex_attrib_change, base_rate);
 	}
 
 	num_vbos = 8;
-	setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
-				    num_tbos, num_images, num_imgbos);
 	{
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 "shader program", draw_shader_change, base_rate);
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 "1 texture", draw_one_texture_change, base_rate);
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 "8 textures", draw_many_texture_change, base_rate);
+		perf_run(call, 0, "shader program", draw_shader_change, base_rate);
+		perf_run(call, 0, "1 texture", draw_one_texture_change, base_rate);
+		perf_run(call, 0, "8 textures", draw_many_texture_change, base_rate);
 
 		if (!is_compat) {
 			num_textures = 0;
 
 			num_tbos = 8;
-			setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
-						    num_tbos, num_images, num_imgbos);
-			perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-				 num_images, num_imgbos,
-				 "1 TBO", draw_one_tbo_change, base_rate);
-			perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-				 num_images, num_imgbos,
-				 "8 TBOs", draw_many_tbo_change, base_rate);
+			perf_run(call, 0, "1 TBO", draw_one_tbo_change, base_rate);
+			perf_run(call, 0, "8 TBOs", draw_many_tbo_change, base_rate);
 			num_tbos = 0;
 
 			num_images = 8;
-			setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
-						    num_tbos, num_images, num_imgbos);
-			perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-				 num_images, num_imgbos,
-				 "1 image", draw_one_img_change, base_rate);
-			perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-				 num_images, num_imgbos,
-				 "8 images", draw_many_img_change, base_rate);
+			perf_run(call, 0, "1 image", draw_one_img_change, base_rate);
+			perf_run(call, 0,  "8 images", draw_many_img_change, base_rate);
 			num_images = 0;
 
 			num_imgbos = 8;
-			setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
-						    num_tbos, num_images, num_imgbos);
-			perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-				 num_images, num_imgbos,
-				 "1 image buffer", draw_one_imgbo_change, base_rate);
-			perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-				 num_images, num_imgbos,
-				 "8 image buffers", draw_many_imgbo_change, base_rate);
+			perf_run(call, 0, "1 image buffer", draw_one_imgbo_change, base_rate);
+			perf_run(call, 0, "8 image buffers", draw_many_imgbo_change, base_rate);
 			num_imgbos = 0;
 
 			num_textures = 8;
 			num_tbos = 0;
-			setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
-						    num_tbos, num_images, num_imgbos);
 		}
 
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 "1 UBO", draw_one_ubo_change, base_rate);
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 "8 UBOs", draw_many_ubo_change, base_rate);
+		perf_run(call, 0, "1 UBO", draw_one_ubo_change, base_rate);
+		perf_run(call, 0, "8 UBOs", draw_many_ubo_change, base_rate);
 
-		glUseProgram(prog[0]);
-		uniform_loc = glGetUniformLocation(prog[0], "u");
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 "few uniforms / 1", draw_uniform_change, base_rate);
+		perf_run(call, 0, "few uniforms / 1", draw_uniform_change, base_rate);
+		perf_run(call, 1, "many uniforms / 1", draw_uniform_change, base_rate);
 
-		glUseProgram(prog[1]);
-		uniform_loc = glGetUniformLocation(prog[1], "u");
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 "many uniforms / 1", draw_uniform_change, base_rate);
-		glUseProgram(prog[0]);
-
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 "scissor", draw_scissor_change, base_rate);
-		perf_run(call, num_vbos, num_ubos, num_textures, num_tbos,
-			 num_images, num_imgbos,
-			 "viewport", draw_viewport_change, base_rate);
+		perf_run(call, 0, "scissor", draw_scissor_change, base_rate);
+		perf_run(call, 0, "viewport", draw_viewport_change, base_rate);
 
 		for (int state = 0; state < ARRAY_SIZE(enable_states); state++) {
 			enable_enum = enable_states[state].enable;
-			perf_run(call, num_vbos, num_ubos, num_textures,
-				 num_tbos, num_images, num_imgbos,
-				 enable_states[state].name,
+			perf_run(call, 0, enable_states[state].name,
 				 draw_state_change, base_rate);
 		}
 	}
