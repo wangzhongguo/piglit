@@ -313,6 +313,11 @@ setup_shaders_and_resources(unsigned prog_index)
 		/* Save the last TBOs for testing UBO changes. */
 		tbo[i % 8] = tb;
 	}
+	for (i = 0; i < num_images; i++)
+		glBindImageTexture(i, tex[i % 8], 0, false, 0, GL_READ_ONLY, GL_RGBA8);
+	for (i = 0; i < num_imgbos; i++)
+		glBindImageTexture(i, tbo[i % 8], 0, false, 0, GL_READ_ONLY, GL_RGBA8);
+
 	glActiveTexture(GL_TEXTURE0);
 }
 
@@ -474,14 +479,14 @@ draw_many_img_change(unsigned count)
 	if (indexed) {
 		for (i = 0; i < count; i++) {
 			for (j = 0; j < 8; j++)
-				glBindImageTexture(0, tex[(i + j) % 8], 0, false,
+				glBindImageTexture(j, tex[(i + j) % 8], 0, false,
 						   0, GL_READ_ONLY, GL_RGBA8);
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL);
 		}
 	} else {
 		for (i = 0; i < count; i++) {
 			for (j = 0; j < 8; j++)
-				glBindImageTexture(0, tex[(i + j) % 8], 0, false,
+				glBindImageTexture(j, tex[(i + j) % 8], 0, false,
 						   0, GL_READ_ONLY, GL_RGBA8);
 			glActiveTexture(GL_TEXTURE0);
 			glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -515,7 +520,7 @@ draw_many_imgbo_change(unsigned count)
 	if (indexed) {
 		for (i = 0; i < count; i++) {
 			for (j = 0; j < 8; j++)
-				glBindImageTexture(0, tbo[(i + j) % 8], 0, false,
+				glBindImageTexture(j, tbo[(i + j) % 8], 0, false,
 						   0, GL_READ_ONLY, GL_RGBA8);
 			glActiveTexture(GL_TEXTURE0);
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL);
@@ -523,7 +528,7 @@ draw_many_imgbo_change(unsigned count)
 	} else {
 		for (i = 0; i < count; i++) {
 			for (j = 0; j < 8; j++)
-				glBindImageTexture(0, tbo[(i + j) % 8], 0, false,
+				glBindImageTexture(j, tbo[(i + j) % 8], 0, false,
 						   0, GL_READ_ONLY, GL_RGBA8);
 			glActiveTexture(GL_TEXTURE0);
 			glDrawArrays(GL_TRIANGLES, 0, 3);
