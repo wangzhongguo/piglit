@@ -89,8 +89,8 @@ PIGLIT_GL_TEST_CONFIG_BEGIN
 
 PIGLIT_GL_TEST_CONFIG_END
 
-static GLuint prog[2], uniform_loc, tex[8], ubo[8], tbo[8], stream;
-static bool indexed;
+static GLuint prog[2], uniform_loc, tex[8], ubo[8], tbo[8], stream, dlist[16];
+static bool indexed, is_dlist;
 static GLenum enable_enum;
 
 static unsigned num_ubos;
@@ -115,6 +115,74 @@ piglit_init(int argc, char **argv)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 		     sizeof(indices), indices, GL_STATIC_DRAW);
+
+	if (is_compat) {
+		unsigned i = 0;
+
+		/* 0..3: {glVertex}. All display lists should use the same
+		 * internal VAO.
+		 */
+		for (; i < 4; i++) {
+			dlist[i] = glGenLists(1);
+			glNewList(dlist[i], GL_COMPILE);
+			glBegin(GL_TRIANGLES);
+			glVertex2f(0, 0);
+			glVertex2f(0, 1);
+			glVertex2f(1, 0);
+			glEnd();
+			glEndList();
+		}
+
+		/* 4..7: {glVertex, glColor}. All display lists should use
+		 * the same internal VAO.
+		 */
+		for (; i < 8; i++) {
+			dlist[i] = glGenLists(1);
+			glNewList(dlist[i], GL_COMPILE);
+			glBegin(GL_TRIANGLES);
+			glColor3f(1, 1, 1);
+			glVertex2f(0, 0);
+			glColor3f(1, 1, 1);
+			glVertex2f(0, 1);
+			glColor3f(1, 1, 1);
+			glVertex2f(1, 0);
+			glEnd();
+			glEndList();
+		}
+
+		/* 8..15: {glVertex} and {glVertex, glColor} created interleaved,
+		 * which should result in different internal VAOs in suboptimal
+		 * implementations.
+		 */
+		for (; i < 16; i++) {
+			dlist[i] = glGenLists(1);
+			glNewList(dlist[i], GL_COMPILE);
+			glBegin(GL_TRIANGLES);
+			if (i % 2)
+				glColor3f(1, 1, 1);
+			glVertex2f(0, 0);
+			if (i % 2)
+				glColor3f(1, 1, 1);
+			glVertex2f(0, 1);
+			if (i % 2)
+				glColor3f(1, 1, 1);
+			glVertex2f(1, 0);
+			glEnd();
+			glEndList();
+		}
+	}
+}
+
+static void
+get_dlist_vs_text(char *s, unsigned prog_index)
+{
+	sprintf(s,
+		"#version 130\n"
+		"void main() {\n"
+		"	gl_Position = gl_Vertex;\n"
+		"	%s\n"
+		"}\n",
+		prog_index == 1 ? "gl_FrontColor = gl_Color;" : "");
 }
 
 static void
@@ -196,10 +264,15 @@ setup_shaders_and_resources(unsigned prog_index)
 
 	/* Create two programs in case we want to test program changes. */
 	for (p = 0; p < 2; p++) {
-		get_vs_text(vs, num_vbos, num_tbos, p);
-		get_fs_text(fs, num_ubos, num_textures, num_tbos, num_images,
-			    num_imgbos, p);
-		prog[p] = piglit_build_simple_program(vs, fs);
+		if (is_dlist) {
+			get_dlist_vs_text(vs, p);
+			prog[p] = piglit_build_simple_program(vs, NULL);
+		} else {
+			get_vs_text(vs, num_vbos, num_tbos, p);
+			get_fs_text(fs, num_ubos, num_textures, num_tbos, num_images,
+				    num_imgbos, p);
+			prog[p] = piglit_build_simple_program(vs, fs);
+		}
 
 		/* Assign texture units to samplers. */
 		glUseProgram(prog[p]);
@@ -319,6 +392,41 @@ setup_shaders_and_resources(unsigned prog_index)
 		glBindImageTexture(i, tbo[i % 8], 0, false, 0, GL_READ_ONLY, GL_RGBA8);
 
 	glActiveTexture(GL_TEXTURE0);
+}
+
+static void
+calllist_1attrib(unsigned count)
+{
+	for (unsigned i = 0; i < count; i++)
+		glCallList(dlist[i % 4]);
+}
+
+static void
+calllist_2attribs(unsigned count)
+{
+	for (unsigned i = 0; i < count; i++)
+		glCallList(dlist[4 + i % 4]);
+}
+
+static void
+calllist_1attrib_mixed_alloc(unsigned count)
+{
+	for (unsigned i = 0; i < count; i++)
+		glCallList(dlist[8 + (i % 4) * 2]);
+}
+
+static void
+calllist_2attribs_mixed_alloc(unsigned count)
+{
+	for (unsigned i = 0; i < count; i++)
+		glCallList(dlist[9 + (i % 4) * 2]);
+}
+
+static void
+calllist_mixed_attribs(unsigned count)
+{
+	for (unsigned i = 0; i < count; i++)
+		glCallList(dlist[8 + i % 8]);
 }
 
 static void
@@ -734,7 +842,7 @@ perf_run(const char *call, unsigned prog_index, const char *change,
 		ratio > 0.7 ? COLOR_GREEN :
 		ratio > 0.4 ? COLOR_YELLOW : COLOR_RED;
 
-	printf(" %3u, %*s (%2u VBO| %u UBO| %2u %s) w/ %s change,%*s"
+	printf(" %3u, %*s (%2u VBO| %u UBO| %2u %s) w/ %s %7s%*s"
 	       "%s%5u%s, %s%.1f%%%s\n",
 	       test_index, -(int)strlen("DrawElements"), call, num_vbos, num_ubos,
 	       num_textures ? num_textures :
@@ -745,7 +853,8 @@ perf_run(const char *call, unsigned prog_index, const char *change,
 	         num_images ? "Img" :
 	         num_imgbos ? "ImB" : "   ",
 	       change,
-	       MAX2(24 - (int)strlen(change), 0), "",
+	       is_dlist ? "" : "change,",
+	       MAX2(26 - (int)strlen(change), 0), "",
 	       color ? COLOR_CYAN : "",
 	       (unsigned)(rate / 1000),
 	       color ? COLOR_RESET : "",
@@ -789,10 +898,24 @@ piglit_display(void)
 	num_vbos = 1;
 	perf_run(call, 0, "no state", draw, 0);
 
+	if (is_compat) {
+		is_dlist = true;
+		call = "glCallList";
+		num_vbos = 0;
+		base_rate = perf_run(call, 0, "1 attrib", calllist_1attrib, 0);
+		perf_run(call, 1, "2 attribs", calllist_2attribs, base_rate);
+		perf_run(call, 0, "1 attrib (mixed alloc)", calllist_1attrib_mixed_alloc, base_rate);
+		perf_run(call, 1, "2 attribs (mixed alloc)", calllist_2attribs_mixed_alloc, base_rate);
+		perf_run(call, 1, "1 and 2 attribs intermixed", calllist_mixed_attribs, base_rate);
+		perf_run(call, 1, "1 attrib + 1 zero-stride", calllist_1attrib, base_rate);
+		num_vbos = 1;
+		is_dlist = false;
+	}
+
 	call = "DrawElements";
 	indexed = true;
 
-	base_rate = perf_run(call, 0, "no state", draw, base_rate);
+	base_rate = perf_run(call, 0, "no state", draw, 0);
 
 	num_textures = 16;
 	num_ubos = 8;
