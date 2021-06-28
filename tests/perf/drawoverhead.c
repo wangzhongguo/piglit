@@ -765,12 +765,11 @@ static struct enable_state_t enable_states[] = {
 	{GL_CLIP_DISTANCE0, "clip distance enable"},
 };
 
-static void
-perf_draw_variant(const char *call, bool is_indexed)
+/** Called from test harness/main */
+enum piglit_result
+piglit_display(void)
 {
 	double base_rate = 0;
-
-	indexed = is_indexed;
 
 	/* Test different shader resource usage without state changes. */
 	unsigned num_ubos = 0;
@@ -778,7 +777,21 @@ perf_draw_variant(const char *call, bool is_indexed)
 	unsigned num_tbos = 0;
 	unsigned num_images = 0;
 	unsigned num_imgbos = 0;
-	unsigned num_vbos;
+	unsigned num_vbos = 1;
+
+	puts("   #, Test name                                              ,    Thousands draws/s, Difference vs the 1st");
+
+	const char *call = "DrawArrays";
+	indexed = false;
+
+	setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
+				    num_tbos, num_images, num_imgbos);
+
+	perf_run(call, num_vbos, num_ubos, num_textures, num_tbos, num_images,
+		 num_imgbos, "no state", draw, 0);
+
+	call = "DrawElements";
+	indexed = true;
 
 	for (num_vbos = 1; num_vbos <= 16; num_vbos *= 16) {
 		setup_shaders_and_resources(num_vbos, num_ubos, num_textures,
@@ -921,15 +934,6 @@ perf_draw_variant(const char *call, bool is_indexed)
 				 draw_state_change, base_rate);
 		}
 	}
-}
-
-/** Called from test harness/main */
-enum piglit_result
-piglit_display(void)
-{
-	puts("   #, Test name                                              ,    Thousands draws/s, Difference vs the 1st");
-	perf_draw_variant("DrawElements", true);
-	perf_draw_variant("DrawArrays", false);
 
 	exit(0);
 	return PIGLIT_SKIP;
