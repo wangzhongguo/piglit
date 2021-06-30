@@ -65,7 +65,7 @@ PIGLIT_GL_TEST_CONFIG_BEGIN
 		config.supports_gl_core_version = 32;
 	} else {
 		config.supports_gl_compat_version = 10;
-		config.supports_gl_core_version = 31;
+		config.supports_gl_core_version = 0;
 	}
 
 PIGLIT_GL_TEST_CONFIG_END
@@ -262,7 +262,38 @@ generate_GLSL(enum shader_target test_stage)
 	static const char *zeroes[3] = { "", "0, ", "0, 0, " };
 
 	const int size = sampler_size();
+	const char *type_func;
 
+	type_func = "";
+	if (gpu_shader4) {
+		switch (sampler.target) {
+		case GL_TEXTURE_1D:
+			type_func = "1D";
+			break;
+		case GL_TEXTURE_1D_ARRAY:
+			type_func = "1DArray";
+			break;
+		case GL_TEXTURE_2D:
+			type_func = "2D";
+			break;
+		case GL_TEXTURE_2D_ARRAY:
+			type_func = "2DArray";
+			break;
+		case GL_TEXTURE_RECTANGLE:
+			type_func = "2DRect";
+			break;
+		case GL_TEXTURE_3D:
+			type_func = "3D";
+			break;
+		case GL_TEXTURE_CUBE_MAP:
+			type_func = "Cube";
+			break;
+		default:
+			assert(!"Unexpected target texture");
+			type_func = "";
+			break;
+		}
+	}
 	/* The GLSL 1.40 sampler2DRect/samplerBuffer samplers don't
 	 * take a lod argument. Neither do ARB_texture_multisample's
 	 * sampler2DMS/sampler2DMSArray samplers.
@@ -273,28 +304,38 @@ generate_GLSL(enum shader_target test_stage)
 	case VS:
 		(void)!asprintf(&vs_code,
 			 "#version %d\n%s"
+			 "%s\n"
 			 "#define ivec1 int\n"
 			 "uniform int lod;\n"
 			 "uniform %s tex;\n"
-			 "in vec4 vertex;\n"
-			 "flat out ivec%d size;\n"
+			 "attribute vec4 vertex;\n"
+			 "flat %s ivec%d size;\n"
 			 "void main()\n"
 			 "{\n"
-			 "    size = textureSize(tex%s);\n"
+			 "    size = textureSize%s(tex%s);\n"
 			 "    gl_Position = vertex;\n"
 			 "}\n",
-			 shader_version, extension, sampler.name, size, lod_arg);
+			 shader_version, extension,
+			 gpu_shader4 ? "#extension GL_EXT_gpu_shader4: enable" : "",
+			 sampler.name,
+			 gpu_shader4 ? "varying" : "out",
+			 size, type_func,lod_arg);
 		(void)!asprintf(&fs_code,
 			 "#version %d\n"
+			 "%s\n"
 			 "#define ivec1 int\n"
 			 "#define vec1 float\n"
-			 "flat in ivec%d size;\n"
+			 "flat %s ivec%d size;\n"
 			 "out vec4 fragColor;\n"
 			 "void main()\n"
 			 "{\n"
 			 "    fragColor = vec4(0.01 * size,%s 1);\n"
 			 "}\n",
-			 shader_version, size, zeroes[3 - size]);
+			 shader_version,
+			 gpu_shader4 ? "#extension GL_EXT_gpu_shader4: enable" : "",
+			 gpu_shader4 ? "varying" : "in",
+			 size,
+			 zeroes[3 - size]);
 		break;
 	case GS:
 		(void)!asprintf(&vs_code,
@@ -341,7 +382,7 @@ generate_GLSL(enum shader_target test_stage)
 	case FS:
 		(void)!asprintf(&vs_code,
 			 "#version %d\n"
-			 "in vec4 vertex;\n"
+			 "attribute vec4 vertex;\n"
 			 "void main()\n"
 			 "{\n"
 			 "    gl_Position = vertex;\n"
@@ -349,16 +390,19 @@ generate_GLSL(enum shader_target test_stage)
 			 shader_version);
 		(void)!asprintf(&fs_code,
 			 "#version %d\n%s"
+			 "%s\n"
 			 "#define ivec1 int\n"
 			 "uniform int lod;\n"
 			 "uniform %s tex;\n"
 			 "out vec4 fragColor;\n"
 			 "void main()\n"
 			 "{\n"
-			 "    ivec%d size = textureSize(tex%s);\n"
+			 "    ivec%d size = textureSize%s(tex%s);\n"
 			 "    fragColor = vec4(0.01 * size,%s 1);\n"
 			 "}\n",
-			 shader_version, extension, sampler.name, size, lod_arg,
+			 shader_version, extension,
+			 gpu_shader4 ? "#extension GL_EXT_gpu_shader4: enable" : "",
+			 sampler.name, size, type_func, lod_arg,
 			 zeroes[3 - size]);
 		break;
 	case TES:
@@ -449,7 +493,7 @@ generate_GLSL(enum shader_target test_stage)
 void
 fail_and_show_usage()
 {
-	printf("Usage: textureSize [140] <vs|gs|fs|tes> <sampler type> [piglit args...]\n");
+	printf("Usage: textureSize [140] [gpu_shader4] <vs|gs|fs|tes> <sampler type> [piglit args...]\n");
 	piglit_report_result(PIGLIT_SKIP);
 }
 
@@ -480,6 +524,12 @@ parse_args(int argc, char **argv)
 
 		if (strcmp(argv[i], "140") == 0) {
 			shader_version = 140;
+			continue;
+		}
+
+		if (strcmp(argv[i], "gpu_shader4") == 0) {
+			shader_version = 120;
+			gpu_shader4 = true;
 			continue;
 		}
 

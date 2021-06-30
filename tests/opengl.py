@@ -1195,6 +1195,13 @@ textureSize_samplers_130 = [
     'isampler3D', 'isamplerCube', 'isampler1DArray', 'isampler2DArray',
     'usampler1D', 'usampler2D', 'usampler3D', 'usamplerCube',
     'usampler1DArray', 'usampler2DArray']
+textureSize_samplers_gpu_shader4 = [
+    'sampler1D', 'sampler2D', 'sampler3D', 'samplerCube',
+    'sampler1DArray', 'sampler2DArray',
+    'isampler1D', 'isampler2D',
+    'isampler3D', 'isamplerCube', 'isampler1DArray', 'isampler2DArray',
+    'usampler1D', 'usampler2D', 'usampler3D', 'usamplerCube',
+    'usampler1DArray', 'usampler2DArray']
 for stage in ['vs', 'gs', 'fs']:
     if stage == 'gs':
         version = '1.50'
@@ -1212,6 +1219,11 @@ for stage in ['vs', 'gs', 'fs']:
                 'spec', 'glsl-{}'.format(version), 'execution', 'textureSize',
                 '{}-textureSize-{}'.format(stage, sampler))] = PiglitGLTest(
                     ['textureSize', stage, sampler])
+        for sampler in textureSize_samplers_gpu_shader4:
+            profile.test_list[grouptools.join(
+                'spec', 'ext_gpu_shader4', 'execution', 'textureSize',
+                '{}-textureSize-{}'.format(stage, sampler))] = PiglitGLTest(
+                    ['textureSize', 'gpu_shader4', stage, sampler])
 
     # texelFetch():
     for sampler in ['sampler1D', 'sampler2D', 'sampler3D', 'sampler1DArray',
