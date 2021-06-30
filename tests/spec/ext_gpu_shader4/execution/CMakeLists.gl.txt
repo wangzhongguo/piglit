@@ -1,0 +1,14 @@
+include_directories(
+	${GLEXT_INCLUDE_DIR}
+	${OPENGL_INCLUDE_PATH}
+	${piglit_SOURCE_DIR}/tests/mesa/util
+)
+
+link_libraries (
+	piglitutil_${piglit_target_api}
+	${OPENGL_gl_LIBRARY}
+)
+
+piglit_add_executable (ext_gpu_shader4-vertexid-beginend vertexid-beginend.c)
+piglit_add_executable (ext_gpu_shader4-vertexid-drawarrays vertexid-drawarrays.c)
+piglit_add_executable (ext_gpu_shader4-vertexid-drawelements vertexid-drawelements.c)
