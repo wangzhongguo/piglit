@@ -44,7 +44,10 @@ static const char *TestName = "texture-integer";
 static GLint TexWidth = 16, TexHeight = 16;
 static GLuint Texture;
 
-static GLint BiasUniform[2] = {-1, -1}, TexUniform[2] = {-1, -1};
+static GLint BiasUniform[4] = {-1, -1, -1, -1}, TexUniform[4] = {-1, -1, -1, -1};
+
+static bool has_glsl_130;
+static bool has_gpu_shader4;
 
 struct format_info
 {
@@ -132,7 +135,7 @@ static const struct format_info rgb10_formats[] = {
 };
 
 /* The programs will be indexed by whether the texture is signed or not. */
-static const char *FragShaderText[2] = {
+static const char *FragShaderText[4] = {
 	"#version 130\n"
 	"uniform vec4 bias; \n"
 	"uniform usampler2D tex; \n"
@@ -150,9 +153,27 @@ static const char *FragShaderText[2] = {
 	"   vec4 t = vec4(texture(tex, gl_TexCoord[0].xy)); \n"
 	"   gl_FragColor = t + bias; \n"
 	"} \n",
+
+	"#extension GL_EXT_gpu_shader4 : require\n"
+	"uniform vec4 bias; \n"
+	"uniform usampler2D tex; \n"
+	"void main() \n"
+	"{ \n"
+	"   vec4 t = vec4(texture2D(tex, gl_TexCoord[0].xy)); \n"
+	"   gl_FragColor = t + bias; \n"
+	"} \n",
+
+	"#extension GL_EXT_gpu_shader4 : require\n"
+	"uniform vec4 bias; \n"
+	"uniform isampler2D tex; \n"
+	"void main() \n"
+	"{ \n"
+	"   vec4 t = vec4(texture2D(tex, gl_TexCoord[0].xy)); \n"
+	"   gl_FragColor = t + bias; \n"
+	"} \n",
 };
 
-static GLuint Program[2];
+static GLuint Program[4];
 
 static int
 get_max_val(const struct format_info *info)
@@ -316,7 +337,7 @@ check_error(const char *file, int line)
 
 /** \return GL_TRUE for pass, GL_FALSE for fail */
 static GLboolean
-test_format(const struct format_info *info)
+test_format(const struct format_info *info, int shader_base)
 {
 	const int max = get_max_val(info);
 	const int comps = num_components(info->BaseFormat);
@@ -450,14 +471,14 @@ test_format(const struct format_info *info)
 		;
 	}
 
-	glUseProgram(Program[info->Signed]);
+	glUseProgram(Program[shader_base + info->Signed]);
 
 	/* compute, set test bias */
 	bias[0] = expected[0] - value[0];
 	bias[1] = expected[1] - value[1];
 	bias[2] = expected[2] - value[2];
 	bias[3] = expected[3] - value[3];
-	glUniform4fv(BiasUniform[info->Signed], 1, bias);
+	glUniform4fv(BiasUniform[shader_base + info->Signed], 1, bias);
 
 	/* draw */
 	glClearColor(0, 1, 1, 0);
@@ -503,13 +524,13 @@ test_format(const struct format_info *info)
 
 
 static GLboolean
-test_general_formats(void)
+test_general_formats(int shader_base)
 {
 	int f, i;
 
 	for (f = 0; f < ARRAY_SIZE(Formats); f++) {
 		for (i = 0; i < 5; i++) {
-			if (!test_format(&Formats[f]))
+			if (!test_format(&Formats[f], shader_base))
 				return GL_FALSE;
 		}
 	}
@@ -517,7 +538,7 @@ test_general_formats(void)
 	if (piglit_is_extension_supported("GL_ARB_texture_rg")) {
 		for (f = 0; f < ARRAY_SIZE(rg_formats); f++) {
 			for (i = 0; i < 5; i++) {
-				if (!test_format(&rg_formats[f]))
+				if (!test_format(&rg_formats[f], shader_base))
 					return GL_FALSE;
 			}
 		}
@@ -526,7 +547,7 @@ test_general_formats(void)
 	if (piglit_is_extension_supported("GL_ARB_texture_rgb10_a2ui")) {
 		for (f = 0; f < ARRAY_SIZE(rgb10_formats); f++) {
 			for (i = 0; i < 5; i++) {
-				if (!test_format(&rgb10_formats[f]))
+				if (!test_format(&rgb10_formats[f], shader_base))
 					return GL_FALSE;
 			}
 		}
@@ -583,8 +604,15 @@ test_specific_formats(void)
 enum piglit_result
 piglit_display(void)
 {
-	if (!test_general_formats())
-		return PIGLIT_FAIL;
+	if (has_glsl_130) {
+		if (!test_general_formats(0))
+			return PIGLIT_FAIL;
+	}
+
+	if (has_gpu_shader4) {
+		if (!test_general_formats(2))
+			return PIGLIT_FAIL;
+	}
 
 	if (!test_specific_formats())
 		return PIGLIT_FAIL;
@@ -597,11 +625,23 @@ void
 piglit_init(int argc, char **argv)
 {
 	int i;
+	int major, minor;
 
-	piglit_require_extension("GL_EXT_texture_integer");
-	piglit_require_GLSL_version(130);
+	has_gpu_shader4 = piglit_is_extension_supported("GL_EXT_gpu_shader4");
+	piglit_get_glsl_version(NULL, &major, &minor);
+	has_glsl_130 = (major * 100 + minor) >= 130;
+	/* Check if EXT_gpu_shader4 is supported */
+	if (!has_gpu_shader4) {
+		/* If EXT_gpu_shader4 is not supported GL version must be 3.0 */
+		piglit_require_gl_version(30);
+		piglit_require_GLSL_version(130);
+	}
 
-	for (i = 0; i < 2; i++) {
+	for (i = 0; i < 4; i++) {
+		if ((i == 0 || i == 1) && !has_glsl_130)
+			continue;
+		if ((i == 2 || i == 3) && !has_gpu_shader4)
+			continue;
 		Program[i] = piglit_build_simple_program(NULL,
 							 FragShaderText[i]);
 		BiasUniform[i] = glGetUniformLocation(Program[i], "bias");
