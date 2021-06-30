@@ -84,6 +84,7 @@ extern bool swizzling;
 extern int minx, miny, minz, maxx, maxy, maxz;
 extern int sample_count;
 extern int shader_version;
+extern bool gpu_shader4;
 
 /**
  * Which shader stage to test

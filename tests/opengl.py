@@ -1227,6 +1227,16 @@ for stage in ['vs', 'gs', 'fs']:
             'spec', 'glsl-{}'.format(version), 'execution', 'texelFetchOffset',
             '{}-texelFetch-{}'.format(stage, sampler))] = PiglitGLTest(
                 ['texelFetch', 'offset', stage, sampler])
+        if stage != 'gs':
+            profile.test_list[grouptools.join(
+                'spec', 'ext_gpu_shader4', 'execution', 'texelFetch',
+                '{}-texelFetch-{}'.format(stage, sampler))] = PiglitGLTest(
+                    ['texelFetch', 'gpu_shader4', stage, sampler])
+            profile.test_list[grouptools.join(
+                'spec', 'ext_gpu_shader4', 'execution', 'texelFetchOffset',
+                '{}-texelFetch-{}'.format(stage, sampler))] = PiglitGLTest(
+                    ['texelFetch', 'gpu_shader4', 'offset', stage, sampler])
+
 
     # texelFetch() with EXT_texture_swizzle mode "b0r1":
     for type in ['i', 'u', '']:

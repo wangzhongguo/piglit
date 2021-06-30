@@ -24,7 +24,7 @@
 /**
  * \file common.c
  *
- * Helper functions for GLSL 1.30+ texturing tests.
+ * Helper functions for GLSL 1.30+/EXT_gpu_shader4 texturing tests.
  */
 #include "common.h"
 
@@ -36,6 +36,7 @@ bool swizzling;
 int minx, miny, minz, maxx, maxy, maxz;
 int sample_count;
 int shader_version = 130;
+bool gpu_shader4 = false;
 
 /**
  * Load a miplevel's texel data via glTexImage.
@@ -341,6 +342,9 @@ require_GL_features(enum shader_target test_stage)
 	int tex_units;
 
 	piglit_require_GLSL_version(shader_version);
+
+	if (gpu_shader4)
+		piglit_require_extension("GL_EXT_gpu_shader4");
 
 	if (swizzling)
 		piglit_require_extension("GL_EXT_texture_swizzle");

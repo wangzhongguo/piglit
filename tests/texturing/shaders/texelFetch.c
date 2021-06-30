@@ -97,7 +97,7 @@ PIGLIT_GL_TEST_CONFIG_BEGIN
 		config.supports_gl_core_version = 32;
 	} else {
 		config.supports_gl_compat_version = 10;
-		config.supports_gl_core_version = 31;
+		config.supports_gl_core_version = 0;
 	}
 
 PIGLIT_GL_TEST_CONFIG_END
@@ -580,7 +580,7 @@ generate_GLSL(enum shader_target test_stage)
 	static char *vs_code;
 	static char *gs_code = NULL;
 	static char *fs_code;
-	const char *offset_func, *offset_arg;
+	const char *offset_func, *offset_arg, *type_func;
 
 	if (test_offset) {
 		offset_func = "Offset";
@@ -607,32 +607,64 @@ generate_GLSL(enum shader_target test_stage)
 		offset_arg = "";
 	}
 
+	type_func = "";
+	if (gpu_shader4) {
+		switch (sampler.target) {
+		case GL_TEXTURE_1D:
+			type_func = "1D";
+			break;
+		case GL_TEXTURE_1D_ARRAY:
+			type_func = "1DArray";
+			break;
+		case GL_TEXTURE_2D:
+			type_func = "2D";
+			break;
+		case GL_TEXTURE_2D_ARRAY:
+			type_func = "2DArray";
+			break;
+		case GL_TEXTURE_RECTANGLE:
+			type_func = "2DRect";
+			break;
+		case GL_TEXTURE_3D:
+			type_func = "3D";
+			break;
+		default:
+			assert(!"Unexpected target texture");
+			type_func = "";
+			break;
+		}
+	}
+
 	switch (test_stage) {
 	case VS:
 		(void)!asprintf(&vs_code,
 			 "#version %d\n"
 			 "%s\n"
+			 "%s\n"
 			 "#define ivec1 int\n"
-			 "flat out %s color;\n"
-			 "in vec4 pos;\n"
-			 "in ivec4 texcoord;\n"
+			 "flat %s %s color;\n"
+			 "attribute vec4 pos;\n"
+			 "attribute ivec4 texcoord;\n"
 			 "uniform %s tex;\n"
 			 "void main()\n"
 			 "{\n"
-			 "    color = texelFetch%s(tex, ivec%d(texcoord)%s%s);\n"
+			 "    color = texelFetch%s%s(tex, ivec%d(texcoord)%s%s);\n"
 			 "    gl_Position = pos;\n"
 			 "}\n",
 			 shader_version,
 			 has_samples() ? "#extension GL_ARB_texture_multisample: require" : "",
+			 gpu_shader4 ? "#extension GL_EXT_gpu_shader4: enable" : "",
+			 gpu_shader4 ? "varying" : "out",
 			 sampler.return_type, sampler.name,
-			 offset_func,
+			 type_func, offset_func,
 			 coordinate_size(),
 			 ((sampler.target == GL_TEXTURE_RECTANGLE) ?
 			  "" : ", texcoord.w"),
 			 offset_arg);
 		(void)!asprintf(&fs_code,
 			 "#version %d\n"
-			 "flat in %s color;\n"
+			 "%s\n"
+			 "flat %s %s color;\n"
 			 "uniform vec4 divisor;\n"
 			 "out vec4 fragColor;\n"
 			 "void main()\n"
@@ -640,6 +672,8 @@ generate_GLSL(enum shader_target test_stage)
 			 "    fragColor = vec4(color)/divisor;\n"
 			 "}\n",
 			 shader_version,
+			 gpu_shader4 ? "#extension GL_EXT_gpu_shader4: enable" : "",
+		         gpu_shader4 ? "varying" : "in",
 			 sampler.return_type);
 		break;
 	case GS:
@@ -668,14 +702,14 @@ generate_GLSL(enum shader_target test_stage)
 			 "void main()\n"
 			 "{\n"
 			 "    ivec4 texcoord = texcoord_to_gs[0];\n"
-			 "    color = texelFetch%s(tex, ivec%d(texcoord)%s%s);\n"
+			 "    color = texelFetch%s%s(tex, ivec%d(texcoord)%s%s);\n"
 			 "    gl_Position = pos_to_gs[0];\n"
 			 "    EmitVertex();\n"
 			 "}\n",
 			 shader_version,
 			 has_samples() ? "#extension GL_ARB_texture_multisample: require" : "",
 			 sampler.return_type, sampler.name,
-			 offset_func,
+			 type_func, offset_func,
 			 coordinate_size(),
 			 ((sampler.target == GL_TEXTURE_RECTANGLE) ?
 			  "" : ", texcoord.w"),
@@ -695,33 +729,39 @@ generate_GLSL(enum shader_target test_stage)
 	case FS:
 		(void)!asprintf(&vs_code,
 			 "#version %d\n"
+			 "%s\n"
 			 "#define ivec1 int\n"
-			 "in vec4 pos;\n"
-			 "in ivec4 texcoord;\n"
-			 "flat out ivec4 tc;\n"
+			 "attribute vec4 pos;\n"
+			 "attribute ivec4 texcoord;\n"
+			 "flat %s ivec4 tc;\n"
 			 "void main()\n"
 			 "{\n"
 			 "    tc = texcoord;\n"
 			 "    gl_Position = pos;\n"
 			 "}\n",
-			 shader_version);
+			 shader_version,
+			 gpu_shader4 ? "#extension GL_EXT_gpu_shader4: require" : "",
+			 gpu_shader4 ? "varying" : "out");
 		(void)!asprintf(&fs_code,
 			 "#version %d\n"
 			 "%s\n"
+			 "%s\n"
 			 "#define ivec1 int\n"
-			 "flat in ivec4 tc;\n"
+			 "flat %s ivec4 tc;\n"
 			 "uniform vec4 divisor;\n"
 			 "uniform %s tex;\n"
 			 "out vec4 fragColor;\n"
 			 "void main()\n"
 			 "{\n"
-			 "    vec4 color = texelFetch%s(tex, ivec%d(tc)%s%s);\n"
+			 "    vec4 color = texelFetch%s%s(tex, ivec%d(tc)%s%s);\n"
 			 "    fragColor = color/divisor;\n"
 			 "}\n",
 			 shader_version,
 			 has_samples() ? "#extension GL_ARB_texture_multisample: require" : "",
+			 gpu_shader4 ? "#extension GL_EXT_gpu_shader4: require" : "",
+			 gpu_shader4 ? "varying" : "in",
 			 sampler.name,
-			 offset_func,
+			 type_func, offset_func,
 			 coordinate_size(),
 			 (sampler.target == GL_TEXTURE_RECTANGLE ?
 			  "" : ", tc.w"),
@@ -788,7 +828,7 @@ supported_sampler()
 void
 fail_and_show_usage()
 {
-	printf("Usage: texelFetch [140] [offset] <vs|gs|fs> <sampler type> "
+	printf("Usage: texelFetch [140] [gpu_shader4] [offset] <vs|gs|fs> <sampler type> "
 	       "[sample_count] [swizzle] [piglit args...]\n");
 	piglit_report_result(PIGLIT_FAIL);
 }
@@ -823,6 +863,12 @@ parse_args(int argc, char **argv)
 
 		if (strcmp(argv[i], "140") == 0) {
 			shader_version = 140;
+			continue;
+		}
+
+		if (strcmp(argv[i], "gpu_shader4") == 0) {
+			shader_version = 120;
+			gpu_shader4 = true;
 			continue;
 		}
 
