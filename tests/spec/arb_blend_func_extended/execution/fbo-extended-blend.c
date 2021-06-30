@@ -40,7 +40,7 @@
 PIGLIT_GL_TEST_CONFIG_BEGIN
 
 #ifdef PIGLIT_USE_OPENGL
-	config.supports_gl_compat_version = 30;
+	config.supports_gl_compat_version = 10;
 #else // PIGLIT_USE_OPENGL_ES3
 	config.supports_gl_es_version = 30;
 #endif
@@ -53,6 +53,8 @@ static const char *TestName = "fbo-extended-blend";
 
 static GLint max_ds_buffers;
 static GLuint fbo;
+
+static bool use_gpu_shader4;
 
 static GLenum srcFactors[] = {
 	GL_ZERO,
@@ -207,8 +209,8 @@ static void blend_expected(float *expected, const float *src, const float *src1,
 
 #ifdef PIGLIT_USE_OPENGL
 static const char *vs_text =
-	"#version 130\n"
-	"in vec4 piglit_vertex;\n"
+	"#version 120\n"
+	"attribute vec4 piglit_vertex;\n"
 	"void main() {\n"
 	"        gl_Position = piglit_vertex;\n"
 	"}\n"
@@ -216,6 +218,19 @@ static const char *vs_text =
 
 static const char *fs_text =
 	"#version 130\n"
+	"uniform vec4 src0;\n"
+	"uniform vec4 src1;\n"
+	"out vec4 col0;\n"
+	"out vec4 col1;\n"
+	"void main() {\n"
+	"        col0 = src0;\n"
+	"        col1 = src1;\n"
+	"}\n"
+	;
+
+static const char *fs_text_gpu4 =
+	"#version 120\n"
+	"#extension GL_EXT_gpu_shader4 : require\n"
 	"uniform vec4 src0;\n"
 	"uniform vec4 src1;\n"
 	"out vec4 col0;\n"
@@ -246,6 +261,8 @@ static const char *fs_text =
 	"        col1 = src1;\n"
 	"}\n"
 	;
+
+#define fs_text_gpu4 fs_text
 #endif
 
 static void
@@ -319,7 +336,7 @@ test(void)
 	prog = glCreateProgram();
 	vs = piglit_compile_shader_text(GL_VERTEX_SHADER, vs_text);
 
-	fs = piglit_compile_shader_text(GL_FRAGMENT_SHADER, fs_text);
+	fs = piglit_compile_shader_text(GL_FRAGMENT_SHADER, use_gpu_shader4 ? fs_text_gpu4 : fs_text);
 	glAttachShader(prog, vs);
 	glAttachShader(prog, fs);
 	piglit_check_gl_error(GL_NO_ERROR);
@@ -385,6 +402,16 @@ piglit_init(int argc, char**argv)
 	enum piglit_result result;
 #ifdef PIGLIT_USE_OPENGL
 	piglit_require_extension("GL_ARB_blend_func_extended");
+
+	int major, minor;
+	piglit_get_glsl_version(NULL, &major, &minor);
+	int vers = 100 * major + minor;
+	if (vers < 130) {
+		piglit_require_extension("GL_EXT_gpu_shader4");
+		use_gpu_shader4 = true;
+	} else
+		piglit_require_GLSL_version(130);
+
 #else // PIGLIT_USE_OPENGL_ES3
 	piglit_require_extension("GL_EXT_blend_func_extended");
 #endif
