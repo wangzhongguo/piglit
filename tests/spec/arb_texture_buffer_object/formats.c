@@ -135,6 +135,7 @@ static const struct format {
 
 bool test_vs;
 bool test_arb;
+bool test_gpu_shader4;
 bool test_rgb32;
 struct program {
 	GLuint prog;
@@ -599,9 +600,31 @@ static char *vs_vert_source =
 	"	}\n"
 	"}\n";
 
+static char *vs_vert_source_gpu4 =
+	"#version 120\n"
+	"#extension GL_EXT_gpu_shader4: require\n"
+	"attribute vec4 vertex;\n"
+	"varying vec4 color;\n"
+	"uniform %ssamplerBuffer s;\n"
+	"uniform int pos;\n"
+	"uniform %svec4 expected;"
+	"void main()\n"
+	"{\n"
+	"	gl_Position = vertex;\n"
+	"\n"
+	"	%svec4 result = texelFetchBuffer(s, pos);\n"
+	"	%svec4 delta = result - expected;\n"
+	"	bvec4 fail = greaterThanEqual(abs(delta), %s);\n"
+	"	if (any(fail)) {\n"
+	"		color = 0.25 + 0.5 * vec4(fail);\n"
+	"	} else {\n"
+	"		color = vec4(0.0, 1.0, 0.0, 0.0);\n"
+	"	}\n"
+	"}\n";
+
 static char *fs_vert_source =
-	"#version 140\n"
-	"in vec4 color;\n"
+	"#version 120\n"
+	"varying vec4 color;\n"
 	"void main()\n"
 	"{\n"
 	"	gl_FragColor = color;\n"
@@ -609,8 +632,8 @@ static char *fs_vert_source =
 
 
 static char *vs_frag_source =
-	"#version 140\n"
-	"in vec4 vertex;\n"
+	"#version 120\n"
+	"attribute vec4 vertex;\n"
 	"void main()\n"
 	"{\n"
 	"	gl_Position = vertex;\n"
@@ -633,6 +656,24 @@ static char *fs_frag_source =
 	"	}\n"
 	"}\n";
 
+static char *fs_frag_source_gpu4 =
+	"#version 120\n"
+	"#extension GL_EXT_gpu_shader4: require\n"
+	"uniform %ssamplerBuffer s;\n"
+	"uniform int pos;\n"
+	"uniform %svec4 expected;"
+	"void main()\n"
+	"{\n"
+	"	%svec4 result = texelFetchBuffer(s, pos);\n"
+	"	%svec4 delta = result - expected;\n"
+	"	bvec4 fail = greaterThanEqual(abs(delta), %s);\n"
+	"	if (any(fail)) {\n"
+	"		gl_FragColor = 0.25 + 0.5 * vec4(fail);\n"
+	"	} else {\n"
+	"		gl_FragColor = vec4(0.0, 1.0, 0.0, 0.0);\n"
+	"	}\n"
+	"}\n";
+
 static void
 create_program(struct program *program, const char *type)
 {
@@ -646,13 +687,17 @@ create_program(struct program *program, const char *type)
 		threshold = "ivec4(1)";
 
 	if (test_vs) {
-		(void)!asprintf(&vs_source, vs_vert_source, type, type, type, type,
-			 threshold);
+		(void)!asprintf(&vs_source,
+				test_gpu_shader4 ? vs_vert_source_gpu4 : vs_vert_source,
+				type, type, type, type,
+				threshold);
 		fs_source = fs_vert_source;
 	} else {
 		vs_source = vs_frag_source;
-		(void)!asprintf(&fs_source, fs_frag_source, type, type, type, type,
-			 threshold);
+		(void)!asprintf(&fs_source,
+				test_gpu_shader4 ? fs_frag_source_gpu4 : fs_frag_source,
+				type, type, type, type,
+				threshold);
 	}
 
 	prog = piglit_build_simple_program(vs_source, fs_source);
@@ -676,14 +721,18 @@ init_programs()
 static void
 usage(const char *name)
 {
-	printf("usage: %s <fs | vs> <core | arb>\n", name);
+	printf("usage: %s <fs | vs> <core | arb | gpu_shader4>\n", name);
 	piglit_report_result(PIGLIT_FAIL);
 }
 
 void
 piglit_init(int argc, char **argv)
 {
-	piglit_require_GLSL_version(140);
+
+	if (test_gpu_shader4)
+		piglit_require_extension("GL_EXT_gpu_shader4");
+	else
+		piglit_require_GLSL_version(140);
 
 	piglit_require_extension("GL_EXT_texture_integer");
 	piglit_require_extension("GL_ARB_texture_rg");
@@ -708,10 +757,11 @@ PIGLIT_GL_TEST_CONFIG_BEGIN
 		usage(argv[0]);
 
 	test_arb = PIGLIT_STRIP_ARG("arb");
-	if (!test_arb && !PIGLIT_STRIP_ARG("core"))
+        test_gpu_shader4 = PIGLIT_STRIP_ARG("gpu_shader4");
+	if (!test_arb && !test_gpu_shader4 && !PIGLIT_STRIP_ARG("core"))
 		usage(argv[0]);
 
-	if (test_arb)
+	if (test_arb || test_gpu_shader4)
 		config.supports_gl_compat_version = 10;
 	else
 		config.supports_gl_core_version = 31;

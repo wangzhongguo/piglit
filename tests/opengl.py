@@ -2457,6 +2457,8 @@ with profile.test_list.group_manager(
       'formats (VS, 3.1 core)')
     g(['arb_texture_buffer_object-formats', 'fs', 'arb'], 'formats (FS, ARB)')
     g(['arb_texture_buffer_object-formats', 'vs', 'arb'], 'formats (VS, ARB)')
+    g(['arb_texture_buffer_object-formats', 'fs', 'gpu_shader4'], 'formats (FS, EXT_gpu_shader4)')
+    g(['arb_texture_buffer_object-formats', 'vs', 'gpu_shader4'], 'formats (VS, EXT_gpu_shader4)')
     g(['arb_texture_buffer_object-get'], 'get')
     g(['arb_texture_buffer_object-fetch-outside-bounds'],
       'fetch-outside-bounds')
