@@ -147,10 +147,24 @@ enum shader_type {
 	GL3_TEXTURE_GRAD_OFFSET,
 	GL3_TEXTURE_PROJ_GRAD,
 	GL3_TEXTURE_PROJ_GRAD_OFFSET,
+	GPU4_TEXTURE,
+	GPU4_TEXTURE_BIAS,
+	GPU4_TEXTURE_LOD,
+	GPU4_TEXTURE_OFFSET,
+	GPU4_TEXTURE_OFFSET_BIAS,
+	GPU4_TEXTURE_PROJ_OFFSET,
+	GPU4_TEXTURE_PROJ_OFFSET_BIAS,
+	GPU4_TEXTURE_LOD_OFFSET,
+	GPU4_TEXTURE_PROJ_LOD_OFFSET,
+	GPU4_TEXTURE_GRAD,
+	GPU4_TEXTURE_GRAD_OFFSET,
+	GPU4_TEXTURE_PROJ_GRAD,
+	GPU4_TEXTURE_PROJ_GRAD_OFFSET,
 };
 
 #define NEED_ARB_LOD(t) ((t) >= ARB_TEXTURE_LOD && (t) < GL3_TEXTURE_LOD)
-#define NEED_GL3(t) ((t) >= GL3_TEXTURE_LOD)
+#define NEED_GL3(t) ((t) >= GL3_TEXTURE_LOD && (t) < GPU4_TEXTURE)
+#define NEED_GPU4(t) ((t) >= GPU4_TEXTURE)
 
 static enum shader_type test = FIXED_FUNCTION;
 static enum target_type target = TEX_2D;
@@ -194,6 +208,35 @@ static int offset[] = {3, -1, 2};
 	GL3_FS_PREAMBLE \
 	"  gl_FragColor = vec4(textureInst(tex, gl_TexCoord[0], z - 0.05) * \n" \
 	"                      textureInst(tex2, gl_TexCoord[0], z + 0.05)); \n" \
+	"} \n"
+
+
+#define GPU4_FS_PREAMBLE \
+	"#version 120 \n" \
+	"#extension GL_EXT_gpu_shader4 : require \n" \
+	"#extension GL_ARB_shader_texture_lod : enable\n" \
+	"#extension GL_ARB_texture_rectangle : enable\n" \
+	"uniform sampler%s tex, tex2; \n" \
+	"uniform float z, lod, bias; \n" \
+	"uniform vec3 dx, dy; \n" \
+	"#define TYPE %s \n" \
+	"#define DERIV_TYPE %s \n" \
+	"#define MASK %s \n" \
+	"#define OFFSET %s(ivec3(3, -1, 2)) \n" \
+	"%s" \
+	"#define textureInst %s \n" \
+	"#define PARAMS %s \n" \
+	"void main() {\n"
+
+#define GPU4_FS_CODE \
+	GPU4_FS_PREAMBLE \
+	"  gl_FragColor = textureInst(tex, TYPE(gl_TexCoord[0]) PARAMS); \n" \
+	"} \n"
+
+#define GPU4_FS_CODE_SHADOW \
+	GPU4_FS_PREAMBLE \
+	"  gl_FragColor = vec4(textureInst(tex, TYPE(gl_TexCoord[0]) - 0.05 * MASK PARAMS) * \n" \
+	"                      textureInst(tex2, TYPE(gl_TexCoord[0]) + 0.05 * MASK PARAMS)); \n" \
 	"} \n"
 
 static void set_sampler_parameter(GLenum pname, GLint value)
@@ -305,6 +348,32 @@ piglit_init(int argc, char **argv)
 			target = TEX_2D_ARRAY_SHADOW;
 		else if (strcmp(argv[i], "CubeArrayShadow") == 0)
 			target = TEX_CUBE_ARRAY_SHADOW;
+		else if (strcmp(argv[i], "GPU4texture()") == 0)
+			test = GPU4_TEXTURE;
+		else if (strcmp(argv[i], "GPU4texture(bias)") == 0)
+			test = GPU4_TEXTURE_BIAS;
+		else if (strcmp(argv[i], "GPU4textureLod") == 0)
+			test = GPU4_TEXTURE_LOD;
+		else if (strcmp(argv[i], "GPU4textureOffset") == 0)
+			test = GPU4_TEXTURE_OFFSET;
+		else if (strcmp(argv[i], "GPU4textureOffset(bias)") == 0)
+			test = GPU4_TEXTURE_OFFSET_BIAS;
+		else if (strcmp(argv[i], "GPU4textureProjOffset") == 0)
+			test = GPU4_TEXTURE_PROJ_OFFSET;
+		else if (strcmp(argv[i], "GPU4textureProjOffset(bias)") == 0)
+			test = GPU4_TEXTURE_PROJ_OFFSET_BIAS;
+		else if (strcmp(argv[i], "GPU4textureGrad") == 0)
+			test = GPU4_TEXTURE_GRAD;
+		else if (strcmp(argv[i], "GPU4textureGradOffset") == 0)
+			test = GPU4_TEXTURE_GRAD_OFFSET;
+		else if (strcmp(argv[i], "GPU4textureProjGrad") == 0)
+			test = GPU4_TEXTURE_PROJ_GRAD;
+		else if (strcmp(argv[i], "GPU4textureProjGradOffset") == 0)
+			test = GPU4_TEXTURE_PROJ_GRAD_OFFSET;
+		else if (strcmp(argv[i], "GPU4textureProjLodOffset") == 0)
+			test = GPU4_TEXTURE_PROJ_LOD_OFFSET;
+		else if (strcmp(argv[i], "GPU4textureLodOffset") == 0)
+			test = GPU4_TEXTURE_LOD_OFFSET;
 		else {
 			printf("Unknown parameter: %s\n", argv[i]);
 			piglit_report_result(PIGLIT_FAIL);
@@ -321,7 +390,27 @@ piglit_init(int argc, char **argv)
 	if (NEED_ARB_LOD(test)) {
 		piglit_require_extension("GL_ARB_shader_texture_lod");
 	}
+	int major, minor, vers;
+	piglit_get_glsl_version(NULL, &major, &minor);
+	vers = 100 * major + minor;
+	bool has_gl3_or_gpu4 = false;
+
+	if (vers >= 130)
+		has_gl3_or_gpu4 = true;
+	if (piglit_is_extension_supported("GL_EXT_gpu_shader4"))
+		has_gl3_or_gpu4 = true;
+
 	piglit_require_gl_version(NEED_GL3(test) ? 30 : 14);
+
+	if (NEED_GPU4(test)) {
+		/* don't run the EXT_gpu_shader4 variants unless
+		   we really need to. */
+		if (vers > 120) {
+			piglit_report_result(PIGLIT_SKIP);
+			return;
+		}
+		piglit_require_extension("GL_EXT_gpu_shader4");
+	}
 
 	if (target == TEX_2D_ARRAY_SHADOW &&
 	    test == GL3_TEXTURE_OFFSET) {
@@ -388,7 +477,8 @@ piglit_init(int argc, char **argv)
 		deriv_type = "vec3";
 		break;
 	case TEX_1D_ARRAY:
-		piglit_require_gl_version(30);
+		if (!has_gl3_or_gpu4)
+			piglit_require_gl_version(30);
 		gltarget = GL_TEXTURE_1D_ARRAY;
 		target_str = "1DArray";
 		type_str = "vec2";
@@ -396,7 +486,8 @@ piglit_init(int argc, char **argv)
 		offset_type_str = "int";
 		break;
 	case TEX_2D_ARRAY:
-		piglit_require_gl_version(30);
+		if (!has_gl3_or_gpu4)
+			piglit_require_gl_version(30);
 		gltarget = GL_TEXTURE_2D_ARRAY;
 		target_str = "2DArray";
 		type_str = "vec3";
@@ -437,7 +528,8 @@ piglit_init(int argc, char **argv)
 		compare_value_mask = "vec3(0.0, 0.0, 1.0)";
 		break;
 	case TEX_CUBE_SHADOW:
-		piglit_require_gl_version(30);
+		if (!has_gl3_or_gpu4)
+			piglit_require_gl_version(30);
 		gltarget = GL_TEXTURE_CUBE_MAP;
 		target_str = "CubeShadow";
 		type_str = "vec4";
@@ -445,7 +537,8 @@ piglit_init(int argc, char **argv)
 		compare_value_mask = "vec4(0.0, 0.0, 0.0, 1.0)";
 		break;
 	case TEX_1D_ARRAY_SHADOW:
-		piglit_require_gl_version(30);
+		if (!has_gl3_or_gpu4)
+			piglit_require_gl_version(30);
 		gltarget = GL_TEXTURE_1D_ARRAY;
 		target_str = "1DArrayShadow";
 		type_str = "vec3";
@@ -454,7 +547,8 @@ piglit_init(int argc, char **argv)
 		compare_value_mask = "vec3(0.0, 0.0, 1.0)";
 		break;
 	case TEX_2D_ARRAY_SHADOW:
-		piglit_require_gl_version(30);
+		if (!has_gl3_or_gpu4)
+			piglit_require_gl_version(30);
 		gltarget = GL_TEXTURE_2D_ARRAY;
 		target_str = "2DArrayShadow";
 		type_str = "vec4";
@@ -483,7 +577,12 @@ piglit_init(int argc, char **argv)
 	    test == GL3_TEXTURE_PROJ_LOD ||
 	    test == GL3_TEXTURE_PROJ_LOD_OFFSET ||
 	    test == GL3_TEXTURE_PROJ_GRAD ||
-	    test == GL3_TEXTURE_PROJ_GRAD_OFFSET) {
+	    test == GL3_TEXTURE_PROJ_GRAD_OFFSET ||
+	    test == GPU4_TEXTURE_PROJ_OFFSET ||
+	    test == GPU4_TEXTURE_PROJ_OFFSET_BIAS ||
+	    test == GPU4_TEXTURE_PROJ_LOD_OFFSET ||
+	    test == GPU4_TEXTURE_PROJ_GRAD ||
+	    test == GPU4_TEXTURE_PROJ_GRAD_OFFSET)  {
 		if (!strcmp(type_str, "float"))
 			type_str = "vec2";
 		else if (!strcmp(type_str, "vec2"))
@@ -743,6 +842,350 @@ piglit_init(int argc, char **argv)
 		instruction = "textureProjGradOffset";
 		other_params = ", DERIV_TYPE(dx), DERIV_TYPE(dy), OFFSET";
 		break;
+	case GPU4_TEXTURE_BIAS:
+		other_params = ", bias";
+		/* fall through */
+	case GPU4_TEXTURE:
+		switch (target) {
+		case TEX_1D_ARRAY:
+			instruction = "texture1DArray";
+			break;
+		case TEX_2D_ARRAY:
+			instruction = "texture2DArray";
+			break;
+		case TEX_1D_ARRAY_SHADOW:
+			instruction = "shadow1DArray";
+			break;
+		case TEX_2D_ARRAY_SHADOW:
+			instruction = "shadow2DArray";
+			break;
+		case TEX_CUBE_SHADOW:
+			instruction = "shadowCube";
+			break;
+		default:
+			assert(0);
+		}
+		break;
+	case GPU4_TEXTURE_LOD:
+		other_params = ", lod";
+		switch (target) {
+		case TEX_1D_ARRAY:
+			instruction = "texture1DArrayLod";
+			break;
+		case TEX_2D_ARRAY:
+			instruction = "texture2DArrayLod";
+			break;
+		case TEX_1D_ARRAY_SHADOW:
+			instruction = "shadow1DArrayLod";
+			break;
+		default:
+			assert(0);
+		}
+		break;
+	case GPU4_TEXTURE_OFFSET:
+		other_params = ", OFFSET";
+		switch (target) {
+		case TEX_1D:
+			instruction = "texture1DOffset";
+			break;
+		case TEX_2D:
+			instruction = "texture2DOffset";
+			break;
+		case TEX_3D:
+			instruction = "texture3DOffset";
+			break;
+		case TEX_1D_SHADOW:
+			instruction = "shadow1DOffset";
+			break;
+		case TEX_2D_SHADOW:
+			instruction = "shadow2DOffset";
+			break;
+		case TEX_RECT:
+			instruction = "texture2DRectOffset";
+			break;
+		case TEX_RECT_SHADOW:
+			instruction = "shadow2DRectOffset";
+			break;
+		case TEX_1D_ARRAY:
+			instruction = "texture1DArrayOffset";
+			break;
+		case TEX_2D_ARRAY:
+			instruction = "texture2DArrayOffset";
+			break;
+		case TEX_1D_ARRAY_SHADOW:
+			instruction = "shadow1DArrayOffset";
+			break;
+		case TEX_2D_ARRAY_SHADOW:
+			instruction = "shadow2DArrayOffset";
+			break;
+		default:
+			assert(0);
+		}
+		break;
+	case GPU4_TEXTURE_LOD_OFFSET:
+		other_params = ", lod, OFFSET";
+		switch (target) {
+		case TEX_1D:
+			instruction = "texture1DLodOffset";
+			break;
+		case TEX_2D:
+			instruction = "texture2DLodOffset";
+			break;
+		case TEX_3D:
+			instruction = "texture3DLodOffset";
+			break;
+		case TEX_1D_SHADOW:
+			instruction = "shadow1DLodOffset";
+			break;
+		case TEX_2D_SHADOW:
+			instruction = "shadow2DLodOffset";
+			break;
+		case TEX_1D_ARRAY:
+			instruction = "texture1DArrayLodOffset";
+			break;
+		case TEX_2D_ARRAY:
+			instruction = "texture2DArrayLodOffset";
+			break;
+		case TEX_1D_ARRAY_SHADOW:
+			instruction = "shadow1DArrayLodOffset";
+			break;
+		default:
+			assert(0);
+		}
+		break;
+	case GPU4_TEXTURE_PROJ_OFFSET:
+		other_params = ", OFFSET";
+		switch (target) {
+		case TEX_1D:
+		case TEX_1D_PROJ_VEC4:
+			instruction = "texture1DProjOffset";
+			break;
+		case TEX_2D:
+		case TEX_2D_PROJ_VEC4:
+			instruction = "texture2DProjOffset";
+			break;
+		case TEX_3D:
+			instruction = "texture3DProjOffset";
+			break;
+		case TEX_1D_SHADOW:
+			instruction = "shadow1DProjOffset";
+			break;
+		case TEX_2D_SHADOW:
+			instruction = "shadow2DProjOffset";
+			break;
+		case TEX_RECT:
+		case TEX_RECT_PROJ_VEC4:
+			instruction = "texture2DRectProjOffset";
+			break;
+		case TEX_RECT_SHADOW:
+			instruction = "shadow2DRectProjOffset";
+			break;
+		default:
+			assert(0);
+		}
+		break;
+	case GPU4_TEXTURE_PROJ_LOD_OFFSET:
+		other_params = ", lod, OFFSET";
+		switch (target) {
+		case TEX_1D:
+		case TEX_1D_PROJ_VEC4:
+			instruction = "texture1DProjLodOffset";
+			break;
+		case TEX_2D:
+		case TEX_2D_PROJ_VEC4:
+			instruction = "texture2DProjLodOffset";
+			break;
+		case TEX_3D:
+			instruction = "texture3DProjLodOffset";
+			break;
+		case TEX_1D_SHADOW:
+			instruction = "shadow1DProjLodOffset";
+			break;
+		case TEX_2D_SHADOW:
+			instruction = "shadow2DProjLodOffset";
+			break;
+		default:
+			assert(0);
+		}
+		break;
+	case GPU4_TEXTURE_PROJ_OFFSET_BIAS:
+		other_params = ", OFFSET, bias";
+		switch (target) {
+		case TEX_1D:
+		case TEX_1D_PROJ_VEC4:
+			instruction = "texture1DProjOffset";
+			break;
+		case TEX_2D:
+		case TEX_2D_PROJ_VEC4:
+			instruction = "texture2DProjOffset";
+			break;
+		case TEX_3D:
+			instruction = "texture3DProjOffset";
+			break;
+		case TEX_1D_SHADOW:
+			instruction = "shadow1DProjOffset";
+			break;
+		case TEX_2D_SHADOW:
+			instruction = "shadow2DProjOffset";
+			break;
+		case TEX_RECT:
+			instruction = "texture2DRectProjOffset";
+			break;
+		case TEX_RECT_SHADOW:
+			instruction = "shadow2DRectProjOffset";
+			break;
+		default:
+			assert(0);
+		}
+		break;
+	case GPU4_TEXTURE_GRAD:
+		switch (target) {
+		case TEX_1D:
+			instruction = "texture1DGrad";
+			break;
+		case TEX_2D:
+			instruction = "texture2DGrad";
+			break;
+		case TEX_3D:
+			instruction = "texture3DGrad";
+			break;
+		case TEX_CUBE:
+			instruction = "textureCubeGrad";
+			break;
+		case TEX_1D_SHADOW:
+			instruction = "shadow1DGrad";
+			break;
+		case TEX_2D_SHADOW:
+			instruction = "shadow2DGrad";
+			break;
+		case TEX_RECT:
+			instruction = "texture2DRectGrad";
+			break;
+		case TEX_RECT_SHADOW:
+			instruction = "shadow2DRectGrad";
+			break;
+		case TEX_1D_ARRAY:
+			instruction = "texture1DArrayGrad";
+			break;
+		case TEX_2D_ARRAY:
+			instruction = "texture2DArrayGrad";
+			break;
+		case TEX_1D_ARRAY_SHADOW:
+			instruction = "shadow1DArrayGrad";
+			break;
+		case TEX_2D_ARRAY_SHADOW:
+			instruction = "shadow2DArrayGrad";
+			break;
+		case TEX_CUBE_SHADOW:
+			instruction = "shadowCubeGrad";
+			break;
+		default:
+			assert(0);
+		}
+		other_params = ", DERIV_TYPE(dx), DERIV_TYPE(dy)";
+		break;
+	case GPU4_TEXTURE_GRAD_OFFSET:
+		switch (target) {
+		case TEX_1D:
+			instruction = "texture1DGradOffset";
+			break;
+		case TEX_2D:
+			instruction = "texture2DGradOffset";
+			break;
+		case TEX_3D:
+			instruction = "texture3DGradOffset";
+			break;
+		case TEX_1D_SHADOW:
+			instruction = "shadow1DGradOffset";
+			break;
+		case TEX_2D_SHADOW:
+			instruction = "shadow2DGradOffset";
+			break;
+		case TEX_RECT:
+			instruction = "texture2DRectGradOffset";
+			break;
+		case TEX_RECT_SHADOW:
+			instruction = "shadow2DRectGradOffset";
+			break;
+		case TEX_1D_ARRAY:
+			instruction = "texture1DArrayGradOffset";
+			break;
+		case TEX_2D_ARRAY:
+			instruction = "texture2DArrayGradOffset";
+			break;
+		case TEX_1D_ARRAY_SHADOW:
+			instruction = "shadow1DArrayGradOffset";
+			break;
+		case TEX_2D_ARRAY_SHADOW:
+			instruction = "shadow2DArrayGradOffset";
+			break;
+		default:
+			assert(0);
+		}
+		other_params = ", DERIV_TYPE(dx), DERIV_TYPE(dy), OFFSET";
+		break;
+	case GPU4_TEXTURE_PROJ_GRAD:
+		switch (target) {
+		case TEX_1D:
+		case TEX_1D_PROJ_VEC4:
+			instruction = "texture1DProjGrad";
+			break;
+		case TEX_2D:
+		case TEX_2D_PROJ_VEC4:
+			instruction = "texture2DProjGrad";
+			break;
+		case TEX_3D:
+			instruction = "texture3DProjGrad";
+			break;
+		case TEX_1D_SHADOW:
+			instruction = "shadow1DProjGrad";
+			break;
+		case TEX_2D_SHADOW:
+			instruction = "shadow2DProjGrad";
+			break;
+		case TEX_RECT:
+		case TEX_RECT_PROJ_VEC4:
+			instruction = "texture2DRectProjGrad";
+			break;
+		case TEX_RECT_SHADOW:
+			instruction = "shadow2DRectProjGrad";
+			break;
+		default:
+			assert(0);
+		}
+		other_params = ", DERIV_TYPE(dx), DERIV_TYPE(dy)";
+		break;
+	case GPU4_TEXTURE_PROJ_GRAD_OFFSET:
+		switch (target) {
+		case TEX_1D:
+		case TEX_1D_PROJ_VEC4:
+			instruction = "texture1DProjGradOffset";
+			break;
+		case TEX_2D:
+		case TEX_2D_PROJ_VEC4:
+			instruction = "texture2DProjGradOffset";
+			break;
+		case TEX_3D:
+			instruction = "texture3DProjGradOffset";
+			break;
+		case TEX_1D_SHADOW:
+			instruction = "shadow1DProjGradOffset";
+			break;
+		case TEX_2D_SHADOW:
+			instruction = "shadow2DProjGradOffset";
+			break;
+		case TEX_RECT:
+		case TEX_RECT_PROJ_VEC4:
+			instruction = "texture2DRectProjGradOffset";
+			break;
+		case TEX_RECT_SHADOW:
+			instruction = "shadow2DRectProjGradOffset";
+			break;
+		default:
+			assert(0);
+		}
+		other_params = ", DERIV_TYPE(dx), DERIV_TYPE(dy), OFFSET";
+		break;
 	default:
 		assert(0);
 	}
@@ -756,8 +1199,20 @@ piglit_init(int argc, char **argv)
 				version, target_str, type_str, deriv_type,
 				compare_value_mask, offset_type_str,
 				declaration, instruction, other_params);
-		else if (IS_SHADOW(target))
-			sprintf(fscode, GL3_FS_CODE_SHADOW, version, target_str,
+		else if (IS_SHADOW(target)) {
+			if (NEED_GPU4(test))
+				sprintf(fscode, GPU4_FS_CODE_SHADOW, target_str,
+					type_str, deriv_type, compare_value_mask,
+					offset_type_str, declaration, instruction,
+					other_params);
+			else
+				sprintf(fscode, GL3_FS_CODE_SHADOW, version, target_str,
+					type_str, deriv_type, compare_value_mask,
+					offset_type_str, declaration, instruction,
+					other_params);
+		}
+		else if (NEED_GPU4(test))
+			sprintf(fscode, GPU4_FS_CODE, target_str,
 				type_str, deriv_type, compare_value_mask,
 				offset_type_str, declaration, instruction,
 				other_params);
@@ -787,7 +1242,10 @@ piglit_init(int argc, char **argv)
 		    test == GL3_TEXTURE_LOD ||
 		    test == GL3_TEXTURE_LOD_OFFSET ||
 		    test == GL3_TEXTURE_PROJ_LOD ||
-		    test == GL3_TEXTURE_PROJ_LOD_OFFSET)
+		    test == GL3_TEXTURE_PROJ_LOD_OFFSET ||
+		    test == GPU4_TEXTURE_LOD ||
+		    test == GPU4_TEXTURE_LOD_OFFSET ||
+		    test == GPU4_TEXTURE_PROJ_LOD_OFFSET)
 			loc_lod = glGetUniformLocation(prog, "lod");
 
 		if (test == GL2_TEXTURE_BIAS ||
@@ -795,7 +1253,10 @@ piglit_init(int argc, char **argv)
 		    test == GL3_TEXTURE_BIAS ||
 		    test == GL3_TEXTURE_OFFSET_BIAS ||
 		    test == GL3_TEXTURE_PROJ_BIAS ||
-		    test == GL3_TEXTURE_PROJ_OFFSET_BIAS)
+		    test == GL3_TEXTURE_PROJ_OFFSET_BIAS ||
+		    test == GPU4_TEXTURE_BIAS ||
+		    test == GPU4_TEXTURE_OFFSET_BIAS ||
+		    test == GPU4_TEXTURE_PROJ_OFFSET_BIAS)
 			loc_bias = glGetUniformLocation(prog, "bias");
 
 		if (test == ARB_TEXTURE_GRAD ||
@@ -803,7 +1264,11 @@ piglit_init(int argc, char **argv)
 		    test == GL3_TEXTURE_GRAD ||
 		    test == GL3_TEXTURE_GRAD_OFFSET ||
 		    test == GL3_TEXTURE_PROJ_GRAD ||
-		    test == GL3_TEXTURE_PROJ_GRAD_OFFSET) {
+		    test == GL3_TEXTURE_PROJ_GRAD_OFFSET ||
+		    test == GPU4_TEXTURE_GRAD ||
+		    test == GPU4_TEXTURE_GRAD_OFFSET ||
+		    test == GPU4_TEXTURE_PROJ_GRAD ||
+		    test == GPU4_TEXTURE_PROJ_GRAD_OFFSET) {
 			loc_dx = glGetUniformLocation(prog, "dx");
 			loc_dy = glGetUniformLocation(prog, "dy");
 		}
@@ -815,7 +1280,14 @@ piglit_init(int argc, char **argv)
 		    test == GL3_TEXTURE_LOD_OFFSET ||
 		    test == GL3_TEXTURE_PROJ_LOD_OFFSET ||
 		    test == GL3_TEXTURE_GRAD_OFFSET ||
-		    test == GL3_TEXTURE_PROJ_GRAD_OFFSET) {
+		    test == GL3_TEXTURE_PROJ_GRAD_OFFSET ||
+		    test == GPU4_TEXTURE_OFFSET ||
+		    test == GPU4_TEXTURE_PROJ_OFFSET ||
+		    test == GPU4_TEXTURE_PROJ_OFFSET_BIAS ||
+		    test == GPU4_TEXTURE_LOD_OFFSET ||
+		    test == GPU4_TEXTURE_PROJ_LOD_OFFSET ||
+		    test == GPU4_TEXTURE_GRAD_OFFSET ||
+		    test == GPU4_TEXTURE_PROJ_GRAD_OFFSET) {
 			has_offset = GL_TRUE;
 			no_lod_clamp = GL_TRUE; /* not implemented for now */
 		}
@@ -1067,6 +1539,7 @@ draw_quad(int x, int y, int w, int h, int expected_level, int fetch_level,
 	case ARB_TEXTURE_PROJ_LOD:
 	case GL3_TEXTURE_LOD:
 	case GL3_TEXTURE_PROJ_LOD:
+	case GPU4_TEXTURE_LOD:
 		/* set an explicit LOD */
 		glUniform1f(loc_lod, fetch_level - baselevel);
 		break;
@@ -1075,6 +1548,7 @@ draw_quad(int x, int y, int w, int h, int expected_level, int fetch_level,
 	case GL2_TEXTURE_PROJ_BIAS:
 	case GL3_TEXTURE_BIAS:
 	case GL3_TEXTURE_PROJ_BIAS:
+	case GPU4_TEXTURE_BIAS:
 		/* set a bias */
 		glUniform1f(loc_bias, bias);
 		/* fall through to scale the coordinates */
@@ -1083,6 +1557,7 @@ draw_quad(int x, int y, int w, int h, int expected_level, int fetch_level,
 	case GL3_TEXTURE:
 	case GL3_TEXTURE_PROJ:
 	case FIXED_FUNCTION:
+	case GPU4_TEXTURE:
 		/* scale the coordinates (decrease the texel size),
 		 * so that the texture fetch selects this level
 		 */
@@ -1092,12 +1567,16 @@ draw_quad(int x, int y, int w, int h, int expected_level, int fetch_level,
 
 	case GL3_TEXTURE_GRAD_OFFSET:
 	case GL3_TEXTURE_PROJ_GRAD_OFFSET:
+	case GPU4_TEXTURE_GRAD_OFFSET:
+	case GPU4_TEXTURE_PROJ_GRAD_OFFSET:
 		fix_normalized_coordinates(expected_level, &s0, &t0, &s1, &t1);
 		/* fall through */
 	case ARB_TEXTURE_GRAD:
 	case ARB_TEXTURE_PROJ_GRAD:
 	case GL3_TEXTURE_GRAD:
 	case GL3_TEXTURE_PROJ_GRAD:
+	case GPU4_TEXTURE_GRAD:
+	case GPU4_TEXTURE_PROJ_GRAD:
 		if (gltarget == GL_TEXTURE_CUBE_MAP ||
 		    gltarget == GL_TEXTURE_CUBE_MAP_ARRAY) {
 			glUniform3fv(loc_dx, 1, cube_deriv_x);
@@ -1120,10 +1599,14 @@ draw_quad(int x, int y, int w, int h, int expected_level, int fetch_level,
 
 	case GL3_TEXTURE_OFFSET_BIAS:
 	case GL3_TEXTURE_PROJ_OFFSET_BIAS:
+	case GPU4_TEXTURE_OFFSET_BIAS:
+	case GPU4_TEXTURE_PROJ_OFFSET_BIAS:
 		glUniform1f(loc_bias, bias);
 		/* fall through */
 	case GL3_TEXTURE_OFFSET:
 	case GL3_TEXTURE_PROJ_OFFSET:
+	case GPU4_TEXTURE_OFFSET:
+	case GPU4_TEXTURE_PROJ_OFFSET:
 	{
 		/* When testing the texture offset, there is only one pixel which
 		 * is not black and it has the same integer coordinates in every
@@ -1162,6 +1645,8 @@ draw_quad(int x, int y, int w, int h, int expected_level, int fetch_level,
 
 	case GL3_TEXTURE_LOD_OFFSET:
 	case GL3_TEXTURE_PROJ_LOD_OFFSET:
+	case GPU4_TEXTURE_LOD_OFFSET:
+	case GPU4_TEXTURE_PROJ_LOD_OFFSET:
 		glUniform1f(loc_lod, fetch_level - baselevel);
 		fix_normalized_coordinates(expected_level, &s0, &t0, &s1, &t1);
 		break;
@@ -1180,7 +1665,12 @@ draw_quad(int x, int y, int w, int h, int expected_level, int fetch_level,
 	    test == GL3_TEXTURE_PROJ_LOD ||
 	    test == GL3_TEXTURE_PROJ_LOD_OFFSET ||
 	    test == GL3_TEXTURE_PROJ_GRAD ||
-	    test == GL3_TEXTURE_PROJ_GRAD_OFFSET)
+	    test == GL3_TEXTURE_PROJ_GRAD_OFFSET ||
+	    test == GPU4_TEXTURE_PROJ_OFFSET ||
+	    test == GPU4_TEXTURE_PROJ_OFFSET_BIAS ||
+	    test == GPU4_TEXTURE_PROJ_LOD_OFFSET ||
+	    test == GPU4_TEXTURE_PROJ_GRAD ||
+	    test == GPU4_TEXTURE_PROJ_GRAD_OFFSET)
 		p = 7;
 
 	/* Cube coordinates */
@@ -1419,7 +1909,8 @@ piglit_display(void)
 	    (test == GL2_TEXTURE ||
 	     test == GL2_TEXTURE_BIAS ||
 	     test == GL3_TEXTURE ||
-	     test == GL3_TEXTURE_BIAS)) {
+	     test == GL3_TEXTURE_BIAS ||
+	     test == GPU4_TEXTURE_BIAS)) {
 		end_fetch_level = last_level - 1;
 	}
 	else {
@@ -1460,7 +1951,10 @@ piglit_display(void)
 									    test != GL3_TEXTURE_BIAS &&
 									    test != GL3_TEXTURE_PROJ_BIAS &&
 									    test != GL3_TEXTURE_OFFSET_BIAS &&
-									    test != GL3_TEXTURE_PROJ_OFFSET_BIAS)
+									    test != GL3_TEXTURE_PROJ_OFFSET_BIAS &&
+									    test != GPU4_TEXTURE_BIAS &&
+									    test != GPU4_TEXTURE_OFFSET_BIAS &&
+									    test != GPU4_TEXTURE_PROJ_OFFSET_BIAS)
 										set_sampler_parameter(GL_TEXTURE_LOD_BIAS, bias);
 									set_sampler_parameter(GL_TEXTURE_MIN_FILTER,
 											mipfilter ? GL_NEAREST_MIPMAP_NEAREST

@@ -3094,6 +3094,49 @@ with profile.test_list.group_manager(
     g(['ext_gpu_shader4-vertexid-drawarrays'])
     g(['ext_gpu_shader4-vertexid-drawelements'])
 
+    for test in ['1DArray', '2DArray', '1DArrayShadow', '2DArrayShadow', 'CubeShadow']:
+        g(['tex-miplevel-selection', 'GPU4texture()', test])
+        g(['tex-miplevel-selection', 'GPU4texture(bias)', test])
+
+    for stage in ['1DArray', '2DArray', '1DArrayShadow']:
+        g(['tex-miplevel-selection', 'GPU4textureLod', stage])
+
+    for stage in ['1D', '2D', '3D', '2DRect', '2DRectShadow', '1DShadow',
+                  '2DShadow', '1DArray', '2DArray', '1DArrayShadow',
+                  '2DArrayShadow']:
+        g(['tex-miplevel-selection', 'GPU4textureOffset', stage])
+
+    for stage in ['1D', '1D_ProjVec4', '2D', '2D_ProjVec4', '3D', '2DRect',
+                  '2DRect_ProjVec4', '2DRectShadow', '1DShadow', '2DShadow']:
+        g(['tex-miplevel-selection', 'GPU4textureProjOffset', stage])
+
+    for stage in ['1D', '1D_ProjVec4', '2D', '2D_ProjVec4', '3D', '1DShadow',
+                  '2DShadow']:
+        g(['tex-miplevel-selection', 'GPU4textureProjOffset(bias)', stage])
+
+    for stage in ['1D', '2D', '3D', 'Cube', '2DRect', '2DRectShadow',
+                  '1DShadow', '2DShadow', 'CubeShadow', '1DArray', '2DArray',
+                  '1DArrayShadow', '2DArrayShadow', 'CubeArray']:
+        g(['tex-miplevel-selection', 'GPU4textureGrad', stage])
+
+    for stage in ['1D', '2D', '3D', '2DRect', '2DRectShadow', '1DShadow',
+                  '2DShadow', '1DArray', '2DArray', '1DArrayShadow',
+                  '2DArrayShadow']:
+        g(['tex-miplevel-selection', 'GPU4textureGradOffset', stage])
+
+    for stage in ['1D', '2D', '3D', '1D_ProjVec4', '2D_ProjVec4', '2DRect',
+                  '2DRect_ProjVec4', '1DShadow', '2DShadow', '2DRectShadow']:
+        g(['tex-miplevel-selection', 'GPU4textureProjGrad', stage])
+        g(['tex-miplevel-selection', 'GPU4textureProjGradOffset', stage])
+
+    for stage in ['1D', '2D', '3D', '1DShadow', '2DShadow', '1DArray',
+                  '2DArray', '1DArrayShadow']:
+        g(['tex-miplevel-selection', 'GPU4textureLodOffset', stage])
+
+    for stage in ['1D', '2D', '3D', '1D_ProjVec4', '2D_ProjVec4', '1DShadow',
+                  '2DShadow']:
+        g(['tex-miplevel-selection', 'GPU4textureProjLodOffset', stage])
+
 with profile.test_list.group_manager(
         PiglitGLTest, grouptools.join('spec', 'ext_image_dma_buf_import')) as \
         g:
