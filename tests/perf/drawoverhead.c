@@ -592,13 +592,16 @@ draw_state_change(unsigned count)
 	unsigned i;
 	PFNGLENABLEPROC enable = glEnable;
 	PFNGLDISABLEPROC disable = glDisable;
+	PFNGLPRIMITIVERESTARTINDEXPROC set_index = glPrimitiveRestartIndex;
 	GLenum glenum = enable_enum;
 
 	if (is_compat && enable_enum == GL_PRIMITIVE_RESTART) {
 		enable = glEnableClientState;
 		disable = glDisableClientState;
 		glenum = GL_PRIMITIVE_RESTART_NV;
+		set_index = glPrimitiveRestartIndexNV;
 	}
+	set_index(0xffffffff);
 
 	if (indexed) {
 		for (i = 0; i < count; i++) {
