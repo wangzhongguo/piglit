@@ -130,6 +130,98 @@ done:
 	return result;
 }
 
+static enum piglit_result check_no_error_shared_context()
+{
+	const int attribs[] = {
+		GLX_CONTEXT_MAJOR_VERSION_ARB, 2,
+		GLX_CONTEXT_MINOR_VERSION_ARB, 0,
+		GLX_CONTEXT_OPENGL_NO_ERROR_ARB, 1,
+		GLX_CONTEXT_FLAGS_ARB, 0,
+		None
+	};
+
+	const int attribs2[] = {
+		GLX_CONTEXT_MAJOR_VERSION_ARB, 2,
+		GLX_CONTEXT_MINOR_VERSION_ARB, 0,
+		GLX_CONTEXT_OPENGL_NO_ERROR_ARB, 0,
+		GLX_CONTEXT_FLAGS_ARB, 0,
+		None
+	};
+
+	static bool is_dispatch_init = false;
+	GLXContext ctx;
+	enum piglit_result result = PIGLIT_SKIP;
+
+	printf("info: no error attrib mismatch\n");
+
+	ctx = glXCreateContextAttribsARB(dpy, fbconfig, NULL, True, attribs);
+	XSync(dpy, 0);
+
+	if (glx_error_code != -1) {
+		/* Most likely the API/version is not supported. */
+		result = PIGLIT_SKIP;
+		goto done;
+	}
+	if (ctx == NULL) {
+		printf("error: context creation failed\n");
+		result = PIGLIT_FAIL;
+		goto done;
+	}
+
+	if (!glXMakeContextCurrent(dpy, glxWin, glxWin, ctx)) {
+		printf("error: created OpenGL context, but could not make it "
+		       "current\n");
+		result = PIGLIT_FAIL;
+		goto done;
+	}
+
+	if (!is_dispatch_init) {
+		/* We must postpone initialization of piglit-dispatch until
+		 * a context is current.
+		 */
+		piglit_dispatch_default_init(PIGLIT_DISPATCH_GL);
+		is_dispatch_init = true;
+	}
+
+	if (!piglit_is_extension_supported("GL_KHR_no_error")) {
+		printf("warning: context does not report GL_KHR_no_error "
+		       "availability\n");
+		result = PIGLIT_WARN;
+		goto done;
+	}
+
+	if (piglit_get_gl_version() >= 30) {
+		GLint context_flags = 0;
+		glGetIntegerv(GL_CONTEXT_FLAGS, &context_flags);
+		if (!(context_flags & GL_CONTEXT_FLAG_NO_ERROR_BIT_KHR)) {
+			printf("error: context does not have "
+			       "GL_CONTEXT_FLAG_NO_ERROR_BIT_KHR set\n");
+			result = PIGLIT_FAIL;
+			goto done;
+		}
+	}
+
+	glXCreateContextAttribsARB(dpy, fbconfig, ctx, True, attribs2);
+	if (validate_glx_error_code(BadMatch, -1)) {
+		/* From the ARB_create_context_no_error spec:
+		 *
+		 *    "BadMatch is generated if the value of GLX_CONTEXT_OPENGL_NO_ERROR_ARB
+		 *    used to create <share_context> does not match the value of
+		 *    GLX_CONTEXT_OPENGL_NO_ERROR_ARB for the context being created."
+		 */
+		printf("info: context creation failed (expected)\n");
+		result = PIGLIT_PASS;
+		goto done;
+	}
+
+	result = PIGLIT_FAIL;
+done:
+	printf("info: %s\n", piglit_result_to_string(result));
+	glXMakeContextCurrent(dpy, None, None, NULL);
+	glXDestroyContext(dpy, ctx);
+	return result;
+}
+
 int main(int argc, char **argv)
 {
 	enum piglit_result result = PIGLIT_SKIP;
@@ -143,6 +235,8 @@ int main(int argc, char **argv)
 	piglit_merge_result(&result, check_no_error(true, false));
 	piglit_merge_result(&result, check_no_error(false, true));
 	piglit_merge_result(&result, check_no_error(true, true));
+
+	piglit_merge_result(&result, check_no_error_shared_context());
 
 	GLX_ARB_create_context_teardown();
 
