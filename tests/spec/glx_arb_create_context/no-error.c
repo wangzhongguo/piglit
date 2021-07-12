@@ -57,12 +57,23 @@ static enum piglit_result check_no_error(bool debug, bool robust)
 	ctx = glXCreateContextAttribsARB(dpy, fbconfig, NULL, True, attribs);
 	XSync(dpy, 0);
 
-	if (glx_error_code != 0) {
-		if (debug || robust) {
+	if (glx_error_code != -1) {
+		if ((debug || robust)) {
 			/* KHR_no_error doesn't allow the no error mode to be enabled
 			 * with KHR_debug or ARB_robustness, so context creation is
 			 * expected to fail in these cases.
+			 *
+			 * From the ARB_create_context_no_error spec:
+			 *
+			 *    "BadMatch is generated if the GLX_CONTEXT_OPENGL_NO_ERROR_ARB is TRUE at
+			 *    the same time as a debug or robustness context is specified."
 			 */
+			if (!validate_glx_error_code(BadMatch, -1)) {
+				printf("error: incorrect context creation error code\n");
+				result = PIGLIT_FAIL;
+				goto done;
+			}
+
 			printf("info: context creation failed (expected)\n");
 			result = PIGLIT_PASS;
 			goto done;
