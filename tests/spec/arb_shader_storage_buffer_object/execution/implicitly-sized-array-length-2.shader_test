@@ -1,0 +1,42 @@
+# From ARB_shader_storage_buffer_object spec:
+#
+#  If an array has not been explicitly sized and is not the last declared
+#  member of a shader storage block, the value returned by the length method is
+#  not a constant expression and will be determined when a program is linked.
+#
+# Using .length() method on implicitly-sized arrays was originally introduced
+# with ARB_shader_storage_buffer_object extension. It was promoted to core in
+# GLSL 4.3.
+#
+# GLSL 4.60.5 introduced a contradiction, that was later resolved:
+# See private GLSL issue 32.
+
+[require]
+GLSL >= 3.30
+GL_ARB_shader_storage_buffer_object
+
+[vertex shader passthrough]
+
+[fragment shader]
+#version 330
+#extension GL_ARB_shader_storage_buffer_object: require
+
+out vec4 outcolor;
+
+void main()
+{
+   float unsized_array[];
+   unsized_array[4] = unsized_array.length(); // length should be 5
+   if (unsized_array[4] == 5) {
+      outcolor = vec4(0.0, 1.0, 0.0, 1.0);
+   } else {
+      outcolor = vec4(1.0, 0.0, 0.0, 1.0);
+   }
+}
+
+[test]
+clear color 0.5 0.5 0.5 0.5
+clear
+
+draw rect -1 -1 2 2
+probe all rgba 0.0 1.0 0.0 1.0
