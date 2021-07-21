@@ -179,7 +179,7 @@ set_base_size()
 		base_size[2] = 1;
 	} else if (sampler.target == GL_TEXTURE_CUBE_MAP_ARRAY) {
 		base_size[0] = base_size[1] = 65;
-		base_size[2] = 6;
+		base_size[2] = 42;
 	} else {
 		base_size[0] = 65;
 		base_size[1] = has_height() ? 32 : 1;
