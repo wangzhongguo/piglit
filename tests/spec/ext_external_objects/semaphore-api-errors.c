@@ -104,7 +104,6 @@ piglit_display(void)
 
 	X(test_gen_semaphores_value_errors(), "gen-semaphores-bad-value");
 	X(test_delete_semaphores_value_errors(), "gen-semaphores-bad-value");
-	X(test_delete_semaphores_value_errors(), "gen-semaphores-bad-value");
 	X(test_semaphore_parameter_enum_errors(), "semaphore-parameter-bad-enum");
 	X(test_get_semaphore_parameter_enum_errors(), "get-semaphore-parameter-bad-enum");
 
