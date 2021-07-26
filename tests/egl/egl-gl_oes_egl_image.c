@@ -117,6 +117,12 @@ piglit_init(int argc, char **argv)
 	GLuint texture_b;
 	glGenTextures(1, &texture_b);
 	glBindTexture(GL_TEXTURE_2D, texture_b);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+	GLuint fbo;
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_b, 0);
 
 	/* Specify texture from EGLImage but use wrong target. */
 	glEGLImageTargetTexture2DOES(GL_TEXTURE_CUBE_MAP_ARRAY, egl_image);
@@ -136,6 +142,12 @@ piglit_init(int argc, char **argv)
                         w, h);
 		piglit_report_result(PIGLIT_FAIL);
 	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDeleteFramebuffers(1, &fbo);
 
 	glDeleteTextures(1, &texture_a);
 	glDeleteTextures(1, &texture_b);
