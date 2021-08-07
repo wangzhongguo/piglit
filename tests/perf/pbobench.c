@@ -276,7 +276,7 @@ perf_pbo_variant(void)
 {
    unsigned pot;
    double base_rate[12];
-   const Format *r32f;
+   const Format *r32f = NULL;
 
    for (unsigned i = 0; i < ARRAY_SIZE(format_es); i++) {
       if (format_es[i].internal_format == GL_R32F) {
