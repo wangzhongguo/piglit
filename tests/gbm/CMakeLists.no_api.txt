@@ -3,7 +3,11 @@ link_libraries (
 	piglitutil
 )
 
-if(PIGLIT_HAS_GBM_BO_GET_FD_FOR_PLANE)
+if(PIGLIT_HAS_GBM_BO_GET_FD_FOR_PLANE AND LIBDRM_FOUND)
+   include_directories(
+      ${LIBDRM_INCLUDE_DIRS}
+   )
+
    piglit_add_executable(gbm-multi-plane gbm-multi-plane.c)
 endif()
 
