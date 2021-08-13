@@ -328,11 +328,19 @@ void test_tex_img(int fi, bool have_mipmap)
 	/* Check for expected error from Tex*Image*D family of functions */
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
 		4, 4, GL_RGBA, GL_UNSIGNED_BYTE, fake_tex_data);
+#if defined (PIGLIT_USE_OPENGL)
 	REQUIRE_ERROR(GL_INVALID_OPERATION);
+#else
+	REQUIRE_ERROR(GL_INVALID_VALUE);
+#endif
 
 	glTexImage2D(GL_TEXTURE_2D, 0,
 		formats[fi].fmt, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+#if defined (PIGLIT_USE_OPENGL)
 	REQUIRE_ERROR(GL_INVALID_OPERATION);
+#else
+	REQUIRE_ERROR(GL_INVALID_VALUE);
+#endif
 
 	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 4, 4);
 	REQUIRE_ERROR(GL_INVALID_OPERATION);
