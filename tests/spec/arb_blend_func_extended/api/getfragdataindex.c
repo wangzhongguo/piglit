@@ -57,10 +57,30 @@ static const char *fs_text =
 	"    a[1] = vec4(2.0);\n"
 	"}\n"
 	;
+
+static const char *fs_text2 =
+	"#version 130\n"
+	"void main() {\n"
+	"    gl_FragColor = vec4(0.0);\n"
+	"}\n"
+	;
+
+static const char *fs_text3 =
+	"#version 130\n"
+	"void main() {\n"
+	"    gl_FragData[0] = vec4(0.0);\n"
+	"}\n"
+	;
 #else // PIGLIT_USE_OPENGL_ES3
 static const char *vs_text =
 	"#version 300 es\n"
 	"in vec4 vertex;\n"
+	"void main() { gl_Position = vertex; }\n"
+	;
+
+static const char *vs_text2 =
+	"#version 100\n"
+	"attribute vec4 vertex;\n"
 	"void main() { gl_Position = vertex; }\n"
 	;
 
@@ -73,6 +93,20 @@ static const char *fs_text =
 	"    v = vec4(0.0);\n"
 	"    a[0] = vec4(1.0);\n"
 	"    a[1] = vec4(2.0);\n"
+	"}\n"
+	;
+
+static const char *fs_text2 =
+	"#version 100\n"
+	"void main() {\n"
+	"    gl_FragColor = vec4(0.0);\n"
+	"}\n"
+	;
+
+static const char *fs_text3 =
+	"#version 100\n"
+	"void main() {\n"
+	"    gl_FragData[0] = vec4(0.0);\n"
 	"}\n"
 	;
 #endif
@@ -88,7 +122,7 @@ void piglit_init(int argc, char **argv)
 	GLint max_draw_buffers, max_dual_source;
 	GLuint prog;
 	GLuint vs;
-	GLuint fs;
+	GLuint fs, fs2, fs3;
 	GLint idx;
 
 #ifdef PIGLIT_USE_OPENGL
@@ -170,5 +204,56 @@ void piglit_init(int argc, char **argv)
 		fprintf(stderr, "Expected index = -1, got %d\n", idx);
 		piglit_report_result(PIGLIT_FAIL);
 	}
+
+	printf("Querying index of gl_FragColor...\n");
+#ifndef PIGLIT_USE_OPENGL
+	glDetachShader(prog, vs);
+	vs = piglit_compile_shader_text(GL_VERTEX_SHADER, vs_text2);
+	glAttachShader(prog, vs);
+#endif
+	fs2 = piglit_compile_shader_text(GL_FRAGMENT_SHADER, fs_text2);
+	fs3 = piglit_compile_shader_text(GL_FRAGMENT_SHADER, fs_text3);
+
+	glDetachShader(prog, fs);
+	glAttachShader(prog, fs2);
+	glLinkProgram(prog);
+	if (!piglit_link_check_status(prog)) {
+		piglit_report_result(PIGLIT_FAIL);
+	}
+
+#ifdef PIGLIT_USE_OPENGL
+	idx = glGetFragDataIndex(prog, "gl_FragColor");
+#else // PIGLIT_USE_OPENGLES3
+	idx = glGetFragDataIndexEXT(prog, "gl_FragColor");
+#endif
+	if (!piglit_check_gl_error(GL_NO_ERROR))
+		piglit_report_result(PIGLIT_FAIL);
+
+	if (idx != -1) {
+		fprintf(stderr, "Expected index = -1, got %d\n", idx);
+		piglit_report_result(PIGLIT_FAIL);
+	}
+
+	printf("Querying index of gl_FragData[0]...\n");
+	glDetachShader(prog, fs2);
+	glAttachShader(prog, fs3);
+	glLinkProgram(prog);
+	if (!piglit_link_check_status(prog)) {
+		piglit_report_result(PIGLIT_FAIL);
+	}
+
+#ifdef PIGLIT_USE_OPENGL
+	idx = glGetFragDataIndex(prog, "gl_FragData[0]");
+#else // PIGLIT_USE_OPENGLES3
+	idx = glGetFragDataIndexEXT(prog, "gl_FragData[0]");
+#endif
+	if (!piglit_check_gl_error(GL_NO_ERROR))
+		piglit_report_result(PIGLIT_FAIL);
+
+	if (idx != -1) {
+		fprintf(stderr, "Expected index = -1, got %d\n", idx);
+		piglit_report_result(PIGLIT_FAIL);
+	}
+
 	piglit_report_result(PIGLIT_PASS);
 }

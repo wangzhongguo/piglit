@@ -52,6 +52,20 @@ static const char *fs_text =
 	"}\n"
 	;
 
+static const char *fs_text2 =
+	"#version 130\n"
+	"void main() {\n"
+	"    gl_FragColor = vec4(0.0);\n"
+	"}\n"
+	;
+
+static const char *fs_text3 =
+	"#version 130\n"
+	"void main() {\n"
+	"    gl_FragData[0] = vec4(0.0);\n"
+	"}\n"
+	;
+
 enum piglit_result
 piglit_display(void)
 {
@@ -63,7 +77,7 @@ void piglit_init(int argc, char **argv)
 	GLint max_draw_buffers;
 	GLuint prog;
 	GLuint vs;
-	GLuint fs;
+	GLuint fs, fs2, fs3;
 	GLint loc;
 
 	piglit_require_gl_version(30);
@@ -84,6 +98,8 @@ void piglit_init(int argc, char **argv)
 	prog = glCreateProgram();
 	vs = piglit_compile_shader_text(GL_VERTEX_SHADER, vs_text);
 	fs = piglit_compile_shader_text(GL_FRAGMENT_SHADER, fs_text);
+	fs2 = piglit_compile_shader_text(GL_FRAGMENT_SHADER, fs_text2);
+	fs3 = piglit_compile_shader_text(GL_FRAGMENT_SHADER, fs_text3);
 	glAttachShader(prog, vs);
 	glAttachShader(prog, fs);
 	if (!piglit_check_gl_error(GL_NO_ERROR))
@@ -183,6 +199,40 @@ void piglit_init(int argc, char **argv)
 
 	if (loc != 1) {
 		fprintf(stderr, "Expected location = 1, got %d\n", loc);
+		piglit_report_result(PIGLIT_FAIL);
+	}
+
+	printf("Querying location of gl_FragColor...\n");
+	glDetachShader(prog, fs);
+	glAttachShader(prog, fs2);
+	glLinkProgram(prog);
+	if (!piglit_link_check_status(prog)) {
+		piglit_report_result(PIGLIT_FAIL);
+	}
+
+	loc = glGetFragDataLocation(prog, "gl_FragColor");
+	if (!piglit_check_gl_error(GL_NO_ERROR))
+		piglit_report_result(PIGLIT_FAIL);
+
+	if (loc != -1) {
+		fprintf(stderr, "Expected location = -1, got %d\n", loc);
+		piglit_report_result(PIGLIT_FAIL);
+	}
+
+	printf("Querying location of gl_FragData[0]...\n");
+	glDetachShader(prog, fs2);
+	glAttachShader(prog, fs3);
+	glLinkProgram(prog);
+	if (!piglit_link_check_status(prog)) {
+		piglit_report_result(PIGLIT_FAIL);
+	}
+
+	loc = glGetFragDataLocation(prog, "gl_FragData[0]");
+	if (!piglit_check_gl_error(GL_NO_ERROR))
+		piglit_report_result(PIGLIT_FAIL);
+
+	if (loc != -1) {
+		fprintf(stderr, "Expected location = -1, got %d\n", loc);
 		piglit_report_result(PIGLIT_FAIL);
 	}
 
