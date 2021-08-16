@@ -1,0 +1,33 @@
+# https://gitlab.freedesktop.org/mesa/mesa/-/issues/5226
+# Note: this test requires glsl-1.30 because it's the first version that says
+# that integers are 32-bit and defines overflow behavior (Section "4.1.3
+# Integers" of the glsl spec). Before that integers had 16-bits precision
+# and overflow was explicitly undefined.
+
+[require]
+GLSL >= 1.30
+
+[vertex shader]
+#version 110
+void main()
+{
+	gl_Position = gl_Vertex;
+}
+
+[fragment shader]
+#version 130
+uniform int x;
+
+void main()
+{
+	// signed overflow in GLSL is defined to wrap around since glsl 1.30
+	if (1 + x <= 0)
+		gl_FragColor = vec4(0.0, 1.0, 0.0, 0.0);
+	else
+		gl_FragColor = vec4(1.0, 0.0, 0.0, 0.0);
+}
+
+[test]
+uniform int x 2147483647
+draw rect -1 -1 2 2
+probe all rgb 0 1 0 0
