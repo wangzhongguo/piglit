@@ -57,7 +57,7 @@ def setup_module_search_path():
     # a different Piglit, base the search for Piglit's data directory on the
     # absolute path of the this script and *not* on the process's working
     # directory.
-    abs_script_dir = os.path.abspath(os.path.dirname(__file__))
+    abs_script_dir = path.abspath(path.dirname(path.realpath(__file__)))
 
     tested_piglit_data_dirs = []
 
