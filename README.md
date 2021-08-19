@@ -281,6 +281,12 @@ behaves.
     vkrunner:bin can be used instead. If neither are set then vkrunner
     will be searched for in the search path.
 
+  - `PIGLIT_BUILD_DIR`
+
+    Used to define the directory with the tests and their executable files.
+    If the project is built out of source, this variable must be set for
+    piglit to run successfully.
+
 
 ### 3.2 Note
 
