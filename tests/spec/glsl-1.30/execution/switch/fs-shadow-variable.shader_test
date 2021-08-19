@@ -1,0 +1,36 @@
+# Test that we handle shadow variables correctly inside switches
+[require]
+GLSL >= 1.30
+
+[vertex shader]
+#version 110
+void main()
+{
+   gl_Position = gl_Vertex;
+}
+
+[fragment shader]
+#version 130
+uniform int x;
+
+void main()
+{
+   float var_0 = 0.0;
+
+   gl_FragColor = vec4(0.0, var_0, 0.0, 0.0);
+
+   switch(x) {
+   case 0:
+      float var_0 = 1.0;
+      gl_FragColor = vec4(0.0, var_0, 0.0, 0.0);
+  }
+}
+
+[test]
+uniform int x 0
+draw rect -1 -1 2 2
+probe all rgb 0 1 0 0
+
+uniform int x 1
+draw rect -1 -1 2 2
+probe all rgb 0 0 0 0
