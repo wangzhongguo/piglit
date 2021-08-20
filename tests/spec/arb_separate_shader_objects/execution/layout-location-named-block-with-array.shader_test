@@ -1,0 +1,51 @@
+// Test that inputs and outputs are matched when there are multi-slot fields in
+// interface blocks and explicit locations. We need the stricter definition of
+// matching that mesa uses for GLSL 4.20 (static matching).
+
+[require]
+GLSL >= 4.20
+
+[vertex shader]
+#version 420
+
+in vec4 piglit_vertex;
+
+layout(location = 0) out block {
+	vec4 a[2];
+} name;
+
+layout(location = 4) out block2 {
+	vec4 a[2];
+} name2;
+
+void main()
+{
+	name.a[0] = vec4(0.0, 1.0, 0.0, 1.0);
+	name.a[1] = vec4(0.0, 0.0, 1.0, 1.0);
+	name2.a[0] = vec4(0.0, 1.0, 1.0, 1.0);
+	name2.a[1] = vec4(1.0, 0.0, 0.0, 1.0);
+
+	gl_Position = piglit_vertex;
+}
+
+[fragment shader]
+#version 420
+
+layout(location = 4) in block {
+	vec4 a[2];
+} name;
+
+layout(location = 0) in block2 {
+	vec4 a[2];
+} name2;
+
+out vec4 color;
+
+void main()
+{
+	color = name.a[1];
+}
+
+[test]
+draw rect -1 -1 2 2
+probe all rgb 1 0 0
