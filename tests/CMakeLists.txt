@@ -3,6 +3,16 @@ include_directories(
 	${piglit_SOURCE_DIR}/tests/util
 )
 
+file(
+	GLOB PIGLIT_TESTS_METAFILES
+	"*.meta.xml"
+)
+
+file(
+	COPY ${PIGLIT_TESTS_METAFILES}
+	DESTINATION ${piglit_BINARY_DIR}/tests
+)
+
 if(MSVC)
 	include_directories(${piglit_SOURCE_DIR}/tests/util/msvc)
 	add_definitions(-DSTATIC_GETOPT)
