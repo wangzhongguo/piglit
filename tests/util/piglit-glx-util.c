@@ -281,10 +281,11 @@ piglit_glx_iterate_pixmap_fbconfigs(enum piglit_result (*draw)(Display *dpy,
 	int screen;
 	GLXFBConfig *configs;
 	int n_configs;
-	int i;
+	int i, j;
 	bool any_fail = false;
 	bool any_pass = false;
 	Window root_win;
+        int *depths, n_depths;
 
 	Display *dpy = XOpenDisplay(NULL);
 	if (!dpy) {
@@ -293,6 +294,7 @@ piglit_glx_iterate_pixmap_fbconfigs(enum piglit_result (*draw)(Display *dpy,
 	}
 	screen = DefaultScreen(dpy);
 	root_win = RootWindow(dpy, screen);
+        depths = XListDepths(dpy, screen, &n_depths);
 
 	configs = glXGetFBConfigs(dpy, screen, &n_configs);
 	if (!configs) {
@@ -317,6 +319,21 @@ piglit_glx_iterate_pixmap_fbconfigs(enum piglit_result (*draw)(Display *dpy,
 
 		glXGetFBConfigAttrib(dpy, config, GLX_BUFFER_SIZE,
 				     &depth);
+
+                /* Ensure XCreatePixmap will succeed */
+                for (j = 0; j < n_depths; j++)
+                    if (depths[j] == depth)
+                        break;
+                if (j == n_depths) {
+                    int id;
+                    glXGetFBConfigAttrib(dpy, config, GLX_FBCONFIG_ID, &id);
+                    fprintf(stderr, "fbconfig %d has GLX_PIXMAP_BIT but there "
+                                    "is no pixmap format for depth %d, this "
+                                    "is a server bug\n", id, depth);
+                    any_fail = true;
+                    continue;
+                }
+
 		ctx = glXCreateNewContext(dpy, config, GLX_RGBA_TYPE,
 					  NULL, true);
 		pix = XCreatePixmap(dpy, root_win,
@@ -335,6 +352,7 @@ piglit_glx_iterate_pixmap_fbconfigs(enum piglit_result (*draw)(Display *dpy,
 		glXDestroyContext(dpy, ctx);
 	}
 
+        XFree(depths);
 	XFree(configs);
 
 	if (any_fail)
