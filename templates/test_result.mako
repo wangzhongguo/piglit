@@ -4,6 +4,52 @@
     <meta charset="UTF-8">
     <title>${testname} - Details</title>
     <link rel="stylesheet" href="${css}">
+  % if value.images:
+    <script>module = {}</script>
+    <script src="https://unpkg.com/pixelmatch"></script>
+    <script>
+      var diff_complete = false;
+
+      function readImageData(imageID) {
+        var image = document.getElementById(imageID);
+        var canvas = document.createElement("canvas");
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        canvas.getContext("2d").drawImage(image, 0, 0);
+        return canvas.getContext("2d").getImageData(0, 0, image.naturalWidth, image.naturalHeight);
+      }
+
+      function compare_images() {
+        var diff = document.createElement("canvas");
+        var ref = document.getElementById("refimg");
+        var rend = document.getElementById("rendimg");
+
+        if(!ref.complete || !rend.complete || diff_complete) {
+          return;
+        }
+
+        var width = ref.naturalWidth
+        var height = ref.naturalHeight
+        diff.width = width
+        diff.height = height
+
+        const ref_data = readImageData("refimg")
+
+        const rend_data = readImageData("rendimg")
+
+        diff_ctx = diff.getContext('2d');
+        const diff_data = diff_ctx.createImageData(width, height)
+
+        const diff_count = pixelmatch(ref_data.data, rend_data.data, diff_data.data, width, height, {threshold: 0.1})
+        document.getElementById("diffPixelCount").textContent = diff_count + " pixels are different"
+
+        diff_ctx.putImageData(diff_data, 0, 0)
+        diff_complete = true
+
+        document.getElementById("diffimg").src = diff.toDataURL();
+      }
+    </script>
+  % endif
   </head>
   <body>
     <h1>Results for ${testname}</h1>
@@ -32,15 +78,15 @@
         <td>
           <table>
             <tr>
-              <td/>
+              <td id="diffPixelCount">Calculating the difference...</td>
               <td>reference</td>
               <td>rendered</td>
             </tr>
           % for image in value.images:
             <tr>
-              <td>${image['image_desc']}</td>
-              <td><img src="file://${image['image_ref'] if 'image_ref' in image else None}"></td>
-              <td><img src="file://${image['image_render'] if 'image_render' in image else None}"></td>
+              <td><img width="380px" id="diffimg"/></td>
+              <td><img src="file://${image['image_ref'] if 'image_ref' in image else None}" id="refimg" width="380px" onload="compare_images()" crossorigin="Anonymous"/></td>
+              <td><img src="file://${image['image_render'] if 'image_render' in image else None}" id="rendimg" width="380px" onload="compare_images()" crossorigin="Anonymous"/></td>
             </tr>
           % endfor
           </table>
