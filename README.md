@@ -87,7 +87,7 @@ flags), then you must invoke cmake with options
 
 Install development packages.
 
-    $ sudo apt-get install cmake g++ mesa-common-dev libgl1-mesa-dev python-numpy python-mako freeglut3-dev x11proto-gl-dev libxrender-dev libwaffle-dev
+    $ sudo apt-get install cmake g++ mesa-common-dev libgl1-mesa-dev python3-numpy python3-mako freeglut3-dev x11proto-gl-dev libxrender-dev libwaffle-dev libudev-dev
 
 Configure and build.
 
