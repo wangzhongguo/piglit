@@ -76,6 +76,7 @@ if(PIGLIT_USE_WAFFLE)
 		piglit-framework-gl/piglit_fbo_framework.c
 		piglit-framework-gl/piglit_wfl_framework.c
 		piglit-framework-gl/piglit_winsys_framework.c
+		piglit-framework-gl/piglit_sl_framework.c
 		piglit-util-waffle.c
 	)
 

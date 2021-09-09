@@ -121,6 +121,22 @@ piglit_wfl_framework_choose_platform(const struct piglit_gl_test_config *test_co
 #endif
 	}
 
+	else if (streq(env, "surfaceless_egl")) {
+#if WAFFLE_MAJOR_VERSION > 1 || (WAFFLE_MAJOR_VERSION == 1 && WAFFLE_MINOR_VERSION >= 6)
+#if defined(PIGLIT_HAS_EGL)
+		return WAFFLE_PLATFORM_SURFACELESS_EGL;
+#else
+		fprintf(stderr, "environment var PIGLIT_PLATFORM=surfaceless_egl, "
+		        "but piglit was built without EGL support\n");
+		piglit_report_result(PIGLIT_FAIL);
+#endif
+#else
+		fprintf(stderr, "environment var PIGLIT_PLATFORM=surfaceless_egl, "
+		        "but piglit was built with a too old libwaffle (< 1.6.0)\n");
+		piglit_report_result(PIGLIT_FAIL);
+#endif
+	}
+
 	else {
 		fprintf(stderr, "environment var PIGLIT_PLATFORM has bad "
 			"value \"%s\"\n", env);

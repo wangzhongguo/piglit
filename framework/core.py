@@ -42,7 +42,7 @@ __all__ = [
     'parse_listfile',
 ]
 
-PLATFORMS = ["glx", "x11_egl", "wayland", "gbm", "mixed_glx_egl", "wgl"]
+PLATFORMS = ["glx", "x11_egl", "wayland", "gbm", "mixed_glx_egl", "wgl", "surfaceless_egl"]
 
 
 class PiglitConfig(configparser.ConfigParser):

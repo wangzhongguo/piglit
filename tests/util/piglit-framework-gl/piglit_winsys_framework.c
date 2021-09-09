@@ -35,6 +35,7 @@
 #include "piglit_winsys_framework.h"
 #include "piglit_wl_framework.h"
 #include "piglit_x11_framework.h"
+#include "piglit_sl_framework.h"
 
 struct piglit_winsys_framework*
 piglit_winsys_framework(struct piglit_gl_framework *gl_fw)
@@ -188,6 +189,11 @@ piglit_winsys_framework_factory(const struct piglit_gl_test_config *test_config)
 #ifdef PIGLIT_HAS_WGL
 	case WAFFLE_PLATFORM_WGL:
 		return piglit_wgl_framework_create(test_config);
+#endif
+
+#if WAFFLE_MAJOR_VERSION > 1 || (WAFFLE_MAJOR_VERSION == 1 && WAFFLE_MINOR_VERSION >= 6)
+	case WAFFLE_PLATFORM_SURFACELESS_EGL:
+		return piglit_sl_framework_create(test_config);
 #endif
 
 	default:
