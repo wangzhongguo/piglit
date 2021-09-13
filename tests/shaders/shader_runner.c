@@ -3988,6 +3988,60 @@ draw_arrays_common(int first, size_t count)
 	return result;
 }
 
+static const struct string_to_enum light_table[] = {
+	ENUM_STRING(GL_AMBIENT),
+	ENUM_STRING(GL_DIFFUSE),
+	ENUM_STRING(GL_SPECULAR),
+	ENUM_STRING(GL_POSITION),
+	ENUM_STRING(GL_SPOT_DIRECTION),
+	ENUM_STRING(GL_SPOT_EXPONENT),
+	ENUM_STRING(GL_SPOT_CUTOFF),
+	ENUM_STRING(GL_CONSTANT_ATTENUATION),
+	ENUM_STRING(GL_LINEAR_ATTENUATION),
+	ENUM_STRING(GL_QUADRATIC_ATTENUATION),
+	{ NULL, 0 },
+};
+
+static void
+set_light(const char *line)
+{
+	int index;
+	GLenum attrib;
+
+	REQUIRE(parse_int(line, &index, &line),
+		"Bad light index at: %s\n", line);
+
+	REQUIRE(parse_enum_tab(light_table, line, &attrib, &line),
+		"Bad light enum at: %s\n", line);
+
+	if (parse_str(line, "float", &line)) {
+		float f[16];
+		int n;
+
+		REQUIRE((n = parse_floats(line, f, 16, NULL)) > 0,
+			"No float found for light %s\n", line);
+
+		if (n == 1)
+			glLightf(GL_LIGHT0 + index, attrib, f[0]);
+		else
+			glLightfv(GL_LIGHT0 + index, attrib, f);
+	} else if (parse_str(line, "int", &line)) {
+		int i[16];
+		int n;
+
+		REQUIRE((n = parse_ints(line, i, 16, NULL)) > 0,
+			"No int found for light %s\n", line);
+
+		if (n == 1)
+			glLighti(GL_LIGHT0 + index, attrib, i[0]);
+		else
+			glLightiv(GL_LIGHT0 + index, attrib, i);
+	} else {
+		printf("Invalid light value type \"%s\"\n", line);
+		piglit_report_result(PIGLIT_FAIL);
+	}
+}
+
 static bool
 probe_atomic_counter(unsigned buffer_num, GLint counter_num, const char *op,
 		     uint32_t value, bool uses_layout_qualifiers)
@@ -5386,6 +5440,8 @@ piglit_display(void)
 			glDeleteLists(list, 1);
 		} else if (parse_str(line, "viewport swizzle ", &rest)) {
 			handle_viewport_swizzle(rest);
+		} else if (parse_str(line, "light ", &rest)) {
+			set_light(rest);
 		} else if ((line[0] != '\n') && (line[0] != '\0')
 			   && (line[0] != '#')) {
 			printf("unknown command \"%s\"\n", line);
