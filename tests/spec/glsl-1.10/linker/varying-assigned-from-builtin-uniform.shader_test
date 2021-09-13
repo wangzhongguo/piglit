@@ -1,0 +1,34 @@
+/* For testing an opimization which eliminates varying assigned from
+ * uniform. This will copy/move the assigned uniform to another shader.
+ * This test use the builtin uniform.
+ */
+[require]
+GLSL >= 1.10
+
+[vertex shader]
+varying vec4 color1;
+varying vec4 color2;
+void main()
+{
+	color1 = gl_LightSource[0].position;
+	color2 = gl_LightSource[1].diffuse;
+	gl_Position = ftransform();
+}
+
+[fragment shader]
+varying vec4 color1;
+varying vec4 color2;
+void main()
+{
+	gl_FragColor = color1 + color2;
+}
+
+[test]
+light 0 GL_POSITION float 0.2 0.5 0.8 0.1
+light 1 GL_DIFFUSE float 0.3 0.2 0.1 0.4
+draw rect -1 -1 2 2
+probe all rgba 0.5 0.7 0.9 0.5
+light 0 GL_POSITION float 0.5 0.1 0.4 0.6
+light 1 GL_DIFFUSE float 0.1 0.3 0.5 0.2
+draw rect -1 -1 2 2
+probe all rgba 0.6 0.4 0.9 0.8
