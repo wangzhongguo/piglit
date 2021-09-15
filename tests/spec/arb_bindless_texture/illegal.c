@@ -72,7 +72,8 @@ call_TexImage_when_texture_is_referenced(void *data)
 {
 	GLuint tex;
 
-	tex = piglit_integer_texture(GL_RGBA32I, 16, 16, 0, 0);
+	tex = piglit_rgbw_texture(GL_RGBA32F, 16, 16, GL_FALSE, GL_FALSE,
+				  GL_UNSIGNED_NORMALIZED);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32I, 16, 16, 0, GL_RGBA_INTEGER,
 		     GL_INT, NULL);
@@ -101,7 +102,8 @@ call_CopyTexImage_when_texture_is_referenced(void *data)
 {
 	GLuint tex;
 
-	tex = piglit_integer_texture(GL_RGBA32I, 16, 16, 0, 0);
+	tex = piglit_rgbw_texture(GL_RGBA32F, 16, 16, GL_FALSE, GL_FALSE,
+				  GL_UNSIGNED_NORMALIZED);
 
 	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 16, 16, 0);
 	glGetTextureHandleARB(tex);
