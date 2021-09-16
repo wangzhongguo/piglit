@@ -143,6 +143,13 @@ piglit_display(void)
 	if (disjoint == 0 && time <= 0)
 		piglit_report_result(PIGLIT_FAIL);
 
+	/* Finally, check that we are able to retrieve GL_TIMESTAMP_EXT */
+	GLint64 now_int64;
+	glGetInteger64v(GL_TIMESTAMP_EXT, &now_int64);
+
+	if (!piglit_check_gl_error(GL_NO_ERROR))
+		piglit_report_result(PIGLIT_FAIL);
+
 	glDeleteQueriesEXT(1, &query);
 
 	if (!piglit_check_gl_error(GL_NO_ERROR))
