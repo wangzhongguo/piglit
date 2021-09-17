@@ -36,8 +36,7 @@
 
 #define TW 64
 #define TH 64
-#define MINIMUM(X, Y)  ((X) < (Y) ? (X) : (Y))
-#define LEVELS (log2(MINIMUM(TW,TH)) + 1)
+#define LEVELS (ffs(MIN2(TW,TH)))
 
 PIGLIT_GL_TEST_CONFIG_BEGIN
 
@@ -156,6 +155,14 @@ setup_texture(void)
 void
 piglit_init(int argc, char **argv)
 {
+	int required_size = TW << (LEVELS - 1);
+	GLint max_size;
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_size);
+	if (max_size < required_size) {
+		printf("Test requires GL_MAX_TEXTURE_SIZE %d, found %d\n", required_size, max_size);
+		piglit_report_result(PIGLIT_SKIP);
+	}
+
 	piglit_require_GLSL_version(110);
 	prog = piglit_build_simple_program(NULL, fragShaderText);
 	setup_texture();
