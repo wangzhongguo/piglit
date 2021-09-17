@@ -918,6 +918,9 @@ test_MultiTexParameterEXT(void* data)
 			for (k = 0; k < tested[j].value_count; k++) {
 				int original_value;
 
+				if (tested[j].values[k] == GL_RED && !piglit_is_extension_supported("GL_ARB_texture_rg"))
+					continue;
+
 				if (use_display_list != GL_NONE)
 					glNewList(list, use_display_list);
 

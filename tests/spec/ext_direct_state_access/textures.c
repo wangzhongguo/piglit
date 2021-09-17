@@ -451,6 +451,9 @@ test_TextureParameterEXT(void* data)
 
 		for (j = 0; j < ARRAY_SIZE(tested); j++) {
 			for (k = 0; k < tested[j].value_count; k++) {
+				if (tested[j].values[k] == GL_RED && !piglit_is_extension_supported("GL_ARB_texture_rg"))
+					continue;
+
 				int original_value;
 				if (use_display_list != GL_NONE)
 					glNewList(list, use_display_list);
