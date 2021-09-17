@@ -255,7 +255,8 @@ test_depth_formats_storage(const struct format_desc *test, GLenum expected_error
 
       glBindTexture(GL_TEXTURE_1D, tex[0]);
       glBindTexture(GL_TEXTURE_2D, tex[1]);
-      glBindTexture(GL_TEXTURE_2D_ARRAY, tex[2]);
+      if (piglit_is_extension_supported("GL_EXT_texture_array"))
+	 glBindTexture(GL_TEXTURE_2D_ARRAY, tex[2]);
 
       glTexStorage1D(GL_TEXTURE_1D, 1, test[i].internalformat, 16);
       result = piglit_check_gl_error(GL_NO_ERROR) && result;
