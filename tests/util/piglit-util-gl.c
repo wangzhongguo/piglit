@@ -154,6 +154,16 @@ void piglit_require_not_extension(const char *name)
 	}
 }
 
+void piglit_require_draw_buffers(int count)
+{
+	GLint max_targets;
+	glGetIntegerv(GL_MAX_DRAW_BUFFERS, &max_targets);
+	if (max_targets < 2) {
+		printf("Test requires GL_MAX_DRAW_BUFFERS >= %d", count);
+		piglit_report_result(PIGLIT_SKIP);
+	}
+}
+
 const char* piglit_get_gl_error_name(GLenum error)
 {
 #define CASE(x) case x: return #x; 
