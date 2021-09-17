@@ -77,6 +77,9 @@ piglit_init(int argc, char **argv)
 	GLuint tex0, fb;
 	GLenum status;
 
+	GLint max_buffers;
+	glGetIntegerv(GL_MAX_DRAW_BUFFERS_EXT, &max_buffers);
+
 	piglit_require_extension("GL_ARB_ES2_compatibility");
 
 	glGenFramebuffersEXT(1, &fb);
@@ -93,18 +96,20 @@ piglit_init(int argc, char **argv)
 		piglit_report_result(PIGLIT_SKIP);
 	}
 
-	glDrawBuffer(GL_COLOR_ATTACHMENT1);
-	status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-	if (status == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER) {
-		fprintf(stderr, "fbo incomplete draw buffer\n");
-		piglit_report_result(PIGLIT_FAIL);
-	}
+	if (max_buffers >= 2) {
+		glDrawBuffer(GL_COLOR_ATTACHMENT1);
+		status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+		if (status == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER) {
+			fprintf(stderr, "fbo incomplete draw buffer\n");
+			piglit_report_result(PIGLIT_FAIL);
+		}
 
-	glReadBuffer(GL_COLOR_ATTACHMENT1);
-	status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-	if (status == GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER) {
-		fprintf(stderr, "fbo incomplete read buffer\n");
-		piglit_report_result(PIGLIT_FAIL);
+		glReadBuffer(GL_COLOR_ATTACHMENT1);
+		status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+		if (status == GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER) {
+			fprintf(stderr, "fbo incomplete read buffer\n");
+			piglit_report_result(PIGLIT_FAIL);
+		}
 	}
 
 	if (!piglit_check_gl_error(GL_NO_ERROR))

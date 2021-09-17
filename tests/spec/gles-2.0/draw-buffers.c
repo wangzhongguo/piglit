@@ -81,20 +81,21 @@ static const GLenum invalid_buffer_list[] = {
 };
 
 static GLuint
-create_fbo()
+create_fbo(int max_draw_buffers)
 {
 	GLuint fbo;
 	GLuint depth;
+	int test_attachments = MIN2(max_draw_buffers, TEXTURE_AMOUNT);
 	GLuint textures[TEXTURE_AMOUNT];
 	GLint param;
 	unsigned i;
 
-	/* Generate fbo with TEXTURE_AMOUNT color attachments. */
+	/* Generate fbo with test_attachments color attachments. */
 	glGenFramebuffers(1, &fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	glGenTextures(TEXTURE_AMOUNT, textures);
+	glGenTextures(test_attachments, textures);
 
-	for (i = 0; i < TEXTURE_AMOUNT; i++) {
+	for (i = 0; i < test_attachments; i++) {
 		glBindTexture(GL_TEXTURE_2D, textures[i]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 4, 4, 0, GL_RGBA,
 			GL_UNSIGNED_BYTE, NULL);
@@ -161,18 +162,26 @@ run_test(void)
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
+	glGetIntegerv(GL_MAX_DRAW_BUFFERS_EXT, &max_buffers);
+	if (!piglit_check_gl_error(GL_NO_ERROR))
+		return false;
+
 	/* Error cases when default framebuffer is bound. */
 	glDrawBuffersEXT(0, &back);
 	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
 		return false;
 
-	glDrawBuffersEXT(2, &back);
-	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
-		return false;
+	if (max_buffers >= 2) {
+		glDrawBuffersEXT(2, &back);
+		if (!piglit_check_gl_error(GL_INVALID_OPERATION))
+			return false;
+	}
 
-	glDrawBuffersEXT(3, &att0);
-	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
-		return false;
+	if (max_buffers >= 3) {
+		glDrawBuffersEXT(3, &att0);
+		if (!piglit_check_gl_error(GL_INVALID_OPERATION))
+			return false;
+	}
 
 	/* Positive case with default framebuffer. */
 	glDrawBuffersEXT(1, &back);
@@ -180,27 +189,25 @@ run_test(void)
 		return false;
 
 	/* Create user fbo for rest of the tests. */
-	fbo = create_fbo();
+	fbo = create_fbo(max_buffers);
 	if (!fbo || !piglit_check_gl_error(GL_NO_ERROR))
 		return false;
 
 	/* Error cases when user framebuffer is bound. */
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-	glDrawBuffersEXT(3, invalid_buffer_list);
-	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
-		return false;
-
-	glGetIntegerv(GL_MAX_DRAW_BUFFERS_EXT, &max_buffers);
-	if (!piglit_check_gl_error(GL_NO_ERROR))
-		return false;
+	if (max_buffers >= 3) {
+		glDrawBuffersEXT(3, invalid_buffer_list);
+		if (!piglit_check_gl_error(GL_INVALID_OPERATION))
+			return false;
+	}
 
 	glDrawBuffersEXT(max_buffers + 1, valid_buffer_list);
 	if (!piglit_check_gl_error(GL_INVALID_VALUE))
 		return false;
 
 	/* Positive case with user framebuffer. */
-	glDrawBuffersEXT(TEXTURE_AMOUNT, valid_buffer_list);
+	glDrawBuffersEXT(MIN2(max_buffers, TEXTURE_AMOUNT), valid_buffer_list);
 	if (!piglit_check_gl_error(GL_NO_ERROR))
 		return false;
 

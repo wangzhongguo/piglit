@@ -159,7 +159,7 @@ void piglit_require_draw_buffers(int count)
 	GLint max_targets;
 	glGetIntegerv(GL_MAX_DRAW_BUFFERS, &max_targets);
 	if (max_targets < 2) {
-		printf("Test requires GL_MAX_DRAW_BUFFERS >= %d", count);
+		printf("Test requires GL_MAX_DRAW_BUFFERS >= %d\n", count);
 		piglit_report_result(PIGLIT_SKIP);
 	}
 }
