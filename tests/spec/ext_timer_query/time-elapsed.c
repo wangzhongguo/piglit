@@ -289,10 +289,10 @@ piglit_init(int argc, char **argv)
 {
 	piglit_require_gl_version(20);
 
+	piglit_require_extension("GL_EXT_timer_query");
+
 	prog = piglit_build_simple_program(vs_text, fs_text);
 	iters_loc = glGetUniformLocation(prog, "iters");
-
-	piglit_require_extension("GL_EXT_timer_query");
 
 	if (argc == 2 && strcmp(argv[1], "timestamp") == 0) {
 		piglit_require_extension("GL_ARB_timer_query");
