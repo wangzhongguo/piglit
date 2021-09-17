@@ -536,6 +536,11 @@ test_TextureParameterfEXT(void* data)
 	for (i = 0; i < ARRAY_SIZE(targets); i++) {
 		GLenum target = targets[i];
 
+		if ((target == GL_TEXTURE_1D_ARRAY || target == GL_TEXTURE_2D_ARRAY) &&
+			!piglit_is_extension_supported("GL_EXT_texture_array")) {
+			continue;
+		}
+
 		glGenTextures(ARRAY_SIZE(tex), tex);
 
 		for (j = 0; j < ARRAY_SIZE(tested); j++) {

@@ -147,6 +147,11 @@ test_GetIntegerIndexedvEXT(void* data)
 	int value, expected_value;
 
 	for (i = 0; i < ARRAY_SIZE(targets); i++) {
+		if ((targets[i] == GL_TEXTURE_BINDING_1D_ARRAY || targets[i] == GL_TEXTURE_BINDING_2D_ARRAY) &&
+			!piglit_is_extension_supported("GL_EXT_texture_array")) {
+			continue;
+		}
+
 		int index = rand() % max_units;
 		glActiveTexture(GL_TEXTURE0 + (index + 1) % max_units);
 
