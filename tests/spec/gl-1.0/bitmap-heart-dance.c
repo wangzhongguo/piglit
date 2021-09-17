@@ -234,6 +234,7 @@ piglit_display(void)
 void
 piglit_init(int argc, char **argv)
 {
+	piglit_require_GLSL_version(130);
 	fragShader = piglit_compile_shader_text(GL_FRAGMENT_SHADER,
 						fragShaderText);
 	program = piglit_link_simple_program(0, fragShader);
