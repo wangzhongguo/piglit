@@ -100,6 +100,11 @@ static unsigned num_images;
 static unsigned num_imgbos;
 static unsigned num_vbos;
 
+/* Small vertex coordinate to generate as small a triangle as possible
+ * for the lowest GPU overhead.
+ */
+#define V1 0.00001
+
 void
 piglit_init(int argc, char **argv)
 {
@@ -127,8 +132,8 @@ piglit_init(int argc, char **argv)
 			glNewList(dlist[i], GL_COMPILE);
 			glBegin(GL_TRIANGLES);
 			glVertex2f(0, 0);
-			glVertex2f(0, 1);
-			glVertex2f(1, 0);
+			glVertex2f(0, V1);
+			glVertex2f(V1, 0);
 			glEnd();
 			glEndList();
 		}
@@ -143,9 +148,9 @@ piglit_init(int argc, char **argv)
 			glColor3f(1, 1, 1);
 			glVertex2f(0, 0);
 			glColor3f(1, 1, 1);
-			glVertex2f(0, 1);
+			glVertex2f(0, V1);
 			glColor3f(1, 1, 1);
-			glVertex2f(1, 0);
+			glVertex2f(V1, 0);
 			glEnd();
 			glEndList();
 		}
@@ -163,10 +168,10 @@ piglit_init(int argc, char **argv)
 			glVertex2f(0, 0);
 			if (i % 2)
 				glColor3f(1, 1, 1);
-			glVertex2f(0, 1);
+			glVertex2f(0, V1);
 			if (i % 2)
 				glColor3f(1, 1, 1);
-			glVertex2f(1, 0);
+			glVertex2f(V1, 0);
 			glEnd();
 			glEndList();
 		}
