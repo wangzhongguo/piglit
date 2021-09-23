@@ -2451,6 +2451,15 @@ get_indexes_and_offset_from_ubo(char *name, struct block_info block_data,
 		if (block_index == -1)
 			return false;
 
+		GLint array_size;
+		glGetActiveUniformsiv(prog, 1, &uniform_index, GL_UNIFORM_SIZE, &array_size);
+
+		if (array_index > array_size) {
+			printf("attempt to access beyond uniform \"%s\" array size (%d)\n",
+			       name, array_size);
+			return false;
+		}
+
 		/* if the uniform block is an array, then GetActiveUniformsiv with
 		 * UNIFORM_BLOCK_INDEX will have given us the index of the first
 		 * element in the array.
