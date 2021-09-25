@@ -847,7 +847,7 @@ perf_run(const char *call, unsigned prog_index, const char *change,
 		ratio > 0.7 ? COLOR_GREEN :
 		ratio > 0.4 ? COLOR_YELLOW : COLOR_RED;
 
-	printf(" %3u, %*s (%2u VBO| %u UBO| %2u %s) w/ %s %7s%*s"
+	printf(" %3u, %*s (%2u VBO| %u UBO| %2u %s) w/ %s%s%*s"
 	       "%s%5u%s, %s%.1f%%%s\n",
 	       test_index, -(int)strlen("DrawElements"), call, num_vbos, num_ubos,
 	       num_textures ? num_textures :
@@ -858,8 +858,8 @@ perf_run(const char *call, unsigned prog_index, const char *change,
 	         num_images ? "Img" :
 	         num_imgbos ? "ImB" : "   ",
 	       change,
-	       is_dlist ? "" : "change,",
-	       MAX2(26 - (int)strlen(change), 0), "",
+	       is_dlist ? "," : " change,",
+	       MAX2(26 - (int)strlen(change), 0) + (is_dlist ? 7 : 0), "",
 	       color ? COLOR_CYAN : "",
 	       (unsigned)(rate / 1000),
 	       color ? COLOR_RESET : "",
