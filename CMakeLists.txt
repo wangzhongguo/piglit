@@ -429,6 +429,7 @@ if(PIGLIT_USE_WAFFLE AND ${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 endif()
 
 if(EGL_FOUND)
+	set(PIGLIT_HAS_EGL True)
 	add_definitions(-DPIGLIT_HAS_EGL)
 	include_directories(${EGL_INCLUDE_DIRS})
 	add_definitions (${EGL_CFLAGS_OTHER})

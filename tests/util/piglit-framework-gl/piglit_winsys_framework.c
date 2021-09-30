@@ -192,8 +192,10 @@ piglit_winsys_framework_factory(const struct piglit_gl_test_config *test_config)
 #endif
 
 #if WAFFLE_MAJOR_VERSION > 1 || (WAFFLE_MAJOR_VERSION == 1 && WAFFLE_MINOR_VERSION >= 6)
+#ifdef PIGLIT_HAS_EGL
 	case WAFFLE_PLATFORM_SURFACELESS_EGL:
 		return piglit_sl_framework_create(test_config);
+#endif
 #endif
 
 	default:

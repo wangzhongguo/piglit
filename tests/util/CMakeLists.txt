@@ -76,7 +76,6 @@ if(PIGLIT_USE_WAFFLE)
 		piglit-framework-gl/piglit_fbo_framework.c
 		piglit-framework-gl/piglit_wfl_framework.c
 		piglit-framework-gl/piglit_winsys_framework.c
-		piglit-framework-gl/piglit_sl_framework.c
 		piglit-util-waffle.c
 	)
 
@@ -104,6 +103,11 @@ if(PIGLIT_USE_WAFFLE)
 	if(PIGLIT_HAS_X11)
 		list(APPEND UTIL_GL_SOURCES
 			piglit-framework-gl/piglit_x11_framework.c
+		)
+	endif()
+	if(PIGLIT_HAS_EGL)
+		list(APPEND UTIL_GL_SOURCES
+			piglit-framework-gl/piglit_sl_framework.c
 		)
 	endif()
 
