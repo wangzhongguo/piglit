@@ -53,7 +53,6 @@ destroy(struct piglit_gl_framework *gl_fw)
 struct piglit_gl_framework*
 piglit_sl_framework_create(const struct piglit_gl_test_config *test_config)
 {
-#if WAFFLE_MAJOR_VERSION > 1 || (WAFFLE_MAJOR_VERSION == 1 && WAFFLE_MINOR_VERSION >= 6)
 	struct piglit_winsys_framework *winsys_fw = NULL;
 	struct piglit_gl_framework *gl_fw = NULL;
 	bool ok = true;
@@ -74,7 +73,6 @@ piglit_sl_framework_create(const struct piglit_gl_test_config *test_config)
 
 fail:
 	destroy(gl_fw);
-#endif
 	return NULL;
 }
 

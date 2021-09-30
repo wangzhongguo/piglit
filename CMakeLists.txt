@@ -79,7 +79,7 @@ if(PIGLIT_USE_WAFFLE)
 		# validates the required version at most once for the lifetime of the
 		# source tree.  If someone changes the required version by editing the
 		# CMakeLists, CMake fails to detect the new requirement.
-		set(Waffle_REQUIRED_VERSION "1.5.0")
+		set(Waffle_REQUIRED_VERSION "1.6.0")
 		if(Waffle_VERSION VERSION_LESS Waffle_REQUIRED_VERSION)
 			message(FATAL_ERROR "Found waffle-${Waffle_VERSION}, but "
 			"piglit requires waffle-${Waffle_REQUIRED_VERSION}")
