@@ -5145,6 +5145,21 @@ piglit_display(void)
 					"glMakeTextureHandleResidentARB error\n");
 				piglit_report_result(PIGLIT_FAIL);
 			}
+		} else if (sscanf(line, "resident texture 1D %d", &tex) == 1) {
+			GLuint64 handle;
+
+			glBindTexture(GL_TEXTURE_1D, 0);
+
+			handle = glGetTextureHandleARB(get_texture_binding(tex)->obj);
+			glMakeTextureHandleResidentARB(handle);
+
+			set_resident_handle(tex, handle, true);
+
+			if (!piglit_check_gl_error(GL_NO_ERROR)) {
+				fprintf(stderr,
+					"glMakeTextureHandleResidentARB error\n");
+				piglit_report_result(PIGLIT_FAIL);
+			}
 		} else if (sscanf(line, "resident image texture %d %31s",
 				  &tex, s) == 2) {
 			const GLenum img_fmt = piglit_get_gl_enum_from_name(s);
