@@ -80,7 +80,7 @@ get_buffer(unsigned unit)
 }
 
 static GLuint fb[2], cb[2], zb[2];
-static GLfloat vp[2][4];
+static GLsizei vp[2][4];
 
 static bool
 generate_fb(const struct grid_info grid, unsigned idx)
@@ -109,7 +109,7 @@ generate_fb(const struct grid_info grid, unsigned idx)
         vp[idx][1] = 0;
         vp[idx][2] = grid.size.x;
         vp[idx][3] = grid.size.y;
-        glViewportIndexedfv(0, vp[idx]);
+        glViewport(0, 0, grid.size.x, grid.size.y);
 
         return piglit_check_gl_error(GL_NO_ERROR);
 }
@@ -332,7 +332,7 @@ upload_image_levels(const struct image_info img, unsigned num_levels,
                 glDeleteTextures(1, &tmp_tex);
 
                 glBindFramebuffer(GL_FRAMEBUFFER, fb[0]);
-                glViewportIndexedfv(0, vp[0]);
+                glViewport(vp[0][0], vp[0][1], vp[0][2], vp[0][3]);
 
                 glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 
@@ -486,7 +486,7 @@ download_image_levels(const struct image_info img, unsigned num_levels,
                 glDeleteTextures(1, &tmp_tex);
 
                 glBindFramebuffer(GL_FRAMEBUFFER, fb[0]);
-                glViewportIndexedfv(0, vp[0]);
+                glViewport(vp[0][0], vp[0][1], vp[0][2], vp[0][3]);
 
                 if (!ret)
                         return false;

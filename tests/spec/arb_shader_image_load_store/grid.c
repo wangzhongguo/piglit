@@ -392,9 +392,9 @@ draw_grid(const struct grid_info grid, GLuint prog)
                 static GLuint vao, vbo;
 
                 if (size.x != grid.size.x || size.y != grid.size.y) {
-                        float vp[4];
+                        int vp[4];
 
-                        glGetFloati_v(GL_VIEWPORT, 0, vp);
+                        glGetIntegerv(GL_VIEWPORT, vp);
                         size = grid.size;
 
                         if (!generate_grid_arrays(
