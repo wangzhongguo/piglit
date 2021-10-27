@@ -187,12 +187,12 @@ class ShaderTest(FastSkipMixin, PiglitBaseTest):
         """ Add -auto, -fbo and -glsl (if needed) to the test command """
 
         command = super(ShaderTest, self).command
-        shaderfile = os.path.join(ROOT_DIR, command[1])
+        shaderfile = os.path.join(ROOT_DIR, self._command[1])
 
         if options.OPTIONS.force_glsl:
-            return [command[0]] + [shaderfile, '-auto', '-fbo', '-glsl']
+            return self.keys() + [command[0]] + [shaderfile, '-auto', '-fbo', '-glsl']
         else:
-            return [command[0]] + [shaderfile, '-auto', '-fbo']
+            return self.keys() + [command[0]] + [shaderfile, '-auto', '-fbo']
 
     @command.setter
     def command(self, new):
@@ -298,7 +298,7 @@ class MultiShaderTest(ReducedProcessMixin, PiglitBaseTest):
         command = super(MultiShaderTest, self).command
         shaderfiles = (x for x in command[1:] if not x.startswith('-'))
         shaderfiles = [os.path.join(ROOT_DIR, s) for s in shaderfiles]
-        return [command[0]] + shaderfiles + ['-auto', '-report-subtests']
+        return self.keys() + [command[0]] + shaderfiles + ['-auto', '-report-subtests']
 
     def _is_subtest(self, line):
         return line.startswith('PIGLIT TEST:')

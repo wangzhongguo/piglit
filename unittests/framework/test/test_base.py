@@ -348,7 +348,7 @@ class TestValgrindMixin(object):
     """Tests for the ValgrindMixin class."""
 
     def test_command(self, mocker):
-        """test.base.ValgrindMixin.command: overrides self.command."""
+        """test.base.ValgrindMixin.command: self.command doesnt change."""
         opts = mocker.patch('framework.test.base.OPTIONS',
                             new_callable=Options)
 
@@ -358,8 +358,21 @@ class TestValgrindMixin(object):
         opts.valgrind = True
 
         test = Test(['foo'])
-        assert test.command == ['valgrind', '--quiet', '--error-exitcode=1',
-                                '--tool=memcheck', 'foo']
+        assert test.command == ['foo']
+
+    def test_keys(self, mocker):
+        """test.base.ValgrindMixin.keys: return 'valgrind' with its keys."""
+        opts = mocker.patch('framework.test.base.OPTIONS',
+                            new_callable=Options)
+
+        class Test(base.ValgrindMixin, _Test):
+            pass
+
+        opts.valgrind = True
+
+        test = Test(['foo'])
+        assert test.keys() == ['valgrind', '--quiet', '--error-exitcode=1',
+                    '--tool=memcheck']
 
     class TestRun(object):
         """Tests for the run method."""

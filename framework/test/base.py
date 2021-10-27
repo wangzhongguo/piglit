@@ -380,12 +380,14 @@ class ValgrindMixin(object):
     """
     @Test.command.getter
     def command(self):
-        command = super(ValgrindMixin, self).command
+        return super(ValgrindMixin, self).command
+
+    def keys(self):
         if OPTIONS.valgrind:
             return ['valgrind', '--quiet', '--error-exitcode=1',
-                    '--tool=memcheck'] + command
+                    '--tool=memcheck']
         else:
-            return command
+            return []
 
     def interpret_result(self):
         """Set the status to the valgrind status.

@@ -179,9 +179,9 @@ class PiglitGLTest(WindowResizeMixin, PiglitBaseTest):
     def command(self):
         """ Automatically add -auto and -fbo as appropriate """
         if not self.run_concurrent:
-            return super(PiglitGLTest, self).command + ['-auto']
+            return self.keys() + super(PiglitGLTest, self).command + ['-auto']
         else:
-            return super(PiglitGLTest, self).command + ['-auto', '-fbo']
+            return self.keys() + super(PiglitGLTest, self).command + ['-auto', '-fbo']
 
     @command.setter
     def command(self, new):
@@ -199,7 +199,7 @@ class ASMParserTest(PiglitBaseTest):
     @PiglitBaseTest.command.getter
     def command(self):
         command = super(ASMParserTest, self).command
-        return command + [os.path.join(ROOT_DIR, self.filename)]
+        return self.keys() + command + [os.path.join(ROOT_DIR, self.filename)]
 
 
 class BuiltInConstantsTest(PiglitBaseTest):
@@ -209,8 +209,9 @@ class BuiltInConstantsTest(PiglitBaseTest):
     @PiglitBaseTest.command.getter
     def command(self):
         command = super(BuiltInConstantsTest, self).command
+
         command[1] = os.path.join(ROOT_DIR, 'tests', command[1])
-        return command
+        return self.keys() + command; 
 
 
 class PiglitCLTest(PiglitBaseTest):  # pylint: disable=too-few-public-methods
@@ -236,7 +237,7 @@ class CLProgramTester(PiglitCLTest):
     @PiglitCLTest.command.getter
     def command(self):
         command = super(CLProgramTester, self).command
-        return command + [os.path.join(ROOT_DIR, self.filename)]
+        return self.keys() + command + [os.path.join(ROOT_DIR, self.filename)]
 
 
 class VkRunnerTest(PiglitBaseTest):
@@ -259,7 +260,7 @@ class VkRunnerTest(PiglitBaseTest):
         # self._command is used because we don't want PiglitBaseTest
         # to prepend TEST_BIN_DIR so that it will look for vkrunner in
         # the search path.
-        return self._command + [os.path.join(ROOT_DIR, self.filename)]
+        return self.keys() + self._command + [os.path.join(ROOT_DIR, self.filename)]
 
 
 class PiglitReplayerTest(PiglitBaseTest):
@@ -284,7 +285,7 @@ class PiglitReplayerTest(PiglitBaseTest):
         command = super(PiglitReplayerTest, self).command
         if self.RESULTS_PATH is not None:
             command += ['--output', self.RESULTS_PATH]
-        return command + self.extra_args
+        return self.keys() + command + self.extra_args
 
     def interpret_result(self):
         # Python's unhandled exceptions use "1" as exit code value.  We want to

@@ -30,7 +30,7 @@ import sys
 import re
 import io
 
-from framework import exceptions
+from framework import exceptions, options
 from .base import TestIsSkip
 from .opengl import FastSkipMixin
 from .piglit_test import PiglitBaseTest, TEST_BIN_DIR, ROOT_DIR
@@ -302,8 +302,9 @@ class GLSLParserTest(FastSkipMixin, PiglitBaseTest):
     @PiglitBaseTest.command.getter
     def command(self):
         command = super(GLSLParserTest, self).command
+        
         glslfile = os.path.join(ROOT_DIR, command[1])
-        return [command[0], glslfile] + command[2:]
+        return self.keys() + [command[0], glslfile] + command[2:]
 
     @classmethod
     def new(cls, filepath, installpath=None):
