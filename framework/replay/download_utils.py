@@ -111,6 +111,9 @@ def ensure_file(file_path):
 
     url = OPTIONS.download['url'].geturl()
 
+    if OPTIONS.download['caching_proxy_url'] is not None:
+        url = OPTIONS.download['caching_proxy_url'].geturl() + url
+
     core.check_dir(path.dirname(destination_file_path))
 
     if not OPTIONS.download['force'] and path.exists(destination_file_path):

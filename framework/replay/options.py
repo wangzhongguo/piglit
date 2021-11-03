@@ -61,6 +61,8 @@ class _Options(object):  # pylint: disable=too-many-instance-attributes
     db_path -- The path to the objects db or where it will be created.
     results_path -- The path in which to place the results.
     download.url -- The URL from which to download the files.
+    download.caching_proxy_url -- The URL of the caching proxy acting as
+                                  a prefix for download.url
     download.force -- Forces downloading even if the destination file already
                       exists.
     download.minio_host -- Name of MinIO server from which to download traces
@@ -75,6 +77,7 @@ class _Options(object):  # pylint: disable=too-many-instance-attributes
         self.db_path = None
         self.results_path = None
         self.download = {'url': None,
+                         'caching_proxy_url': None,
                          'force': False,
                          'minio_host': '',
                          'minio_bucket': '',
@@ -89,6 +92,10 @@ class _Options(object):  # pylint: disable=too-many-instance-attributes
     def set_download_url(self, url):
         """Safely set the parsed download url."""
         self.download['url'] = _safe_urlparse(url)
+
+    def set_download_caching_proxy_url(self, url):
+        """Safely set the parsed download caching proxy url."""
+        self.download['caching_proxy_url'] = _safe_urlparse(url)
 
     def __iter__(self):
         for key, values in self.__dict__.items():

@@ -35,6 +35,7 @@ __all__ = ['download']
 
 def _ensure_file(args):
     options.OPTIONS.set_download_url(args.download_url)
+    options.OPTIONS.set_download_caching_proxy_url(args.download_caching_proxy_url)
     options.OPTIONS.download['force'] = args.force_download
     options.OPTIONS.download['minio_host'] = args.download_minio_host
     options.OPTIONS.download['minio_bucket'] = args.download_minio_bucket
@@ -49,6 +50,7 @@ def _ensure_file(args):
 def download(input_):
     """ Parser for replayer download command """
     parser = argparse.ArgumentParser(parents=[parsers.DOWNLOAD_URL,
+                                              parsers.DOWNLOAD_CACHING_PROXY_URL,
                                               parsers.DOWNLOAD_FORCE,
                                               parsers.DOWNLOAD_MINIO_HOST,
                                               parsers.DOWNLOAD_MINIO_BUCKET,

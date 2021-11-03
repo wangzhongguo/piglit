@@ -36,6 +36,7 @@ __all__ = ['profile']
 
 def _from_yaml(args):
     options.OPTIONS.device_name = args.device_name
+    options.OPTIONS.set_download_caching_proxy_url(args.download_caching_proxy_url)
     options.OPTIONS.download['force'] = args.force_download
     options.OPTIONS.download['minio_host'] = args.download_minio_host
     options.OPTIONS.download['minio_bucket'] = args.download_minio_bucket
@@ -50,6 +51,7 @@ def _from_yaml(args):
 def _trace(args):
     options.OPTIONS.device_name = args.device_name
     options.OPTIONS.set_download_url(args.download_url)
+    options.OPTIONS.set_download_caching_proxy_url(args.download_caching_proxy_url)
     options.OPTIONS.download['force'] = args.force_download
     options.OPTIONS.download['minio_host'] = args.download_minio_host
     options.OPTIONS.download['minio_bucket'] = args.download_minio_bucket
@@ -81,6 +83,7 @@ def profile(input_):
         'trace',
         parents=[parsers.DEVICE,
                  parsers.DOWNLOAD_URL,
+                 parsers.DOWNLOAD_CACHING_PROXY_URL,
                  parsers.DOWNLOAD_FORCE,
                  parsers.DOWNLOAD_MINIO_HOST,
                  parsers.DOWNLOAD_MINIO_BUCKET,
@@ -100,6 +103,7 @@ def profile(input_):
         'yaml',
         parents=[parsers.DEVICE,
                  parsers.YAML,
+                 parsers.DOWNLOAD_CACHING_PROXY_URL,
                  parsers.DOWNLOAD_FORCE,
                  parsers.DOWNLOAD_MINIO_HOST,
                  parsers.DOWNLOAD_MINIO_BUCKET,

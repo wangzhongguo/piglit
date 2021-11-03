@@ -59,6 +59,15 @@ DOWNLOAD_URL.add_argument(
     default=None,
     help=('the URL from which to download the files'))
 
+DOWNLOAD_CACHING_PROXY_URL = argparse.ArgumentParser(add_help=False)
+DOWNLOAD_CACHING_PROXY_URL.add_argument(
+    '-c', '--download-caching-proxy-url',
+    dest='download_caching_proxy_url',
+    required=False,
+    default=None,
+    help=('the URL for the caching proxy to be used as a prefix '
+          'for the URL provided via --download-url'))
+
 DOWNLOAD_FORCE = argparse.ArgumentParser(add_help=False)
 DOWNLOAD_FORCE.add_argument(
     '-w', '--force-download',
