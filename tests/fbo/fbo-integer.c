@@ -85,51 +85,6 @@ static const char *SimpleFragShaderText =
 
 static GLuint SimpleFragShader, SimpleProgram;
 
-
-/* For glDrawPixels */
-static const char *PassthroughFragShaderText =
-   "void main() \n"
-   "{ \n"
-   "   gl_FragColor = gl_Color; \n"
-   "} \n";
-
-static GLuint PassthroughFragShader, PassthroughProgram;
-
-
-
-static int
-get_max_val(const struct format_info *info)
-{
-   int max;
-
-   switch (info->BitsPerChannel) {
-   case 8:
-      if (info->Signed)
-         max = 127;
-      else
-         max = 255;
-      break;
-   case 16:
-      if (info->Signed)
-         max = 32767;
-      else
-         max = 65535;
-      break;
-   case 32:
-      if (info->Signed)
-         max = 10*1000; /* don't use 0x8fffffff to avoid overflow issues */
-      else
-         max = 20*1000;
-      break;
-   default:
-      assert(0);
-      max = 0;
-   }
-
-   return max;
-}
-
-
 static int
 num_components(GLenum format)
 {
@@ -187,7 +142,6 @@ check_error(const char *file, int line)
 static GLboolean
 test_fbo(const struct format_info *info)
 {
-   const int max = get_max_val(info);
    const int comps = num_components(info->BaseFormat);
    const GLenum type = get_datatype(info);
    const char *name = piglit_get_gl_enum_name(info->IntFormat);
@@ -268,58 +222,6 @@ test_fbo(const struct format_info *info)
             return GL_FALSE;
          }
       }
-   }
-
-
-   /* Do glDraw/ReadPixels test */
-   if (1) {
-#define W 15
-#define H 10
-      GLint image[H * W * 4], readback[H * W * 4];
-      GLint i;
-
-      if (info->Signed) {
-         for (i = 0; i < W * H * 4; i++) {
-            image[i] = (i - 10) % max;
-            assert(image[i] < max);
-         }
-      }
-      else {
-         for (i = 0; i < W * H * 4; i++) {
-            image[i] = (i + 3) % max;
-            assert(image[i] < max);
-         }
-      }
-
-      glUseProgram(PassthroughProgram);
-      if(0)glUseProgram(SimpleProgram);
-
-      glWindowPos2i(1, 1);
-      glDrawPixels(W, H, GL_RGBA_INTEGER_EXT, GL_INT, image);
-
-      if (check_error(__FILE__, __LINE__))
-         return GL_FALSE;
-
-      glReadPixels(1, 1, W, H, GL_RGBA_INTEGER_EXT, GL_INT, readback);
-
-      if (check_error(__FILE__, __LINE__))
-         return GL_FALSE;
-
-      for (i = 0; i < W * H * 4; i++) {
-         if (readback[i] != image[i]) {
-            if (comps == 3 && i % 4 == 3 && readback[i] == 1)
-               continue; /* alpha = 1 if base format == RGB */
-
-            fprintf(stderr,
-                 "%s: glDraw/ReadPixels failed at %d.  Expected %d, found %d\n",
-                    TestName, i, image[i], readback[i]);
-            fprintf(stderr, "Texture format = %s\n", name);
-            assert(0);
-            return GL_FALSE;
-         }
-      }
-#undef W
-#undef H
    }
 
    /* Do rendering test */
@@ -404,12 +306,6 @@ piglit_init(int argc, char **argv)
    piglit_require_extension("GL_EXT_gpu_shader4");
 
    piglit_require_GLSL_version(130);
-
-   PassthroughFragShader = piglit_compile_shader_text(GL_FRAGMENT_SHADER,
-                                                      PassthroughFragShaderText);
-   assert(PassthroughFragShader);
-   PassthroughProgram = piglit_link_simple_program(0, PassthroughFragShader);
-
 
    SimpleFragShader = piglit_compile_shader_text(GL_FRAGMENT_SHADER,
                                                  SimpleFragShaderText);
