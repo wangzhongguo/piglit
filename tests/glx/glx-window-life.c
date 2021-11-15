@@ -51,8 +51,7 @@ expect_no_error(Display *dpy, XErrorEvent *err)
 static int
 expect_glxbadwindow(Display *dpy, XErrorEvent *err)
 {
-	if (piglit_glx_get_error(dpy, err) != GLXBadWindow)
-		pass = 0;
+	pass = piglit_glx_get_error(dpy, err) == GLXBadWindow;
 	return 0;
 }
 
@@ -94,10 +93,14 @@ main(int argc, char **argv)
 
 	XSync(dpy, 0);
 
+	if (!pass)
+		piglit_report_result(PIGLIT_FAIL);
+
 	/*
 	 * X teardown before GLX teardown is legal, and should destroy the
 	 * GLX window.
 	 */
+	pass = 0;
 	XSetErrorHandler(expect_glxbadwindow);
 	w = piglit_get_glx_window(dpy, visinfo);
 	g = glXCreateWindow(dpy, fbc, w, NULL);
