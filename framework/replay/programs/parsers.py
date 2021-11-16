@@ -26,6 +26,20 @@
 import argparse
 
 
+class FileContentType(argparse.FileType):
+    """A FileType type argument which reads the file content
+    and closes the file"""
+
+    def __init__(self, bufsize=-1, encoding=None, errors=None):
+        super().__init__(
+            mode="r", bufsize=bufsize, encoding=encoding, errors=errors
+        )
+
+    def __call__(self, string: str):
+        with super().__call__(string) as open_file:
+            return open_file.read()
+
+
 DEVICE = argparse.ArgumentParser(add_help=False)
 DEVICE.add_argument(
     '-d', '--device-name',
@@ -101,12 +115,21 @@ DOWNLOAD_ROLE_SESSION_NAME.add_argument(
     help=('role session name for authentication with MinIO'))
 
 DOWNLOAD_JWT = argparse.ArgumentParser(add_help=False)
-DOWNLOAD_JWT.add_argument(
+download_jwt_group = DOWNLOAD_JWT.add_mutually_exclusive_group()
+download_jwt_group.add_argument(
     '-j', '--jwt',
     dest='download_jwt',
     required=False,
     default=None,
     help=('JWT token for authentication with MinIO'))
+download_jwt_group.add_argument(
+    "--jwt-file",
+    dest="download_jwt",
+    required=False,
+    default=None,
+    type=FileContentType(),
+    help=("File containing JWT token for authentication with MinIO"),
+)
 
 DB_PATH = argparse.ArgumentParser(add_help=False)
 DB_PATH.add_argument(
