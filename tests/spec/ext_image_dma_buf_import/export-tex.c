@@ -76,8 +76,6 @@ create_cleared_eglImage(EGLDisplay egl_dpy, int w, int h)
 				  (EGLClientBuffer)(uintptr_t)tex,
 				  NULL);
 	tex_clear(tex, w, h);
-	glFinish();
-
 	glDeleteTextures(1, &tex);
 	return img;
 }
@@ -162,12 +160,16 @@ dma_buf_to_eglImage(EGLDisplay egl_dpy, EGLImageKHR *out_img, int w, int h,
 }
 
 bool
-test(EGLDisplay egl_dpy)
+test(EGLDisplay egl_dpy, bool glfinish_after_dmabuf_export)
 {
 	/* Create EGLImage */
 	const int w = 128;
 	const int h = 32;
 	EGLImageKHR img = create_cleared_eglImage(egl_dpy, w, h);
+
+	/* Conditionally finish the clear */
+	if (!glfinish_after_dmabuf_export)
+		glFinish();
 
 	/* Export DMABUF from EGLImage */
 	int fourcc = -1;
@@ -186,6 +188,10 @@ test(EGLDisplay egl_dpy)
 		fprintf(stderr, "Test only supports single plane\n");
 		piglit_report_result(PIGLIT_SKIP);
 	}
+
+	/* Conditionally finish the clear */
+	if (glfinish_after_dmabuf_export)
+		glFinish();
 
 	/* Delete the EGLImage. */
 	eglDestroyImageKHR(egl_dpy, img);
@@ -219,7 +225,12 @@ piglit_init(int argc, char **argv)
 	piglit_require_egl_extension(egl_dpy, "EGL_KHR_gl_texture_2D_image");
 	piglit_require_extension("GL_OES_EGL_image_external");
 
-	if (!test(egl_dpy))
+	fprintf(stderr, "Testing glFinish before dmabuf export\n");
+	if (!test(egl_dpy, false))
+		piglit_report_result(PIGLIT_FAIL);
+
+	fprintf(stderr, "Testing glFinish after dmabuf export\n");
+	if (!test(egl_dpy, true))
 		piglit_report_result(PIGLIT_FAIL);
 
 	piglit_report_result(PIGLIT_PASS);
