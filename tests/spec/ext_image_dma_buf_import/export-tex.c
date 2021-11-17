@@ -161,16 +161,9 @@ dma_buf_to_eglImage(EGLDisplay egl_dpy, EGLImageKHR *out_img, int w, int h,
 	return true;
 }
 
-void
-piglit_init(int argc, char **argv)
+bool
+test(EGLDisplay egl_dpy)
 {
-	EGLDisplay egl_dpy = eglGetCurrentDisplay();
-
-	piglit_require_egl_extension(egl_dpy, "EGL_MESA_image_dma_buf_export");
-	piglit_require_egl_extension(egl_dpy, "EGL_EXT_image_dma_buf_import");
-	piglit_require_egl_extension(egl_dpy, "EGL_KHR_gl_texture_2D_image");
-	piglit_require_extension("GL_OES_EGL_image_external");
-
 	/* Create EGLImage */
 	const int w = 128;
 	const int h = 32;
@@ -213,9 +206,21 @@ piglit_init(int argc, char **argv)
 
 	/* Verify the contents */
 	const float ones[] = { CLEAR_VALUE };
-	if (piglit_probe_pixel_rgba(0, 0, ones))
-		piglit_report_result(PIGLIT_PASS);
-	else
+	return piglit_probe_pixel_rgba(0, 0, ones);
+}
+
+void
+piglit_init(int argc, char **argv)
+{
+	EGLDisplay egl_dpy = eglGetCurrentDisplay();
+
+	piglit_require_egl_extension(egl_dpy, "EGL_MESA_image_dma_buf_export");
+	piglit_require_egl_extension(egl_dpy, "EGL_EXT_image_dma_buf_import");
+	piglit_require_egl_extension(egl_dpy, "EGL_KHR_gl_texture_2D_image");
+	piglit_require_extension("GL_OES_EGL_image_external");
+
+	if (!test(egl_dpy))
 		piglit_report_result(PIGLIT_FAIL);
 
+	piglit_report_result(PIGLIT_PASS);
 }
