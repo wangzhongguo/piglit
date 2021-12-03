@@ -5311,5 +5311,14 @@ with profile.test_list.group_manager(
         grouptools.join('spec', 'EXT_texture_sRGB_RG8')) as g:
     g(['teximage-colors', 'GL_SRG8_EXT'])
 
+with profile.test_list.group_manager(
+        PiglitGLTest,
+        grouptools.join('spec', 'arm_shader_framebuffer_fetch_depth_stencil')) as g:
+    for format in [ 'GL_STENCIL_INDEX8', 'GL_DEPTH_COMPONENT16', 'GL_DEPTH_COMPONENT24',
+        'GL_DEPTH_COMPONENT32F', 'GL_DEPTH24_STENCIL8', 'GL_DEPTH32F_STENCIL8' ]:
+        for samples in ['1', '2', '4', '8', '16']:
+            g(['arm_shader_framebuffer_fetch_depth_stencil', format, samples])
+            g(['arm_shader_framebuffer_fetch_depth_stencil_gles3', format, samples])
+
 if platform.system() == 'Windows':
     profile.filters.append(lambda p, _: not p.startswith('glx'))

@@ -1,0 +1,2 @@
+link_libraries (piglitutil_${piglit_target_api})
+piglit_add_executable (arm_shader_framebuffer_fetch_depth_stencil_gles3 test.c)
