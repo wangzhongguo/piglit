@@ -23,7 +23,6 @@
 
 #include <assert.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 #include "piglit-util-gl.h"
 #include "piglit_sl_framework.h"
