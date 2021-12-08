@@ -1,0 +1,26 @@
+[require]
+GLSL >= 1.30
+
+[vertex shader passthrough]
+
+[fragment shader]
+#version 130
+
+out vec4 out_Color;
+
+#define STEP_ONE() \
+	out_Color = vec4(0.0,1.0,0.0,1.0)
+
+#define GLUE(x,y) x ## _ ## y
+#define NEW_GLUE STEP ## _ ## ONE
+#define EVALUATE(x,y)  GLUE(x,y)
+#define STEP(stepname) EVALUATE(STEP, stepname)()
+#define PERFORM_RAYCASTING_STEP STEP(ONE)
+
+void main() {
+   PERFORM_RAYCASTING_STEP;
+}
+
+[test]
+draw rect -1 -1 2 2
+relative probe rgba (0.5, 0.5) (0.0, 1.0, 0.0, 1.0)
