@@ -53,7 +53,7 @@ GLuint color0, color1;
 void
 piglit_init(int argc, char **argv)
 {
-	piglit_require_GLSL_version(130);
+	piglit_require_GLSL_version(120);
 
 	glGenFramebuffers(1, &fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -75,15 +75,15 @@ piglit_init(int argc, char **argv)
 	glDrawBuffers(2, buffers);
 
 	prog = piglit_build_simple_program(
-		"#version 130\n"
-		"in vec4 pos;\n"
+		"#version 120\n"
+		"attribute vec4 pos;\n"
 		"void main() {\n"
 		"	gl_Position = pos;\n"
 		"}\n",
 
-		"#version 130\n"
+		"#version 120\n"
 		"void main() {\n"
-		"	float alpha = float(int(gl_FragCoord.x / 16 + gl_FragCoord.y / 16) % 2);\n"
+		"	float alpha = mod(floor(gl_FragCoord.x / 16 + gl_FragCoord.y / 16), 2);\n"
 		"	gl_FragData[0] = vec4(1.0, 0.0, 0.0, alpha);\n"
 		"	gl_FragData[1] = vec4(0.0, 1.0, 0.0, 1.0);\n"
 		"}\n"
