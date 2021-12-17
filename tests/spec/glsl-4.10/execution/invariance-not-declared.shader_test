@@ -1,0 +1,34 @@
+# GLSL 4.10
+#
+# "For variables leaving one shader and coming into another shader,
+#  the invariant keyword has to be used in both shaders, or a link
+#  error will result."
+#
+[require]
+GLSL >= 4.10
+
+[vertex shader]
+#version 410
+
+in vec4 piglit_vertex;
+invariant out float d;
+
+void main()
+{
+   gl_Position = piglit_vertex;
+   d = piglit_vertex.z;
+}
+
+[fragment shader]
+#version 410
+
+in float d;
+out vec4 color;
+
+void main()
+{
+	color = vec4(0.0, 1.0, 0.0, 1.0);
+}
+
+[test]
+link error

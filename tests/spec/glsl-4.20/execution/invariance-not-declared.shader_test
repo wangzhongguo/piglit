@@ -1,0 +1,34 @@
+# GLSL 4.20
+#
+# "As only outputs need be declared with invariant, an output from
+#  one shader stage will still match an input of a subsequent stage
+#  without the input being declared as invariant."
+#
+[require]
+GLSL >= 4.20
+
+[vertex shader]
+#version 420
+
+in vec4 piglit_vertex;
+invariant out float d;
+
+void main()
+{
+   gl_Position = piglit_vertex;
+   d = piglit_vertex.z;
+}
+
+[fragment shader]
+#version 420
+
+in float d;
+out vec4 color;
+
+void main()
+{
+	color = vec4(0.0, 1.0, 0.0, 1.0);
+}
+
+[test]
+link success
