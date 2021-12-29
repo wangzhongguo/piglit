@@ -100,7 +100,7 @@ do_texture_storage(GLuint tex, GLenum target, bool ext_dsa,
 /**
  * Do error-check tests for a non-mipmapped texture.
  */
-static bool
+static enum piglit_result
 test_one_level_errors(GLenum target, bool ext_dsa)
 {
 	const GLint width = 64, height = 4, depth = 8;
@@ -119,7 +119,7 @@ test_one_level_errors(GLenum target, bool ext_dsa)
 	glGetTexLevelParameteriv(target, 0, GL_TEXTURE_WIDTH, &v);
 	if (v != width) {
 		printf("%s: bad width: %d, should be %d\n", TestName, v, width);
-		return false;
+		return PIGLIT_FAIL;
 	}
 
 	if (target != GL_TEXTURE_1D) {
@@ -127,7 +127,7 @@ test_one_level_errors(GLenum target, bool ext_dsa)
 		if (v != height) {
 			printf("%s: bad height: %d, should be %d\n", TestName,
 			       v, height);
-			return false;
+			return PIGLIT_FAIL;
 		}
 	}
 
@@ -136,7 +136,7 @@ test_one_level_errors(GLenum target, bool ext_dsa)
 		if (v != depth) {
 			printf("%s: bad depth: %d, should be %d\n", TestName,
 			       v, depth);
-			return false;
+			return PIGLIT_FAIL;
 		}
 	}
 
@@ -157,34 +157,34 @@ test_one_level_errors(GLenum target, bool ext_dsa)
 		if (glGetError() != GL_INVALID_OPERATION) {
 			printf("%s: glTexImage2D failed to generate error\n",
 			       TestName);
-			return false;
+			return PIGLIT_FAIL;
 		}
 
 		glTexStorage2D(target, 1, GL_RGBA8, width, height);
 		if (glGetError() != GL_INVALID_OPERATION) {
 			printf("%s: glTexStorage2D() failed to generate "
 			       "error\n", TestName);
-			return false;
+			return PIGLIT_FAIL;
 		}
 
 		glCopyTexImage2D(target, 0, GL_RGBA, 0, 0, width, height, 0);
 		if (glGetError() != GL_INVALID_OPERATION) {
 			printf("%s: glCopyTexImage2D() failed to generate "
 			       "error\n", TestName);
-			return false;
+			return PIGLIT_FAIL;
 		}
 	}
 
 	glDeleteTextures(1, &tex);
 
-	return true;
+	return PIGLIT_PASS;
 }
 
 
 /**
  * Do error-check tests for a mipmapped texture.
  */
-static bool
+static enum piglit_result
 test_mipmap_errors(GLenum target, bool ext_dsa)
 {
 	GLint width = 128, height = 64, depth = 4, levels = 8;
@@ -206,7 +206,7 @@ test_mipmap_errors(GLenum target, bool ext_dsa)
 		printf("%s: %s GL_TEXTURE_IMMUTABLE_FORMAT query returned "
 		       "false\n",
 		       TestName, targetString);
-		return false;
+		return PIGLIT_FAIL;
 	}
 
 	for (l = 0; l < levels; l++) {
@@ -214,7 +214,7 @@ test_mipmap_errors(GLenum target, bool ext_dsa)
 		if (v != width) {
 			printf("%s: %s level %d: bad width: %d, should be %d\n",
 			       TestName, targetString, l, v, width);
-			return false;
+			return PIGLIT_FAIL;
 		}
 
 		if (target != GL_TEXTURE_1D) {
@@ -224,7 +224,7 @@ test_mipmap_errors(GLenum target, bool ext_dsa)
 				printf("%s: %s level %d: bad height: %d, "
 				       "should be %d\n",
 				       TestName, targetString, l, v, height);
-				return false;
+				return PIGLIT_FAIL;
 			}
 		}
 
@@ -235,7 +235,7 @@ test_mipmap_errors(GLenum target, bool ext_dsa)
 				printf("%s: %s level %d: bad depth: %d, "
 				       "should be %d\n",
 				       TestName, targetString, l, v, depth);
-				return false;
+				return PIGLIT_FAIL;
 			}
 		}
 
@@ -249,66 +249,79 @@ test_mipmap_errors(GLenum target, bool ext_dsa)
 
 	glDeleteTextures(1, &tex);
 
-	return true;
+	return PIGLIT_PASS;
 }
 
 
-static bool
+static enum piglit_result
 test_cube_texture(bool ext_dsa)
 {
 	const GLint width = 16, height = 16;
 	const GLenum target = GL_TEXTURE_CUBE_MAP;
 	GLuint tex;
-	bool pass = true;
+	enum piglit_result result = PIGLIT_PASS;
+
+	if (piglit_get_gl_version() < 13
+	    && !piglit_is_extension_supported("GL_ARB_texture_cube_map")) {
+		return PIGLIT_SKIP;
+	}
 
 	/* Test valid cube dimensions */
 	glGenTextures(1, &tex);
 	glBindTexture(target, tex);
 	do_texture_storage(tex, target, ext_dsa, 1, GL_RGBA8, width, height, 0);
-	pass = piglit_check_gl_error(GL_NO_ERROR) && pass;
+	if (!piglit_check_gl_error(GL_NO_ERROR))
+		result = PIGLIT_FAIL;
 	glDeleteTextures(1, &tex);
 
 	/* Test invalid cube dimensions */
 	glGenTextures(1, &tex);
 	glBindTexture(target, tex);
 	do_texture_storage(tex, target, ext_dsa, 1, GL_RGBA8, width, height + 2, 0);
-	pass = piglit_check_gl_error(GL_INVALID_VALUE) && pass;
+	if (!piglit_check_gl_error(GL_INVALID_VALUE))
+		result = PIGLIT_FAIL;
 	glDeleteTextures(1, &tex);
 
-	return pass;
+	return result;
 }
 
 
-static bool
+static enum piglit_result
 test_cube_array_texture(bool ext_dsa)
 {
 	const GLint width = 16, height = 16;
 	const GLenum target = GL_TEXTURE_CUBE_MAP_ARRAY;
 	GLuint tex;
-	bool pass = true;
+	enum piglit_result result = PIGLIT_PASS;
+
+	if (!piglit_is_extension_supported("GL_ARB_texture_cube_map_array"))
+		return PIGLIT_SKIP;
 
 	/* Test valid cube array dimensions */
 	glGenTextures(1, &tex);
 	glBindTexture(target, tex);
 	do_texture_storage(tex, target, ext_dsa, 1, GL_RGBA8, width, height, 12);
-	pass = piglit_check_gl_error(GL_NO_ERROR) && pass;
+	if (!piglit_check_gl_error(GL_NO_ERROR))
+		result = PIGLIT_FAIL;
 	glDeleteTextures(1, &tex);
 
 	/* Test invalid cube array width, height dimensions */
 	glGenTextures(1, &tex);
 	glBindTexture(target, tex);
 	do_texture_storage(tex, target, ext_dsa, 1, GL_RGBA8, width, height + 3, 12);
-	pass = piglit_check_gl_error(GL_INVALID_VALUE) && pass;
+	if (!piglit_check_gl_error(GL_INVALID_VALUE))
+		result = PIGLIT_FAIL;
 	glDeleteTextures(1, &tex);
 
 	/* Test invalid cube array depth */
 	glGenTextures(1, &tex);
 	glBindTexture(target, tex);
 	do_texture_storage(tex, target, ext_dsa, 1, GL_RGBA8, width, height, 12 + 2);
-	pass = piglit_check_gl_error(GL_INVALID_VALUE) && pass;
+	if (!piglit_check_gl_error(GL_INVALID_VALUE))
+		result = PIGLIT_FAIL;
 	glDeleteTextures(1, &tex);
 
-	return pass;
+	return result;
 }
 
 
@@ -333,7 +346,7 @@ create_image(GLint w, GLint h, const GLubyte color[4])
 /**
  * Test a mip-mapped texture w/ rendering.
  */
-static bool
+static enum piglit_result
 test_2d_mipmap_rendering(bool ext_dsa)
 {
 	GLuint tex;
@@ -361,7 +374,7 @@ test_2d_mipmap_rendering(bool ext_dsa)
 		if (v != width) {
 			printf("%s: level %d: bad width: %d, should be %d\n",
 					 TestName, l, v, width);
-			return false;
+			return PIGLIT_FAIL;
 		}
 
 		glGetTexLevelParameteriv(GL_TEXTURE_2D, l, GL_TEXTURE_HEIGHT,
@@ -369,7 +382,7 @@ test_2d_mipmap_rendering(bool ext_dsa)
 		if (v != height) {
 			printf("%s: level %d: bad height: %d, should be %d\n",
 					 TestName, l, v, height);
-			return false;
+			return PIGLIT_FAIL;
 		}
 
 		if (width > 1)
@@ -391,7 +404,7 @@ test_2d_mipmap_rendering(bool ext_dsa)
 			printf("%s: glTexSubImage2D(illegal level) failed to "
 			       "generate an error.\n",
 			       TestName);
-			return false;
+			return PIGLIT_FAIL;
 		}
 
 		free(buf);
@@ -429,7 +442,7 @@ test_2d_mipmap_rendering(bool ext_dsa)
 		if (!p) {
 			printf("%s: wrong color for mipmap level %d\n",
 			       TestName, l);
-			return false;
+			return PIGLIT_FAIL;
 		}
 	}
 
@@ -437,7 +450,7 @@ test_2d_mipmap_rendering(bool ext_dsa)
 
 	glDeleteTextures(1, &tex);
 
-	return true;
+	return PIGLIT_PASS;
 }
 
 
@@ -448,7 +461,7 @@ test_2d_mipmap_rendering(bool ext_dsa)
  * there are many extensions/versions that could effect the lists (ex:
  * integer formats, etc.)
  */
-static bool
+static enum piglit_result
 test_internal_formats(bool ext_dsa)
 {
 	const GLenum target = GL_TEXTURE_2D;
@@ -483,7 +496,7 @@ test_internal_formats(bool ext_dsa)
 		GL_COMPRESSED_SLUMINANCE_ALPHA
 	};
 	GLuint tex;
-	bool pass = true;
+	enum piglit_result result = PIGLIT_PASS;
 	int i;
 
 	for (i = 0; i < ARRAY_SIZE(legal_formats); i++) {
@@ -497,7 +510,7 @@ test_internal_formats(bool ext_dsa)
 			       " but raised an error.",
 			       TestName,
 			       piglit_get_gl_enum_name(legal_formats[i]));
-			pass = false;
+			result = PIGLIT_FAIL;
 		}
 
 		glDeleteTextures(1, &tex);
@@ -514,23 +527,23 @@ test_internal_formats(bool ext_dsa)
 			       " but didn't raised an error.",
 			       TestName,
 			       piglit_get_gl_enum_name(illegal_formats[i]));
-			pass = false;
+			result = PIGLIT_FAIL;
 		}
 
 		glDeleteTextures(1, &tex);
 	}
 
-	return pass;
+	return result;
 }
 	
-static bool
+static enum piglit_result
 test_immutablity(GLenum target, bool ext_dsa)
 {
 	GLuint tex;
 	GLint level;
 	GLint immutable_format;
 
-	bool pass = true;
+	enum piglit_result result = PIGLIT_PASS;
 
 	glGenTextures(1, &tex);
 	glBindTexture(target, tex);
@@ -545,7 +558,7 @@ test_immutablity(GLenum target, bool ext_dsa)
 	if (immutable_format != GL_TRUE) {
 		printf("%s: GL_TEXTURE_IMMUTABLE_FORMAT was not set to "
 		       "GL_TRUE after glTexStorage2D\n", TestName);
-		pass = false;
+		result = PIGLIT_FAIL;
 	}
 	if (level != 2) {
 		/* The ARB_texture_storage spec says:
@@ -559,13 +572,13 @@ test_immutablity(GLenum target, bool ext_dsa)
 		printf("%s: GL_TEXTURE_MAX_LEVEL changed to %d, which is "
 		       "outside the clamp range for immutables\n",
 		       TestName, level);
-		pass = false;
+		result = PIGLIT_FAIL;
 	}
 
 	/* Other immutable tests happen per-format above */
 
 	glDeleteTextures(1, &tex);
-	return pass;
+	return result;
 }
 
 /*
@@ -573,9 +586,12 @@ test_immutablity(GLenum target, bool ext_dsa)
  * possible to use GenerateMipmap with an incomplete mipmap pyramid. Since the
  * texture is immutable, no new levels are generated.
  */
-static bool
+static enum piglit_result
 test_generate_mipmap(bool ext_dsa)
 {
+	if (!piglit_is_extension_supported("GL_EXT_framebuffer_object"))
+		return PIGLIT_SKIP;
+
 	static float level_1_image[2*2*4] = {
 		1.0, 0.0, 0.0, 1.0,
 		0.0, 1.0, 0.0, 1.0,
@@ -588,7 +604,7 @@ test_generate_mipmap(bool ext_dsa)
 	GLuint tex;
 	GLint level;
 	int x, y;
-	bool pass = true;
+	enum piglit_result result = PIGLIT_PASS;
 
 	ptr = level_0_image;
 	for (y = 0; y < 4; ++y) {
@@ -615,7 +631,7 @@ test_generate_mipmap(bool ext_dsa)
 
 	glEnable(GL_TEXTURE_2D);
 
-	for (level = 0; level <= 1 && pass; ++level) {
+	for (level = 0; level <= 1 && result == PIGLIT_PASS; ++level) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, level);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, level);
 
@@ -625,14 +641,14 @@ test_generate_mipmap(bool ext_dsa)
 				     0.0, 0.0, 1.0, 1.0);
 
 		ptr = level_1_image;
-		for (y = 0; y < 2 && pass; ++y) {
-			for (x = 0; x < 2 && pass; ++x, ptr += 4) {
+		for (y = 0; y < 2 && result == PIGLIT_PASS; ++y) {
+			for (x = 0; x < 2 && result == PIGLIT_PASS; ++x, ptr += 4) {
 				int px = (piglit_width / 4) * (1 + 2 * x);
 				int py = (piglit_height / 4) * (1 + 2 * y);
 				if (!piglit_probe_pixel_rgba(px, py, ptr)) {
 					printf("%s: wrong color for mipmap "
 					       "level %d\n", TestName, level);
-					pass = false;
+					result = PIGLIT_FAIL;
 				}
 			}
 		}
@@ -643,22 +659,21 @@ test_generate_mipmap(bool ext_dsa)
 	glDisable(GL_TEXTURE_2D);
 
 	glDeleteTextures(1, &tex);
-	return pass;
+	return result;
 }
 
-#define X(f, n)								\
-	do {								\
-		const bool subtest_pass = (f);				\
-		piglit_report_subtest_result(subtest_pass		\
-					     ? PIGLIT_PASS : PIGLIT_FAIL, \
-					     (n " %s"), ext_dsa ? "(EXT_dsa)": ""); \
-		pass = pass && subtest_pass;				\
+#define X(f, n)                                                                      \
+	do {                                                                         \
+		const enum piglit_result subtest_result = (f);                       \
+		piglit_report_subtest_result(subtest_result,                         \
+					     (n " %s"), ext_dsa ? "(EXT_dsa)" : ""); \
+		piglit_merge_result(&result, subtest_result);                        \
 	} while (0)
 
 enum piglit_result
 piglit_display(void)
 {
-	bool pass = true;
+	enum piglit_result result = PIGLIT_SKIP;
 	bool ext_dsa_supported = piglit_is_extension_supported("GL_EXT_direct_state_access");
 	bool ext_dsa = false;
 
@@ -673,32 +688,16 @@ retry_with_ext_dsa:
 	X(test_2d_mipmap_rendering(ext_dsa), "2D mipmap rendering");
 	X(test_internal_formats(ext_dsa), "internal formats");
 	X(test_immutablity(GL_TEXTURE_2D, ext_dsa), "immutability");
+	X(test_cube_texture(ext_dsa), "cube texture");
+	X(test_cube_array_texture(ext_dsa), "cube array texture");
+	X(test_generate_mipmap(ext_dsa), "generate mipmap");
 
-	if (piglit_get_gl_version() >= 13
-	    || piglit_is_extension_supported("GL_ARB_texture_cube_map"))
-		X(test_cube_texture(ext_dsa), "cube texture");
-	else
-		piglit_report_subtest_result(PIGLIT_SKIP,
-					     "cube texture");
-
-	if (piglit_is_extension_supported("GL_ARB_texture_cube_map_array"))
-		X(test_cube_array_texture(ext_dsa), "cube array texture");
-	else
-		piglit_report_subtest_result(PIGLIT_SKIP,
-					     "cube array texture");
-
-	if (piglit_is_extension_supported("GL_EXT_framebuffer_object"))
-		X(test_generate_mipmap(ext_dsa), "generate mipmap");
-	else
-		piglit_report_subtest_result(PIGLIT_SKIP,
-					     "generate mipmap");
-
-	if (pass && ext_dsa_supported && !ext_dsa) {
+	if (ext_dsa_supported && !ext_dsa) {
 		ext_dsa = true;
 		goto retry_with_ext_dsa;
 	}
 
-	return pass ? PIGLIT_PASS : PIGLIT_FAIL;
+	return result;
 }
 
 
