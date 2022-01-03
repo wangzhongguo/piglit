@@ -35,7 +35,7 @@
 #define TEX_HEIGHT 4
 #define TEX_DEPTH 4
 
-#include "piglit-util-gl.h"
+#include "common.h"
 
 PIGLIT_GL_TEST_CONFIG_BEGIN
 
@@ -200,6 +200,3 @@ piglit_display(void)
 
 	return pass ? PIGLIT_PASS : PIGLIT_FAIL;
 }
-
-void
-init_program();
