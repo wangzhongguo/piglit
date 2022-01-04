@@ -230,6 +230,13 @@ conformOQ_GetQueryCounterBits(void *data)
 	 */
 	glGetQueryivARB(GL_SAMPLES_PASSED_ARB, GL_QUERY_COUNTER_BITS_ARB,
 			&bit_num);
+
+	/* It is legal for a driver to support the query API but not have
+	 * any query bits.
+	 */
+	if (bit_num == 0)
+		return PIGLIT_SKIP;
+
 	glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
 	if (!piglit_check_gl_error(GL_NO_ERROR))
 		return PIGLIT_FAIL;
