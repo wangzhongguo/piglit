@@ -42,12 +42,15 @@
 #include <math.h>
 #include <time.h>
 
+static const struct piglit_gl_test_config * piglit_config;
+
 PIGLIT_GL_TEST_CONFIG_BEGIN config.supports_gl_compat_version = 10;
 
 config.window_visual =
 	PIGLIT_GL_VISUAL_RGB | PIGLIT_GL_VISUAL_DOUBLE |
 	PIGLIT_GL_VISUAL_DEPTH;
 
+	piglit_config = &config;
 	config.khr_no_error_support = PIGLIT_HAS_ERRORS;
 
 PIGLIT_GL_TEST_CONFIG_END static GLuint
@@ -65,9 +68,10 @@ find_unused_id(void)
  * if the results are not retrieved before starting a new query on the same
  * target and id.
  */
-static bool
-conformOQ_GetObjivAval_multi1(GLuint id)
+static enum piglit_result
+conformOQ_GetObjivAval_multi1(void *data)
 {
+	GLuint id = *(GLuint *)data;
 	GLint ready;
 	GLuint passed = 0;
 
@@ -119,15 +123,15 @@ conformOQ_GetObjivAval_multi1(GLuint id)
 	glGetQueryObjectuivARB(id, GL_QUERY_RESULT_ARB, &passed);
 
 	/* 'passed' should be zero */
-	return passed > 0 ? false : true;
+	return passed > 0 ? PIGLIT_FAIL : PIGLIT_PASS;
 }
 
 /* If mutiple queries are issued on the same target and diff ids prior
  * to calling GetQueryObject[u]iVARB, the results should be
  * corresponding to those queries (ids) respectively.
  */
-static bool
-conformOQ_GetObjivAval_multi2(void)
+static enum piglit_result
+conformOQ_GetObjivAval_multi2(void *data)
 {
 	GLuint passed1 = 0, passed2 = 0, passed3 = 0;
 	GLuint id1, id2, id3;
@@ -197,9 +201,9 @@ conformOQ_GetObjivAval_multi2(void)
 	glPopMatrix();
 
 	if (passed1 > passed2 && passed2 > passed3 && passed3 == 0)
-		return true;
+		return PIGLIT_PASS;
 	else
-		return false;
+		return PIGLIT_FAIL;
 }
 
 /*
@@ -215,8 +219,8 @@ conformOQ_GetObjivAval_multi2(void)
  * number of bits):
  *   n = (min (32, ceil (log2 (maxViewportWidth x maxViewportHeight x 2) ) ) ) or 0
  */
-static bool
-conformOQ_GetQueryCounterBits(void)
+static enum piglit_result
+conformOQ_GetQueryCounterBits(void *data)
 {
 	int bit_num, dims[2];
 	float min_impl, min_bit_num;
@@ -228,7 +232,7 @@ conformOQ_GetQueryCounterBits(void)
 			&bit_num);
 	glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
 	if (!piglit_check_gl_error(GL_NO_ERROR))
-		return false;
+		return PIGLIT_FAIL;
 
 	min_impl =
 		ceil(logf((float) dims[0] * (float) dims[1] * 1.0 * 2.0) /
@@ -236,30 +240,30 @@ conformOQ_GetQueryCounterBits(void)
 	min_bit_num = 32.0 > min_impl ? min_impl : 32.0;
 
 	if ((float) bit_num < min_bit_num)
-		return false;
+		return PIGLIT_FAIL;
 
-	return true;
+	return PIGLIT_PASS;
 }
 
 /* If BeginQueryARB is called with an unused <id>, that name is marked as used
  * and associated with a new query object.
  */
-static bool
-conformOQ_Begin_unused_id(void)
+static enum piglit_result
+conformOQ_Begin_unused_id(void *data)
 {
 	unsigned int id;
-	bool pass = true;
+	enum piglit_result pass = PIGLIT_PASS;
 
 	id = find_unused_id();
 
 	if (id == 0)
-		return false;
+		return PIGLIT_FAIL;
 
 	glBeginQuery(GL_SAMPLES_PASSED_ARB, id);
 
 	if (glIsQueryARB(id) == GL_FALSE) {
 		printf("Error : Begin with a unused id failed.");
-		pass = false;
+		pass = PIGLIT_FAIL;
 	}
 
 	glEndQuery(GL_SAMPLES_PASSED_ARB);
@@ -270,27 +274,30 @@ conformOQ_Begin_unused_id(void)
 /* if EndQueryARB is called while no query with the same target is in progress,
  * an INVALID_OPERATION error is generated.
  */
-static bool
-conformOQ_EndAfter(GLuint id)
+static enum piglit_result
+conformOQ_EndAfter(void *data)
 {
+	GLuint id = *(GLuint *)data;
+
 	glBeginQueryARB(GL_SAMPLES_PASSED_ARB, id);
 	glEndQueryARB(GL_SAMPLES_PASSED_ARB);
 
 	glEndQueryARB(GL_SAMPLES_PASSED_ARB);
 
 	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
-		return false;
+		return PIGLIT_FAIL;
 
-	return true;
+	return PIGLIT_PASS;
 }
 
 /* If BeginQueryARB is called while another query is already in progress with
  * the same target, an INVALID_OPERATION error should be generated.
  */
-static bool
-conformOQ_BeginIn(GLuint id)
+static enum piglit_result
+conformOQ_BeginIn(void *data)
 {
-	int pass = true;
+	GLuint id = *(GLuint *)data;
+	enum piglit_result pass = PIGLIT_PASS;
 
 	glBeginQueryARB(GL_SAMPLES_PASSED_ARB, id);
 
@@ -298,7 +305,7 @@ conformOQ_BeginIn(GLuint id)
 	glBeginQueryARB(GL_SAMPLES_PASSED_ARB, id);
 
 	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
-		pass = false;
+		pass = PIGLIT_FAIL;
 
 	glEndQueryARB(GL_SAMPLES_PASSED_ARB);
 	return pass;
@@ -307,24 +314,25 @@ conformOQ_BeginIn(GLuint id)
 /* if the query object named by <id> is currently active, then an
  * INVALID_OPERATION error is generated.
  */
-static bool
-GetObjectAvailableIn(GLuint id)
+static enum piglit_result
+GetObjectAvailableIn(void *data)
 {
-	int pass = true;
+	GLuint id = *(GLuint *)data;
+	enum piglit_result pass = PIGLIT_PASS;
 	GLint param;
 
 	glBeginQueryARB(GL_SAMPLES_PASSED_ARB, id);
 
 	glGetQueryObjectivARB(id, GL_QUERY_RESULT_AVAILABLE_ARB, &param);
 	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
-		pass = false;
+		pass = PIGLIT_FAIL;
 
 	glGetQueryObjectuivARB(id, GL_QUERY_RESULT_AVAILABLE_ARB,
 			       (GLuint *) & param);
 	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
-		pass = false;
+		pass = PIGLIT_FAIL;
 
-	if (pass == false) {
+	if (pass == PIGLIT_FAIL) {
 		printf(" Error: No GL_INVALID_OPERATION generated if "
 		       "GetQueryObjectuiv with GL_QUERY_RESULT_AVAILABLE_ARB "
 		       "in the active progress.\n");
@@ -336,23 +344,24 @@ GetObjectAvailableIn(GLuint id)
 
 /* if the query object named by <id> is currently active, then an
  * INVALID_OPERATION error is generated. */
-static bool
-conformOQ_GetObjResultIn(GLuint id)
+static enum piglit_result
+conformOQ_GetObjResultIn(void *data)
 {
-	int pass = true;
+	GLuint id = *(GLuint *)data;
+	enum piglit_result pass = PIGLIT_PASS;
 	GLint param;
 
 	glBeginQueryARB(GL_SAMPLES_PASSED_ARB, id);
 
 	glGetQueryObjectivARB(id, GL_QUERY_RESULT_ARB, &param);
 	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
-		pass = false;
+		pass = PIGLIT_FAIL;
 
 	glGetQueryObjectuivARB(id, GL_QUERY_RESULT_ARB, (GLuint *) & param);
 	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
-		pass = false;
+		pass = PIGLIT_FAIL;
 
-	if (pass == false) {
+	if (pass == PIGLIT_FAIL) {
 		printf(" Error: No GL_INVALID_OPERATION generated if "
 		       "GetQueryObject[u]iv with GL_QUERY_RESULT_ARB "
 		       "in the active progress.\n");
@@ -365,9 +374,10 @@ conformOQ_GetObjResultIn(GLuint id)
 /* If <id> is not the name of a query object, then an INVALID_OPERATION error
  * is generated.
  */
-static bool
-conformOQ_GetObjivAval(GLuint id)
+static enum piglit_result
+conformOQ_GetObjivAval(void *data)
 {
+	GLuint id = *(GLuint *)data;
 	GLuint id_tmp;
 	GLint param;
 
@@ -377,23 +387,24 @@ conformOQ_GetObjivAval(GLuint id)
 	id_tmp = find_unused_id();
 
 	if (id_tmp == 0)
-		return false;
+		return PIGLIT_FAIL;
 
 	glGetQueryObjectivARB(id_tmp, GL_QUERY_RESULT_AVAILABLE_ARB, &param);
 
 	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
-		return false;
+		return PIGLIT_FAIL;
 
-	return true;
+	return PIGLIT_PASS;
 }
 
 /* Basic tests on query id generation and deletion */
-static bool
-conformOQ_Gen_Delete(unsigned int id_n)
+static enum piglit_result
+conformOQ_Gen_Delete(void *data)
 {
+	const unsigned int id_n = 64;
 	GLuint *ids1 = NULL, *ids2 = NULL;
 	unsigned int i, j;
-	bool pass = true;
+	enum piglit_result pass = PIGLIT_PASS;
 
 	ids1 = (GLuint *) malloc(id_n * sizeof(GLuint));
 	ids2 = (GLuint *) malloc(id_n * sizeof(GLuint));
@@ -404,7 +415,7 @@ conformOQ_Gen_Delete(unsigned int id_n)
 			free(ids1);
 		if (ids2)
 			free(ids2);
-		return false;
+		return PIGLIT_FAIL;
 	}
 
 	glGenQueriesARB(id_n, ids1);
@@ -419,7 +430,7 @@ conformOQ_Gen_Delete(unsigned int id_n)
 				sprintf(str, "ids1[%d] == ids2[%d] == %u.", i,
 					j, ids1[i]);
 				printf(" Error:  %s\n", str);
-				pass = false;
+				pass = PIGLIT_FAIL;
 			}
 		}
 	}
@@ -437,7 +448,7 @@ conformOQ_Gen_Delete(unsigned int id_n)
 			sprintf(str, "id [%d] just generated is not valid.",
 				ids1[i]);
 			printf(" Error: %s\n", str);
-			pass = false;
+			pass = PIGLIT_FAIL;
 		}
 	}
 #endif
@@ -452,7 +463,7 @@ conformOQ_Gen_Delete(unsigned int id_n)
 			sprintf(str, "id [%d] just deleted is still valid.",
 				ids1[i]);
 			printf(" Error: %s\n", str);
-			pass = false;
+			pass = PIGLIT_FAIL;
 		}
 	}
 
@@ -467,7 +478,7 @@ conformOQ_Gen_Delete(unsigned int id_n)
 
 	ids1 = (GLuint *) malloc(id_n * sizeof(GLuint));
 	if (ids1 == NULL)
-		return false;
+		return PIGLIT_FAIL;
 
 	for (i = 0; i < id_n; i++) {
 		glGenQueriesARB(1, ids1 + i);
@@ -477,7 +488,7 @@ conformOQ_Gen_Delete(unsigned int id_n)
 				sprintf(str, "duplicated id generated [%u]",
 					ids1[i]);
 				printf(" Error: %s\n", str);
-				pass = false;
+				pass = PIGLIT_FAIL;
 			}
 		}
 	}
@@ -490,29 +501,107 @@ conformOQ_Gen_Delete(unsigned int id_n)
 }
 
 /* If <id> is zero, IsQueryARB should return FALSE.*/
-static bool
-conformOQ_IsIdZero(void)
+static enum piglit_result
+conformOQ_IsIdZero(void *data)
 {
 	if (glIsQueryARB(0) == GL_TRUE) {
 		printf(" Error: zero is treated as a valid id by glIsQueryARB().\n");
-		return false;
+		return PIGLIT_FAIL;
 	}
 
-	return true;
+	return PIGLIT_PASS;
 }
 
 /* If BeginQueryARB is called with an <id> of zero, an INVALID_OPERATION error
  * should be generated.
  */
-static bool
-conformOQ_BeginIdZero(void)
+static enum piglit_result
+conformOQ_BeginIdZero(void *data)
 {
 	glBeginQueryARB(GL_SAMPLES_PASSED_ARB, 0);
 	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
-		return false;
+		return PIGLIT_FAIL;
 
-	return true;
+	return PIGLIT_PASS;
 }
+
+GLuint queryId;
+
+static const struct piglit_subtest tests[] = {
+	{
+		"GetQueryCounterBits",
+		"get_query_counter_bits",
+		conformOQ_GetQueryCounterBits,
+		NULL
+	},
+	{
+		"GetObjivAval_multi1",
+		"get_objiv_aval_multi1",
+		conformOQ_GetObjivAval_multi1,
+		&queryId,
+	},
+	{
+		"GetObjivAval_multi2",
+		"get_objiv_aval_multi2",
+		conformOQ_GetObjivAval_multi2,
+		NULL
+	},
+	{
+		"Begin_unused_id",
+		"begin_unused_id",
+		conformOQ_Begin_unused_id,
+		NULL
+	},
+	{
+		"BeginAfter",
+		"begin_after",
+		conformOQ_EndAfter,
+		&queryId,
+	},
+	{
+		"BeginIn",
+		"begin_in",
+		conformOQ_BeginIn,
+		&queryId,
+	},
+	{
+		"GetObjectAvailableIn",
+		"get_object_available_in",
+		GetObjectAvailableIn,
+		&queryId,
+	},
+	{
+		"GetObjResultIn",
+		"get_obj_result_in",
+		conformOQ_GetObjResultIn,
+		&queryId,
+	},
+	{
+		"GetObjivAval",
+		"get_objiv_aval",
+		conformOQ_GetObjivAval,
+		&queryId,
+	},
+	{
+		"Gen_Delete",
+		"gen_delete",
+		conformOQ_Gen_Delete,
+		NULL,
+	},
+	{
+		"IsIdZero",
+		"is_id_zero",
+		conformOQ_IsIdZero,
+		NULL
+	},
+	{
+		"BeginIdZero",
+		"begin_id_zero",
+		conformOQ_BeginIdZero,
+		NULL
+	},
+	{ NULL }
+};
 
 void
 piglit_init(int argc, char **argv)
@@ -531,30 +620,21 @@ piglit_init(int argc, char **argv)
 enum piglit_result
 piglit_display(void)
 {
-	bool pass = true;
-	GLuint queryId;
-
 	glEnable(GL_DEPTH_TEST);
 	glGenQueriesARB(1, &queryId);
 
 	if (queryId == 0)
 		return PIGLIT_FAIL;
 
-	pass = conformOQ_GetQueryCounterBits() && pass;
-	pass = conformOQ_GetObjivAval_multi1(queryId) && pass;
-	pass = conformOQ_GetObjivAval_multi2() && pass;
-	pass = conformOQ_Begin_unused_id() && pass;
-	pass = conformOQ_EndAfter(queryId) && pass;
-	pass = conformOQ_BeginIn(queryId) && pass;
-	pass = GetObjectAvailableIn(queryId) && pass;
-	pass = conformOQ_GetObjResultIn(queryId) && pass;
-	pass = conformOQ_GetObjivAval(queryId) && pass;
-	pass = conformOQ_Gen_Delete(64) && pass;
-	pass = conformOQ_IsIdZero() && pass;
-	pass = conformOQ_BeginIdZero() && pass;
-	glDeleteQueriesARB(1, &queryId);
-
+	enum piglit_result result = PIGLIT_PASS;
+	result = piglit_run_selected_subtests(
+		tests,
+		piglit_config->selected_subtests,
+		piglit_config->num_selected_subtests,
+		result);
 	piglit_present_results();
 
-	return pass ? PIGLIT_PASS : PIGLIT_FAIL;
+	glDeleteQueriesARB(1, &queryId);
+
+	return result;
 }
