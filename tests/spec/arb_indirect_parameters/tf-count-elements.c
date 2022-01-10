@@ -40,8 +40,8 @@ static const char *vs_tf =
 static const char *vs_draw =
 	"#version 140\n"
 	"out vec4 color;\n"
-	"in vec4 vtx, in_color;\n"
-	"void main() { gl_Position = vtx; color = in_color; }\n";
+	"in vec4 piglit_vertex, in_color;\n"
+	"void main() { gl_Position = piglit_vertex; color = in_color; }\n";
 
 static const char *fs_draw =
 	"#version 140\n"
