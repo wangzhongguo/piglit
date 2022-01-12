@@ -53,7 +53,7 @@ static int max_varyings;
 /* Generate a VS that writes to num_varyings vec4s, and put
  * interesting data in data_varying with 0.0 everywhere else.
  */
-static GLint get_vs(int num_varyings, int data_varying)
+static GLint get_vs(int num_varyings)
 {
 	GLuint shader;
 	unsigned i;
@@ -70,18 +70,15 @@ static GLint get_vs(int num_varyings, int data_varying)
 		"attribute vec4 vertex;\n"
 		"attribute vec4 green;\n"
 		"attribute vec4 red;\n"
+		"uniform int data_varying;\n"
 		"void main()\n"
 		"{\n"
 		"	gl_Position = (gl_ModelViewProjectionMatrix * \n"
-		"			vertex);\n"
-		);
+		"			vertex);\n");
 	strcat(code, temp);
 
 	for (i = 0; i < num_varyings; i++) {
-		if (i == data_varying)
-			sprintf(temp, "	v%d = green;\n", i);
-		else
-			sprintf(temp, "	v%d = red;\n", i);
+		sprintf(temp, "	v%d = (data_varying == %d) ? green : red;\n", i, i);
 		strcat(code, temp);
 	}
 
@@ -106,7 +103,7 @@ static GLint get_vs(int num_varyings, int data_varying)
  * shader each time anyway, this produces a simpler FS to read and
  * verify.
  */
-static GLint get_fs(int num_varyings, int data_varying)
+static GLint get_fs(int num_varyings)
 {
 	GLuint shader;
 	unsigned i;
@@ -120,19 +117,15 @@ static GLint get_fs(int num_varyings, int data_varying)
 	}
 
 	sprintf(temp,
-		"uniform float zero;\n"
-		"uniform float one;\n"
+		"uniform float contribution[%d];\n"
 		"void main()\n"
 		"{\n"
-		"	vec4 val = vec4(0.0);\n"
-		);
+		"	vec4 val = vec4(0.0);\n",
+		num_varyings);
 	strcat(code, temp);
 
 	for (i = 0; i < num_varyings; i++) {
-		if (i == data_varying)
-			sprintf(temp, "	val += one * v%d;\n", i);
-		else
-			sprintf(temp, "	val += zero * v%d;\n", i);
+		sprintf(temp, "	val += contribution[%d] * v%d;\n", i, i);
 		strcat(code, temp);
 	}
 
@@ -182,43 +175,40 @@ draw(int num_varyings)
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 
+	GLuint vs = get_vs(num_varyings);
+	GLuint fs = get_fs(num_varyings);
+	GLuint prog = glCreateProgram();
+	glAttachShader(prog, vs);
+	glAttachShader(prog, fs);
+
+	glBindAttribLocation(prog, 0, "vertex");
+	glBindAttribLocation(prog, 1, "green");
+	glBindAttribLocation(prog, 2, "red");
+
+	glLinkProgram(prog);
+	if (!piglit_link_check_status_quiet(prog)) {
+		if (num_varyings > max_varyings) {
+			printf("Failed to link with %d out of %d "
+				"varyings used\n",
+				num_varyings, max_varyings);
+			return false;
+		} else {
+			piglit_report_result(PIGLIT_FAIL);
+		}
+	}
+
+	int data_varying_loc = glGetUniformLocation(prog, "data_varying");
+	int contribution_loc = glGetUniformLocation(prog, "contribution");
+
+	glUseProgram(prog);
+
 	for (data_varying = 0; data_varying < num_varyings; data_varying++) {
-		GLuint prog, vs, fs;
-		GLint loc;
 		float x, y;
 
-		vs = get_vs(num_varyings, data_varying);
-		fs = get_fs(num_varyings, data_varying);
-
-		prog = glCreateProgram();
-		glAttachShader(prog, vs);
-		glAttachShader(prog, fs);
-
-		glBindAttribLocation(prog, 0, "vertex");
-		glBindAttribLocation(prog, 1, "green");
-		glBindAttribLocation(prog, 2, "red");
-
-		glLinkProgram(prog);
-		if (!piglit_link_check_status_quiet(prog)) {
-			if (num_varyings > max_varyings) {
-				printf("Failed to link with %d out of %d "
-				       "varyings used\n",
-				       num_varyings, max_varyings);
-				return false;
-			} else {
-				piglit_report_result(PIGLIT_FAIL);
-			}
-		}
-
-		glUseProgram(prog);
-
-		loc = glGetUniformLocation(prog, "zero");
-		if (loc != -1) /* not used for num_varyings == 1 */
-			glUniform1f(loc, 0.0);
-
-		loc = glGetUniformLocation(prog, "one");
-		assert(loc != -1); /* should always be used */
-		glUniform1f(loc, 1.0);
+		glUniform1i(data_varying_loc, data_varying);
+		glUniform1f(contribution_loc + data_varying, 1.0);
+		if (data_varying > 0)
+			glUniform1f(contribution_loc + data_varying - 1, 0.0);
 
 		x = coord_from_index(data_varying);
 		y = coord_from_index(num_varyings - 1);
@@ -231,11 +221,11 @@ draw(int num_varyings)
 		vertex[3][0] = x + 2;
 		vertex[3][1] = y + 2;
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-		glDeleteShader(vs);
-		glDeleteShader(fs);
-		glDeleteProgram(prog);
 	}
+
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+	glDeleteProgram(prog);
 
 	return true;
 }
