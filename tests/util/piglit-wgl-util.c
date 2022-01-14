@@ -31,10 +31,10 @@
 #include "piglit-util-gl.h"
 #include "piglit-wgl-util.h"
 
-
-int piglit_width = 100;
-int piglit_height = 100;
-
+#ifndef _WIN32
+__attribute__((weak)) int piglit_width = 100;
+__attribute__((weak)) int piglit_height = 100;
+#endif
 
 static LRESULT CALLBACK
 WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
