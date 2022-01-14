@@ -176,7 +176,7 @@ class JSONBackend(FileBackend):
             encoder = functools.partial(json.JSONEncoder, default=piglit_encoder)
 
             with self._write_final(os.path.join(self._dest, 'results.json')) as f:
-                with jsonstreams.Stream(jsonstreams.Type.object, fd=f, indent=4,
+                with jsonstreams.Stream(jsonstreams.Type.OBJECT, fd=f, indent=4,
                                         encoder=encoder, pretty=True) as s:
                     s.write('__type__', 'TestrunResult')
                     with open(os.path.join(self._dest, 'metadata.json'),

@@ -40,7 +40,7 @@ from .. import utils
 class TestFastSkipMixin(object):  # pylint: disable=too-many-public-methods
     """Tests for the FastSkipMixin class."""
 
-    @pytest.yield_fixture(autouse=True, scope='class')
+    @pytest.fixture(autouse=True, scope='class')
     def patch(self):
         """Create a Class with FastSkipMixin, but patch various bits."""
         _mock_wflinfo = mock.Mock(spec=wflinfo.WflInfo)
@@ -71,7 +71,7 @@ class TestFastSkipMixin(object):  # pylint: disable=too-many-public-methods
 class TestFastSkip(object):
     """Tests for the FastSkip class."""
 
-    @pytest.yield_fixture(autouse=True, scope='class')
+    @pytest.fixture(autouse=True, scope='class')
     def patch(self):
         """Create a Class with FastSkipMixin, but patch various bits."""
         _mock_wflinfo = mock.Mock(spec=wflinfo.WflInfo)
@@ -179,7 +179,7 @@ class TestFastSkip(object):
     class TestEmpty(object):
         """Tests for the FastSkip class when values are unset."""
 
-        @pytest.yield_fixture(autouse=True, scope='class')
+        @pytest.fixture(autouse=True, scope='class')
         def patch(self):
             """Create a Class with FastSkipMixin, but patch various bits."""
             _mock_wflinfo = mock.Mock(spec=wflinfo.WflInfo)
@@ -228,7 +228,7 @@ class TestFastSkip(object):
 class TestFastSkipMixinDisabled(object):
     """Tests for the sub version."""
 
-    @pytest.yield_fixture(autouse=True, scope='class')
+    @pytest.fixture(autouse=True, scope='class')
     def patch(self):
         """Create a Class with FastSkipMixin, but patch various bits."""
         _mock_wflinfo = mock.Mock(spec=wflinfo.WflInfo)

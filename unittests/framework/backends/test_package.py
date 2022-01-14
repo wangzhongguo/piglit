@@ -33,7 +33,7 @@ from framework import results
 # Helpers
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def mock_backend(mocker):
     """Add an extra backend for testing."""
     mocker.patch.dict(

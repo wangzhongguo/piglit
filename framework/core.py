@@ -51,9 +51,9 @@ class PiglitConfig(configparser.ConfigParser):
         super().__init__(*args, **kwargs)
         self.filename = None
 
-    def readfp(self, fp, filename=None):
-        super().readfp(fp, filename)
-        self.filename = os.path.abspath(filename or fp.name)
+    def read_file(self, f, source=None):
+        super().read_file(f, source)
+        self.filename = os.path.abspath(source or f.name)
 
     def safe_get(self, section, option, fallback=None, **kwargs):
         """A version of self.get that doesn't raise NoSectionError or
@@ -94,7 +94,7 @@ PIGLIT_CONFIG = PiglitConfig(allow_no_value=True)
 
 def get_config(arg=None):
     if arg:
-        PIGLIT_CONFIG.readfp(arg)
+        PIGLIT_CONFIG.read_file(open(arg))
     else:
         # Load the piglit.conf. First try looking in the current directory,
         # then trying the XDG_CONFIG_HOME, then $HOME/.config/, finally try the
@@ -105,7 +105,7 @@ def get_config(arg=None):
                   os.path.join(os.path.dirname(__file__), '..')]:
             try:
                 with open(os.path.join(d, 'piglit.conf'), 'r') as f:
-                    PIGLIT_CONFIG.readfp(f)
+                    PIGLIT_CONFIG.read_file(f)
                 break
             except IOError:
                 pass

@@ -65,7 +65,7 @@ def add_opencv_tests(profile):
     full_test_name = ''
     for line in test_list:
         #Test groups names start at the beginning of the line and end with '.'
-        m = re.match('([^.]+\.)$', line)
+        m = re.match(r'([^.]+\.)$', line)
         if m:
             group_name = m.group(1)
             group_desc = group_name[:-1]

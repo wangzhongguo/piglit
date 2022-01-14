@@ -63,7 +63,7 @@ end time: 4.5
   </testsuites>
 """
 
-@pytest.yield_fixture(autouse=True, scope="module")
+@pytest.fixture(autouse=True, scope="module")
 def mock_compression():
     with mock.patch('framework.backends.compression.get_mode',
                     mock.Mock(return_value='none')):

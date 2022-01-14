@@ -28,6 +28,7 @@ which allows us to test all classes on all platforms, including windows.
 
 import collections
 import re
+import sys
 try:
     import mock
 except ImportError:
@@ -322,7 +323,7 @@ def _name_get_dmesg(value):
         return 'real' if not value else 'dummy'
     elif isinstance(value, str):
         return value
-    elif isinstance(value, dmesg.BaseDmesg):
+    elif isinstance(value, type(dmesg.BaseDmesg)):
         return repr(value)
     else:
         raise Exception('unreachable')
@@ -336,8 +337,8 @@ class TestGetDmesg(object):
         [
             ('win32', False, dmesg.DummyDmesg),
             ('win32', True, dmesg.DummyDmesg),
-            skip.linux(('linux', False, dmesg.DummyDmesg)),
-            skip.linux(('linux', True, dmesg.LinuxDmesg)),
+            pytest.param('linux', False, dmesg.DummyDmesg, marks=pytest.mark.skipif(sys.platform == 'linux', reason="on linux")),
+            pytest.param('linux', True, dmesg.LinuxDmesg, marks=pytest.mark.skipif(sys.platform == 'linux', reason="on linux")),
         ],
         ids=_name_get_dmesg)
     def test_get_dmesg(self, platform, dummy, expected, mocker):

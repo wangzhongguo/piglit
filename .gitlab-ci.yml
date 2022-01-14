@@ -158,7 +158,7 @@ tox:
   parallel:
     matrix:
       - PY_MAJVER: 3
-        PY_MINVER: [6, 7, 8]
+        PY_MINVER: [7, 8, 9, 10]
   needs: []
 
 pages:

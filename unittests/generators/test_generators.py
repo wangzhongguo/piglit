@@ -73,9 +73,9 @@ import pytest
     'gen_variable_index_write_tests',
     'gen_vp_tex',
     'interpolation-qualifier-built-in-variable',
-    pytest.mark.slow('gen_builtin_uniform_tests'),
-    pytest.mark.slow('gen_constant_array_size_tests'),
-    pytest.mark.very_slow('gen_vs_in_fp64'),
+    pytest.param('gen_builtin_uniform_tests', marks=pytest.mark.slow),
+    pytest.param('gen_constant_array_size_tests', marks=pytest.mark.slow),
+    pytest.param('gen_vs_in_fp64', marks=pytest.mark.slow),
 ])
 def test_generators(name, tmpdir):
     """Teat each generator."""

@@ -48,7 +48,7 @@ class TestBackend():
 # Prevent pytest from trying to collect TestBackend as tests:
 TestBackend.__test__ = False
 
-@pytest.yield_fixture
+@pytest.fixture
 def mock_backend(mocker, backend):
     """Add an extra backend for testing."""
     mocker.patch.dict(

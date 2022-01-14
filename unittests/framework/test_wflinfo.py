@@ -55,7 +55,7 @@ class TestWflInfo(object):
     class TestAttributes(object):
         """test for attribute assignments."""
 
-        @pytest.yield_fixture(autouse=True)
+        @pytest.fixture(autouse=True)
         def patch(self):
             """Mock a few things for testing purposes."""
             # This is pretty ugly, but as a Borb with a private shared state,
@@ -227,7 +227,7 @@ class TestWflInfo(object):
     class TestWAFFLEINFO_GL_ERROR(object):
         """Test class for WflInfo when "WFLINFO_GL_ERROR" is returned."""
 
-        @pytest.yield_fixture(autouse=True)
+        @pytest.fixture(autouse=True)
         def patch(self):
             """Setup each instance, patching necissary bits."""
             rv = textwrap.dedent("""\
@@ -275,7 +275,7 @@ class TestWflInfo(object):
 
         # pylint: disable=pointless-statement
 
-        @pytest.yield_fixture(autouse=True, scope='class')
+        @pytest.fixture(autouse=True, scope='class')
         def patch(self):
             """Setup the class, patching as necessary."""
             # pylint: disable=bad-continuation
@@ -317,7 +317,7 @@ class TestWflInfo(object):
 
         # pylint: disable=pointless-statement
 
-        @pytest.yield_fixture(autouse=True, scope='class')
+        @pytest.fixture(autouse=True, scope='class')
         def patch(self):
             """Setup the class, patching as necessary."""
             # pylint: disable=bad-continuation

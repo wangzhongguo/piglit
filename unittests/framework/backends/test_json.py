@@ -50,7 +50,7 @@ SCHEMA = os.path.join(os.path.dirname(__file__), 'schema',
                       'piglit-{}.json'.format(backends.json.CURRENT_JSON_VERSION))
 
 
-@pytest.yield_fixture(scope='module', autouse=True)
+@pytest.fixture(scope='module', autouse=True)
 def mock_compression():
     with mock.patch.dict(backends.json.compression.os.environ,
                          {'PIGLIT_COMPRESSION': 'none'}):

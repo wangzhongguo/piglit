@@ -66,19 +66,19 @@ def _has_xz_bin():
     return True
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def env():
     with mock.patch.dict('os.environ'):
         yield os.environ
 
-@pytest.yield_fixture
+@pytest.fixture
 def config():
     with mock.patch('framework.core.PIGLIT_CONFIG',
                     new_callable=core.PiglitConfig) as conf:
         conf.add_section('core')
         yield conf
 
-@pytest.yield_fixture
+@pytest.fixture
 def compressor():
     """Workaround for yield_fixture not working with classes."""
     class Compressor(object):

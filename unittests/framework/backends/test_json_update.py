@@ -39,7 +39,7 @@ from framework import backends
 # pylint: disable=protected-access,no-self-use
 
 
-@pytest.yield_fixture(autouse=True, scope='module')
+@pytest.fixture(autouse=True, scope='module')
 def setup_module():
     with mock.patch.dict(backends.json.compression.os.environ,
                          {'PIGLIT_COMPRESSION': 'none'}):

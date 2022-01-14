@@ -82,7 +82,7 @@ class TestQuietLog(object):
             sys.stdout.seek(0)
 
             actual = sys.stdout.read()
-            assert actual == b'[1/1] pass: 1 -\n'
+            assert actual == '[1/1] pass: 1 -\n'
 
         def test_summary(self, log_state):  # pylint: disable=redefined-outer-name
             """Test the output of the summary method."""
@@ -100,7 +100,7 @@ class TestQuietLog(object):
             # Because of the 'lastlength' mechanims there will likely be
             # trainling whitespace after the the output, it's not useful to
             # test that here, so just strip it.
-            assert sys.stdout.read().rstrip() == b'[1/1] pass: 1'
+            assert sys.stdout.read().rstrip() == '[1/1] pass: 1'
 
         def test_start(self, log_state):  # pylint: disable=redefined-outer-name
             """Test that the start method doesn't have output."""
@@ -110,7 +110,7 @@ class TestQuietLog(object):
             sys.stdout.seek(0)
 
             actual = sys.stdout.read()
-            assert actual == b''
+            assert actual == ''
 
 
 class TestVerboseLog(object):
@@ -134,7 +134,7 @@ class TestVerboseLog(object):
             sys.stdout.seek(0)
 
             actual = sys.stdout.read()
-            assert actual == b'pass: foo\n\n[1/1] pass: 1 /\n'
+            assert actual == 'pass: foo\n\n[1/1] pass: 1 /\n'
 
         def test_summary(self, log_state):  # pylint: disable=redefined-outer-name
             """Test the output of the summary method."""
@@ -147,7 +147,7 @@ class TestVerboseLog(object):
             l.summary()
             sys.stdout.seek(0)
 
-            assert sys.stdout.read().rstrip() == b'[1/1] pass: 1'
+            assert sys.stdout.read().rstrip() == '[1/1] pass: 1'
 
         def test_start(self, log_state):  # pylint: disable=redefined-outer-name
             """Test that the start method doesn't have output."""
@@ -155,7 +155,7 @@ class TestVerboseLog(object):
             l.start('foo')
             sys.stdout.seek(0)
 
-            assert sys.stdout.read().rstrip() == b'running: foo\n\n[0/1]  \\'
+            assert sys.stdout.read().rstrip() == 'running: foo\n\n[0/1]  \\'
 
 
 class TestDummyLog(object):
@@ -176,7 +176,7 @@ class TestDummyLog(object):
             sys.stdout.seek(0)
 
             actual = sys.stdout.read()
-            assert actual == b''
+            assert actual == ''
 
         def test_summary(self, log_state):  # pylint: disable=redefined-outer-name
             """Test the output of the summary method."""
@@ -185,7 +185,7 @@ class TestDummyLog(object):
             sys.stdout.seek(0)
 
             actual = sys.stdout.read()
-            assert actual == b''
+            assert actual == ''
 
         def test_start(self, log_state):  # pylint: disable=redefined-outer-name
             """Test that the start method doesn't have output."""
@@ -194,4 +194,4 @@ class TestDummyLog(object):
             sys.stdout.seek(0)
 
             actual = sys.stdout.read()
-            assert actual == b''
+            assert actual == ''

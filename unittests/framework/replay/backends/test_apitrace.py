@@ -39,7 +39,7 @@ from framework.replay import backends
 from framework.replay.options import OPTIONS
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def config(mocker):
     conf = mocker.patch('framework.core.PIGLIT_CONFIG',
                         new_callable=core.PiglitConfig)

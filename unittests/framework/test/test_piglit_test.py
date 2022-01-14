@@ -132,7 +132,7 @@ class TestPiglitGLTest(object):
         work.
         """
 
-        @pytest.yield_fixture()
+        @pytest.fixture()
         def mock_options(self):
             with mock.patch('framework.test.piglit_test.options.OPTIONS',
                             new_callable=Options) as m:

@@ -48,9 +48,9 @@ __all__ = [
 
 
 _MIN_VERSION = version.Version('0.9.4')
-_VERSION_RE = re.compile('\s*GFXReconstruct Version\s*([0-9]\.[0-9]\.[0-9])')
+_VERSION_RE = re.compile(r'\s*GFXReconstruct Version\s*([0-9]\.[0-9]\.[0-9])')
 
-_TOTAL_FRAMES_RE = re.compile('\s*Total frames:\s*([0-9]*)')
+_TOTAL_FRAMES_RE = re.compile(r'\s*Total frames:\s*([0-9]*)')
 
 class GFXReconstructBackend(DumpBackend):
     """ replayer's GFXReconstruct dump backend
