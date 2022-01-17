@@ -305,10 +305,10 @@ run_testcase(const struct testcase *tc)
 
 	glDrawArraysInstanced(GL_POINTS, 0, tc->num_points, tc->num_instances);
 
-	float expected[WINDOW_SIZE * WINDOW_SIZE * 4];
+	float *expected = new float[WINDOW_SIZE * WINDOW_SIZE * 4];
 	unsigned num_total =
 		tc->num_instances * tc->num_points * tc->num_invocations * tc->num_outputs;
-	memset(expected, 0, sizeof(expected));
+	memset(expected, 0, sizeof(float) * WINDOW_SIZE * WINDOW_SIZE * 4);
 
 	for (unsigned i = 0; i < WINDOW_SIZE * WINDOW_SIZE; ++i) {
 		if (i < num_total)
@@ -316,7 +316,9 @@ run_testcase(const struct testcase *tc)
 		expected[4 * i + 3] = 1.0;
 	}
 
-	return piglit_probe_image_rgba(0, 0, WINDOW_SIZE, WINDOW_SIZE, expected);
+	int result = piglit_probe_image_rgba(0, 0, WINDOW_SIZE, WINDOW_SIZE, expected);
+	delete[] expected;
+	return result;
 }
 
 static void
