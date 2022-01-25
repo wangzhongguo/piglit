@@ -39,7 +39,7 @@ PIGLIT_GL_TEST_CONFIG_BEGIN
 
 	config.window_width = 600;
 	config.window_height = 200;
-	config.window_visual = PIGLIT_GL_VISUAL_RGBA | PIGLIT_GL_VISUAL_DOUBLE;
+	config.window_visual = PIGLIT_GL_VISUAL_RGBA | PIGLIT_GL_VISUAL_STENCIL | PIGLIT_GL_VISUAL_DOUBLE;
 	config.khr_no_error_support = PIGLIT_NO_ERRORS;
 
 PIGLIT_GL_TEST_CONFIG_END
@@ -114,7 +114,7 @@ make_texture_image(GLenum intFormat, GLubyte upperRightTexel[4])
 	} else {
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 		glTexImage2D(GL_TEXTURE_2D, 0, intFormat, TEX_SIZE, TEX_SIZE, 0,
-			     GL_RGBA, GL_UNSIGNED_BYTE, tex);
+			     intFormat == GL_STENCIL_INDEX8 ? GL_STENCIL_INDEX : GL_RGBA, GL_UNSIGNED_BYTE, tex);
 	}
 
 	return glGetError() == GL_NO_ERROR;
@@ -178,6 +178,14 @@ compute_expected_color(const struct format_desc *fmt,
 	/* Handle special cases first */
 	if (fmt->internalformat == GL_R11F_G11F_B10F_EXT) {
 		bits[0] = bits[1] = bits[2] = 8;
+		bits[3] = 0;
+		texel[0] = ubyte_to_float(upperRightTexel[0], bits[0]);
+		texel[1] = ubyte_to_float(upperRightTexel[1], bits[1]);
+		texel[2] = ubyte_to_float(upperRightTexel[2], bits[2]);
+		texel[3] = 1.0;
+		compressed = GL_FALSE;
+	} else if (fmt->internalformat == GL_STENCIL_INDEX8) {
+		bits[0] = bits[1] = bits[2] = 7;
 		bits[3] = 0;
 		texel[0] = ubyte_to_float(upperRightTexel[0], bits[0]);
 		texel[1] = ubyte_to_float(upperRightTexel[1], bits[1]);
@@ -351,6 +359,7 @@ test_format(const struct test_desc *test,
 	bool pass = true;
 
 	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_STENCIL_BUFFER_BIT);
 
 	/* The RGBA_DXT1 formats seem to expose a Mesa/libtxc_dxtn bug.
 	 * Just skip them for now.  Testing the other compressed formats
@@ -380,24 +389,25 @@ test_format(const struct test_desc *test,
 		x += TEX_SIZE + 20;
 
 		level = 0;
+		GLenum format = fmt->internalformat == GL_STENCIL_INDEX8 ? GL_STENCIL_INDEX : GL_RGBA;
+		GLenum type = fmt->internalformat == GL_STENCIL_INDEX8 ? GL_UNSIGNED_BYTE : GL_FLOAT;
 		while (w > 0) {
 			/* Get the texture image */
-			glGetTextureImage(texture_id, level, GL_RGBA,
-					  GL_FLOAT, sizeof(readback),
-					  readback);
+			glGetTextureImage(texture_id, level, format, type,
+                                          sizeof(readback), readback);
 
 			/* Draw the texture image */
 			glWindowPos2iARB(x, y);
 #if DO_BLEND
 			glEnable(GL_BLEND);
 #endif
-			glDrawPixels(w, h, GL_RGBA, GL_FLOAT, readback);
+			glDrawPixels(w, h, format, type, readback);
 			glDisable(GL_BLEND);
 
 			if (level <= 2) {
 				GLint rx = x + w-1;
 				GLint ry = y + h-1;
-				glReadPixels(rx, ry, 1, 1, GL_RGBA, GL_FLOAT, pix);
+				glReadPixels(rx, ry, 1, 1, format, type, pix);
 				if (!colors_equal(expected, pix, tolerance)) {
 					printf("%s failure: format: %s, level %d at pixel(%d, %d)\n",
 					       TestName,
@@ -527,6 +537,7 @@ piglit_init(int argc, char **argv)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+	glClearStencil(clearColor[0] * 255);
 
 	prog = dsa_create_program(GL_TEXTURE_2D);
 }
