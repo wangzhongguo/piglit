@@ -300,11 +300,10 @@ class Test(metaclass=abc.ABCMeta):
 
             proc.terminate()
 
-            # XXX: This is probably broken on windows, since os.getpgid doesn't
-            # exist on windows. What is the right way to handle this?
-            if proc.poll() is None:
-                time.sleep(3)
-                os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
+            if sys.platform != 'win32':
+                if proc.poll() is None:
+                    time.sleep(3)
+                    os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
 
             # Since the process isn't running it's safe to get any remaining
             # stdout/stderr values out and store them.
