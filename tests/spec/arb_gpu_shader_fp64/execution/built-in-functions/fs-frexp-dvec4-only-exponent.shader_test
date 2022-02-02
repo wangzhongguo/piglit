@@ -1,5 +1,5 @@
 [require]
-GLSL >= 1.40
+GLSL >= 1.50
 GL_ARB_gpu_shader_fp64
 
 [vertex shader passthrough]
