@@ -29,6 +29,11 @@ out vec4 color;
 void main()
 {
 	double result[5];
+	result[0] = 0.0;
+	result[1] = 1.0;
+	result[2] = 2.0;
+	result[3] = 3.0;
+	result[4] = 4.0;
 
 	result[pick] = (arg0 + arg1);
 	color = distance(result[pick2], expected) <= tolerance
