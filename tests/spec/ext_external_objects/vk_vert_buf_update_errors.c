@@ -52,6 +52,7 @@ struct Vec2 {
 	float y;
 };
 
+static const float bgc[3] = { 1.0, 0.0, 0.0 };
 static void gen_checkerboard_quads(struct Vec2 *vptr);
 
 #define WHITE_QUADS 32
@@ -135,7 +136,10 @@ enum piglit_result
 piglit_display(void)
 {
 	enum piglit_result res = PIGLIT_PASS;
-	static float uninteresting_data[WHITE_VERTS * 2];
+	float checkerboard[WHITE_VERTS * 2];
+
+	/* Fill with checkerboard data. */
+	gen_checkerboard_quads((struct Vec2 *) &checkerboard);
 
 	glUseProgram(gl_prog);
 
@@ -152,38 +156,30 @@ piglit_display(void)
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
 
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glDrawArrays(GL_TRIANGLES, 0, WHITE_VERTS);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	if ((res = check_chessboard_pattern()) == PIGLIT_FAIL) {
-		fprintf(stderr, "Unexpected geometry inside the vertex buffer.\n");
-		return res;
-	}
+	/* Since Vk buffer is initially empty, expectation is bg color. */
+	piglit_probe_rect_rgb(0, 0, piglit_width, piglit_height, bgc);
 
 	piglit_present_results();
 
-	/* Checking that calling glBufferSubData with random vertices returns
-	 * invalid operation error.
-	 */
-
+	/* Checking that calling glBufferSubData updates buffer succesfully. */
 	glBindBuffer(GL_ARRAY_BUFFER, gl_vk_vb);
-
-	glBufferSubData(GL_ARRAY_BUFFER, 0, vk_vb.mobj.mem_sz, uninteresting_data);
-	if (glGetError() != GL_INVALID_OPERATION) {
-		fprintf(stderr, "glBufferSubData should return GL_INVALID_OPERATION error!\n");
+	glBufferSubData(GL_ARRAY_BUFFER, 0, vk_vb.mobj.mem_sz, checkerboard);
+	if (glGetError() != GL_NO_ERROR) {
+		fprintf(stderr, "glBufferSubData should not throw error!\n");
 		return PIGLIT_FAIL;
 	}
 
-	/* Render again, and check that the checkerboard pattern hasn't
-	 * been changed (array was not modified)
-	 */
-
-	glClear(GL_COLOR_BUFFER_BIT);
+	/* Render again, check that the result matches checkerboard pattern */
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glDrawArrays(GL_TRIANGLES, 0, WHITE_VERTS);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	if ((res = check_chessboard_pattern()) == PIGLIT_FAIL) {
-		fprintf(stderr, "Vulkan buffer has been modified.\n");
+		fprintf(stderr, "Vulkan buffer has not been modified.\n");
 		return res;
 	}
 
@@ -233,7 +229,7 @@ vk_init()
 		fprintf(stderr, "Failed to map Vulkan buffer memory.\n");
 		piglit_report_result(PIGLIT_FAIL);
 	}
-	gen_checkerboard_quads(pdata);
+	memset(pdata, 0, vk_vb.mobj.mem_sz);
 	vkUnmapMemory(vk_core.dev, vk_vb.mobj.mem);
 
 	return true;
@@ -242,7 +238,7 @@ vk_init()
 static bool
 gl_init()
 {
-	glClearColor(1.0, 0.0, 0.0, 1.0);
+	glClearColor(bgc[0], bgc[1], bgc[2], 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	gl_prog = piglit_build_simple_program(vs, fs);
