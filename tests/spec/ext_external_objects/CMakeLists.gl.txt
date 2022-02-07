@@ -17,6 +17,10 @@ IF(PIGLIT_BUILD_VK_TESTS)
 	add_definitions(-DVK_BANDS_VERT="${VK_BANDS_VERT}")
 	add_definitions(-DVK_BANDS_FRAG="${VK_BANDS_FRAG}")
 
+	set(VK_BANDS_REVERSE_FRAG vk_bands_reverse_frag.spv)
+	set(VK_BANDS_REVERSE_FRAG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${VK_BANDS_REVERSE_FRAG})
+	add_definitions(-DVK_BANDS_REVERSE_FRAG="${VK_BANDS_REVERSE_FRAG}")
+
 	set(VK_BLUE_VERT vk_blue.vert.spv)
 	set(VK_BLUE_FRAG vk_blue.frag.spv)
 	set(VK_BLUE_VERT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${VK_BLUE_VERT})
@@ -43,6 +47,12 @@ IF(PIGLIT_BUILD_VK_TESTS)
 		OUTPUT ${VK_BANDS_FRAG_PATH}
 		COMMAND ${GLSLANG_VALIDATOR} -V ${CMAKE_CURRENT_SOURCE_DIR}/vk_bands.frag -o ${VK_BANDS_FRAG_PATH}
 		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/vk_bands.frag
+	)
+
+	add_custom_command(
+		OUTPUT ${VK_BANDS_REVERSE_FRAG_PATH}
+		COMMAND ${GLSLANG_VALIDATOR} -V ${CMAKE_CURRENT_SOURCE_DIR}/vk_bands_reverse.frag -o ${VK_BANDS_REVERSE_FRAG_PATH}
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/vk_bands_reverse.frag
 	)
 
 	add_custom_command(
@@ -90,7 +100,7 @@ IF(PIGLIT_BUILD_VK_TESTS)
 	piglit_add_executable (ext_external_objects-vk-buf-exchange
 		vk.c interop.c helpers.c vk_buf_exchange.c ${VK_BANDS_VERT_PATH} ${VK_BANDS_FRAG_PATH})
 	piglit_add_executable (ext_external_objects-vk-pix-buf-update-errors
-		vk.c interop.c helpers.c vk_pix_buf_update_errors.c ${VK_BANDS_VERT_PATH} ${VK_BANDS_FRAG_PATH})
+		vk.c interop.c helpers.c vk_pix_buf_update_errors.c ${VK_BANDS_VERT_PATH} ${VK_BANDS_FRAG_PATH} ${VK_BANDS_REVERSE_FRAG_PATH})
 	piglit_add_executable (ext_external_objects-vk-vert-buf-update-errors
 		vk.c interop.c helpers.c vk_vert_buf_update_errors.c)
 	piglit_add_executable (ext_external_objects-vk-vert-buf-reuse

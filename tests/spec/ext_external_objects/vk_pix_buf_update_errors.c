@@ -171,14 +171,28 @@ piglit_display(void)
 		{0.0, 1.0, 1.0, 1.0}
 	};
 	enum piglit_result res = PIGLIT_PASS;
-	unsigned char *data = calloc(w * h, 1);
+	float *data = malloc(w * h * 4 * sizeof(float));
+	float *p = data;
 
+	/* Generate and update a matching data pattern. */
+	for (unsigned y = 0; y < h; y++) {
+		for (unsigned x = 0; x < w; x++, p += 4) {
+			float color = x / (w / 6.0);
+			unsigned idx = color;
+			p[0] = colors[idx][0];
+			p[1] = colors[idx][1];
+			p[2] = colors[idx][2];
+			p[3] = colors[idx][3];
+		}
+	}
 
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, gl_bo);
 	glBufferSubData(GL_PIXEL_UNPACK_BUFFER, 0, vk_bo.mobj.mem_sz, data);
 
-	if (glGetError() != GL_INVALID_OPERATION) {
-		fprintf(stderr, "glBufferSubData should return GL_INVALID_OPERATION error!\n");
+	free(data);
+
+	if (glGetError() != GL_NO_ERROR) {
+		fprintf(stderr, "glBufferSubData should not throw error!\n");
 		res = PIGLIT_FAIL;
 	}
 
@@ -190,8 +204,7 @@ piglit_display(void)
 	glUseProgram(gl_prog);
 	piglit_draw_rect_tex(-1, -1, 2, 2, 0, 0, 1, 1);
 
-	/* We make sure that the gl_bo buffer data are the initial ones */
-
+	/* Verify that image matches the updated color pattern. */
 	for (i = 0; i < 6; i++) {
 		float x = i * (float)piglit_width / 6.0 + (float)piglit_width / 12.0;
 		float y = (float)piglit_height / 2.0;
@@ -278,7 +291,7 @@ vk_init(uint32_t w,
 	if (!(vs_src = load_shader(VK_BANDS_VERT, &vs_sz)))
 		goto fail;
 
-	if (!(fs_src = load_shader(VK_BANDS_FRAG, &fs_sz)))
+	if (!(fs_src = load_shader(VK_BANDS_REVERSE_FRAG, &fs_sz)))
 		goto fail;
 
 	if (!vk_create_renderer(&vk_core, vs_src, vs_sz, fs_src, fs_sz,
