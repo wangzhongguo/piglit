@@ -555,6 +555,7 @@ validate_program(unsigned name)
 	if (!glIsProgramARB(name)) {
 		printf("\t%s,%d: %u is not a program\n",
 		       __func__, __LINE__, name);
+		free(expected);
 		return false;
 	}
 
