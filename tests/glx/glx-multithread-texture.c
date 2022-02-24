@@ -151,7 +151,6 @@ draw_func(void *arg)
 
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glReadBuffer(GL_FRONT);
 
 	while (!quit && count < num_test) {
 		struct texture *tex = advance(&count, DRAW);
@@ -166,7 +165,6 @@ draw_func(void *arg)
 		glBindTexture(GL_TEXTURE_2D, tex->id);
 		piglit_draw_rect_tex(0, 0, piglit_width, piglit_height,
 				     0, 0, 1, 1);
-		glXSwapBuffers(dpy, draw_win);
 
 		/* first texture not filled so don't check it */
 		if (count > 0 &&
@@ -175,6 +173,8 @@ draw_func(void *arg)
 			break;
 		}
 	}
+
+	glXSwapBuffers(dpy, draw_win);
 
 	if (count < num_test) {
 		quit = true;

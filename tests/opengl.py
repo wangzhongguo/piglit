@@ -375,7 +375,7 @@ with profile.test_list.group_manager(
     g(['glx-multithread-buffer'], run_concurrent=False)
     g(['glx-multithread-buffer-refcount-bug'], run_concurrent=False)
     g(['glx-multithread-clearbuffer'], run_concurrent=False)
-    g(['glx-multithread-texture'], run_concurrent=False)
+    g(['glx-multithread-texture'])
     g(['glx-multithread-makecurrent-1'], run_concurrent=False)
     g(['glx-multithread-makecurrent-2'], run_concurrent=False)
     g(['glx-multithread-makecurrent-3'], run_concurrent=False)
