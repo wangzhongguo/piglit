@@ -49,6 +49,8 @@ static const GLenum targets[6] = {
    GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_ARB
 };
 
+static GLuint textures[2];
+
 static void draw_quad(int x, int y, float s, float t, float r, GLuint tex, GLboolean seamless)
 {
    glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, tex);
@@ -69,31 +71,31 @@ enum piglit_result piglit_display(void)
 
    glClear(GL_COLOR_BUFFER_BIT);
 
-   draw_quad(10, 10, 0.99, 0, 1, 1, GL_FALSE);
-   draw_quad(40, 10, 1, 0, 0.99, 2, GL_FALSE);
+   draw_quad(10, 10, 0.99, 0, 1, textures[0], GL_FALSE);
+   draw_quad(40, 10, 1, 0, 0.99, textures[1], GL_FALSE);
 
-   draw_quad(70, 10, 0.99, 0, 1, 1, GL_TRUE);
-   draw_quad(100, 10, 1, 0, 0.99, 2, GL_FALSE);
+   draw_quad(70, 10, 0.99, 0, 1, textures[0], GL_TRUE);
+   draw_quad(100, 10, 1, 0, 0.99, textures[1], GL_FALSE);
 
-   draw_quad(130, 10, 0.99, 0, 1, 1, GL_FALSE);
-   draw_quad(160, 10, 1, 0, 0.99, 2, GL_TRUE);
+   draw_quad(130, 10, 0.99, 0, 1, textures[0], GL_FALSE);
+   draw_quad(160, 10, 1, 0, 0.99, textures[1], GL_TRUE);
 
-   draw_quad(190, 10, 0.99, 0, 1, 1, GL_TRUE);
-   draw_quad(220, 10, 1, 0, 0.99, 2, GL_TRUE);
+   draw_quad(190, 10, 0.99, 0, 1, textures[0], GL_TRUE);
+   draw_quad(220, 10, 1, 0, 0.99, textures[1], GL_TRUE);
 
    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
-   draw_quad(10, 40, 0.99, 0, 1, 1, GL_FALSE);
-   draw_quad(40, 40, 1, 0, 0.99, 2, GL_FALSE);
+   draw_quad(10, 40, 0.99, 0, 1, textures[0], GL_FALSE);
+   draw_quad(40, 40, 1, 0, 0.99, textures[1], GL_FALSE);
 
-   draw_quad(70, 40, 0.99, 0, 1, 1, GL_TRUE);
-   draw_quad(100, 40, 1, 0, 0.99, 2, GL_FALSE);
+   draw_quad(70, 40, 0.99, 0, 1, textures[0], GL_TRUE);
+   draw_quad(100, 40, 1, 0, 0.99, textures[1], GL_FALSE);
 
-   draw_quad(130, 40, 0.99, 0, 1, 1, GL_FALSE);
-   draw_quad(160, 40, 1, 0, 0.99, 2, GL_TRUE);
+   draw_quad(130, 40, 0.99, 0, 1, textures[0], GL_FALSE);
+   draw_quad(160, 40, 1, 0, 0.99, textures[1], GL_TRUE);
 
-   draw_quad(190, 40, 0.99, 0, 1, 1, GL_TRUE);
-   draw_quad(220, 40, 1, 0, 0.99, 2, GL_TRUE);
+   draw_quad(190, 40, 0.99, 0, 1, textures[0], GL_TRUE);
+   draw_quad(220, 40, 1, 0, 0.99, textures[1], GL_TRUE);
 
    glDisable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
@@ -134,8 +136,10 @@ void piglit_init(int argc, char **argv)
    piglit_require_extension("GL_ARB_seamless_cube_map");
    piglit_require_extension("GL_AMD_seamless_cubemap_per_texture");
 
+   glGenTextures(2, textures);
+
    for (t = 0; t < 2; t++) {
-      glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, 1+t);
+      glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, textures[t]);
       glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
       glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
       glTexParameteri(GL_TEXTURE_CUBE_MAP_ARB, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
