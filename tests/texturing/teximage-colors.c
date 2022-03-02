@@ -44,6 +44,7 @@ struct texture_format formats[] = {
 	{ GL_RED, GL_RED, GL_NONE },
 	{ GL_R8, GL_RED, GL_UNSIGNED_BYTE },
 	{ GL_R8_SNORM, GL_RED, GL_BYTE },
+	{ GL_SR8_EXT, GL_RED, GL_UNSIGNED_BYTE },
 	{ GL_R16, GL_RED, GL_UNSIGNED_SHORT },
 	{ GL_R16_SNORM, GL_RED, GL_SHORT },
 	{ GL_R16F, GL_RED, GL_NONE },
@@ -52,6 +53,7 @@ struct texture_format formats[] = {
 	{ GL_RG, GL_RG, GL_NONE },
 	{ GL_RG8, GL_RG, GL_UNSIGNED_BYTE },
 	{ GL_RG8_SNORM, GL_RG, GL_BYTE },
+	{ GL_SRG8_EXT, GL_RG, GL_UNSIGNED_BYTE },
 	{ GL_RG16, GL_RG, GL_UNSIGNED_SHORT },
 	{ GL_RG16_SNORM, GL_RG, GL_SHORT },
 	{ GL_RG16F, GL_RG, GL_NONE },
@@ -357,6 +359,8 @@ static bool
 is_format_srgb(GLenum format)
 {
 	switch (format) {
+	case GL_SR8_EXT:
+	case GL_SRG8_EXT:
 	case GL_SRGB:
 	case GL_SRGB8:
 	case GL_SRGB_ALPHA:
@@ -483,8 +487,6 @@ piglit_init(int argc, char **argv)
 		exit(1);
 	}
 
-	piglit_require_extension("GL_EXT_texture_integer");
-
 	if (format == NULL) {
 		int i;
 		printf("Invalid format.  Valid formats:\n");
@@ -494,6 +496,12 @@ piglit_init(int argc, char **argv)
 						 formats[i].internal_format));
 		exit(1);
 	}
+
+	piglit_require_extension("GL_EXT_texture_integer");
+	if (format->internal_format == GL_SR8_EXT)
+		piglit_require_extension("GL_EXT_texture_sRGB_R8");
+	if (format->internal_format == GL_SRG8_EXT)
+		piglit_require_extension("GL_EXT_texture_sRGB_RG8");
 
 	signed_prog = piglit_build_simple_program(NULL, frag_shader_signed_src);
 	unsigned_prog = piglit_build_simple_program(NULL, frag_shader_unsigned_src);

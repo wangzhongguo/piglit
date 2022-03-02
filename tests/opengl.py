@@ -5297,5 +5297,15 @@ with profile.test_list.group_manager(
     g(['ext_clear_texture-stencil'])
     g(['ext_clear_texture-texview'])
 
+with profile.test_list.group_manager(
+        PiglitGLTest,
+        grouptools.join('spec', 'EXT_texture_sRGB_R8')) as g:
+    g(['teximage-colors', 'GL_SR8_EXT'])
+
+with profile.test_list.group_manager(
+        PiglitGLTest,
+        grouptools.join('spec', 'EXT_texture_sRGB_RG8')) as g:
+    g(['teximage-colors', 'GL_SRG8_EXT'])
+
 if platform.system() == 'Windows':
     profile.filters.append(lambda p, _: not p.startswith('glx'))
