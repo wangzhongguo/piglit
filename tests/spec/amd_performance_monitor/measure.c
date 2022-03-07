@@ -283,6 +283,7 @@ test_basic_measurement(unsigned group)
 	piglit_report_subtest_result(PIGLIT_PASS, "%s", test_name);
 
 	glDeletePerfMonitorsAMD(1, &monitor);
+	free(counters);
 }
 
 
@@ -312,8 +313,10 @@ test_change_counters_while_active(unsigned group)
 
 	usable_counters = MIN2(num_counters, max_active_counters);
 
-	if (usable_counters == 0)
+	if (usable_counters == 0) {
+		free(counters);
 		return; /* skip */
+	}
 
 	glGenPerfMonitorsAMD(1, &monitor);
 	verify(piglit_check_gl_error(GL_NO_ERROR));
@@ -354,6 +357,7 @@ test_change_counters_while_active(unsigned group)
 	verify(piglit_check_gl_error(GL_NO_ERROR));
 
 	glDeletePerfMonitorsAMD(1, &monitor);
+	free(counters);
 	verify(piglit_check_gl_error(GL_NO_ERROR));
 
 	piglit_report_subtest_result(PIGLIT_PASS, "%s", test_name);
