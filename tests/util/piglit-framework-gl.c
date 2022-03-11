@@ -113,8 +113,6 @@ process_args(int *argc, char *argv[], unsigned *force_samples,
 				  &config->selected_subtests,
 				  &config->num_selected_subtests);
 
-	/* Find/remove "-auto" and "-fbo" from the argument vector.
-	 */
 	for (j = 1; j < *argc; j++) {
 		if (!strcmp(argv[j], "-auto")) {
 			piglit_automatic = 1;
