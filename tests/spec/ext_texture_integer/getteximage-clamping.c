@@ -405,7 +405,6 @@ read_format(const struct format_info *tex_info,
 		suffix = " (bgra)";
 	else
 		suffix = "";
-	asprintf(&name, "%s%s:\n", piglit_get_gl_enum_name(tex_info->internal_format), suffix);
 
 	if (!test_rg && (read_info->format == GL_RED_INTEGER ||
 			 read_info->format == GL_RG_INTEGER)) {
@@ -433,6 +432,7 @@ read_format(const struct format_info *tex_info,
 	if (tex_info->sign != read_info->sign)
 		return PIGLIT_SKIP;
 
+	asprintf(&name, "%s%s:\n", piglit_get_gl_enum_name(tex_info->internal_format), suffix);
 
 	printf("Reading from %s to %s/%s\n", name,
 	       piglit_get_gl_enum_name(read_info->format),
