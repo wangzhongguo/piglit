@@ -85,8 +85,8 @@ test_formats(const char *name, const GLenum formats[2],
 	 * is initialized to the expected value.
 	 */
 	for (i = 0; i < 2; i++) {
-		glDrawBuffers(1, &draw_bufs[0]);
-		glClearColor(0.0, 0.0, 0.0, expect[0][3]);
+		glDrawBuffers(1, &draw_bufs[i]);
+		glClearColor(0.0, 0.0, 0.0, expect[i][3]);
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
