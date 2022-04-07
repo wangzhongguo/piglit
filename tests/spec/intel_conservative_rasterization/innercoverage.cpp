@@ -28,8 +28,12 @@
  * GL_INTEL_conservative_rasterization is enabled.
  */
 
+#include "piglit-fbo.h"
 #include "piglit-util-gl.h"
-#include "piglit-matrix.h"
+
+using namespace piglit_util_fbo;
+
+static const int win_width = 400, win_height = 400;
 
 PIGLIT_GL_TEST_CONFIG_BEGIN
 
@@ -39,11 +43,13 @@ PIGLIT_GL_TEST_CONFIG_BEGIN
 	config.supports_gl_es_version = 31;
 #endif
 
-	config.window_width = 400;
-	config.window_height = 400;
+	config.window_width = win_width;
+	config.window_height = win_height;
 	config.window_visual = PIGLIT_GL_VISUAL_RGBA | PIGLIT_GL_VISUAL_DOUBLE;
 
 PIGLIT_GL_TEST_CONFIG_END
+
+static Fbo multisampled_fbo;
 
 enum piglit_result
 piglit_display(void)
@@ -114,8 +120,12 @@ piglit_display(void)
 	if (!conservative_prog)
 		piglit_report_result(PIGLIT_FAIL);
 
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, piglit_winsys_fbo);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, multisampled_fbo.handle);
 	glViewport(0, 0, piglit_width, piglit_height);
+
+	glEnable(GL_SAMPLE_SHADING_ARB);
+	glEnable(GL_MULTISAMPLE_ARB);
+	glMinSampleShadingARB(1.0f);
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 
@@ -145,11 +155,24 @@ piglit_display(void)
 	if(!piglit_check_gl_error(GL_NO_ERROR))
 		return PIGLIT_FAIL;
 
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, multisampled_fbo.handle);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, piglit_winsys_fbo);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glBlitFramebuffer(0, 0,
+			  win_width, win_height,
+			  0, 0,
+			  win_width, win_height,
+			  GL_COLOR_BUFFER_BIT,
+			  GL_NEAREST);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, piglit_winsys_fbo);
+
 	piglit_present_results();
 
 	const float conservative_expected[] = { 0.0, 0.0, 0.0, 0.0 };
-	if (!piglit_probe_pixel_rgba(piglit_width / 2, 0, conservative_expected))
+	if (!piglit_probe_pixel_rgba(win_width / 2, 0, conservative_expected))
 		result = PIGLIT_FAIL;
+
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, multisampled_fbo.handle);
 
 	glUseProgram(inner_prog);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -158,10 +181,21 @@ piglit_display(void)
 	if(!piglit_check_gl_error(GL_NO_ERROR))
 		result = PIGLIT_FAIL;
 
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, multisampled_fbo.handle);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, piglit_winsys_fbo);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glBlitFramebuffer(0, 0,
+			  win_width, win_height,
+			  0, 0,
+			  win_width, win_height,
+			  GL_COLOR_BUFFER_BIT,
+			  GL_NEAREST);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, piglit_winsys_fbo);
+
 	piglit_present_results();
 
 	const float inner_expected[] = { 1.0, 0.0, 0.0, 1.0 };
-	if (!piglit_probe_pixel_rgba(piglit_width / 2, 0, inner_expected))
+	if (!piglit_probe_pixel_rgba(win_width / 2, 0, inner_expected))
 		result = PIGLIT_FAIL;
 
 	return result;
@@ -170,4 +204,12 @@ piglit_display(void)
 void piglit_init(int argc, char **argv)
 {
 	piglit_require_extension("GL_INTEL_conservative_rasterization");
+
+	GLint max_samples;
+	glGetIntegerv(GL_MAX_SAMPLES, &max_samples);
+	if (max_samples < 2)
+		piglit_report_result(PIGLIT_SKIP);
+
+	FboConfig msConfig(2, win_width, win_height);
+	multisampled_fbo.setup(msConfig);
 }
