@@ -1706,7 +1706,7 @@ with profile.test_list.group_manager(
     g(['arb_sync-timeout-zero'], 'timeout-zero')
     g(['arb_sync-WaitSync-errors'], 'WaitSync-errors')
     g(['arb_sync-ClientWaitSync-timeout'], 'ClientWaitSync-timeout')
-    g(['sync_api'], run_concurrent=False)
+    g(['sync_api'])
 
 # Group ARB_ES2_compatibility
 with profile.test_list.group_manager(
