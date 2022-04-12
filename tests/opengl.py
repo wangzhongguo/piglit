@@ -4886,7 +4886,7 @@ with profile.test_list.group_manager(
         PiglitGLTest,
         grouptools.join('spec', 'egl_ext_protected_content'),
         exclude_platforms=['glx']) as g:
-    g(['egl_ext_protected_Content'], 'conformance')
+    g(['egl_ext_protected_content'], 'conformance')
 
 with profile.test_list.group_manager(
         PiglitGLTest, grouptools.join('spec', '!opengl ES 2.0')) as g:
