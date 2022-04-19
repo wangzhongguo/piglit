@@ -40,8 +40,9 @@
         diff_ctx = diff.getContext('2d');
         const diff_data = diff_ctx.createImageData(width, height)
 
-        const diff_count = pixelmatch(ref_data.data, rend_data.data, diff_data.data, width, height, {threshold: 0.1})
-        document.getElementById("diffPixelCount").textContent = diff_count + " pixels are different"
+        const diff_count_rel = pixelmatch(ref_data.data, rend_data.data, diff_data.data, width, height, {threshold: 0.1})
+        const diff_count_abs = pixelmatch(ref_data.data, rend_data.data, diff_data.data, width, height, {threshold: 0.0})
+        document.getElementById("diffPixelCount").textContent = "Different pixels: " + diff_count_abs + " <small>(no tolerance)</small>, <strong>" + diff_count_rel + "</strong> <small>(1% tol.)</small>"
 
         diff_ctx.putImageData(diff_data, 0, 0)
         diff_complete = true
