@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Copyright (c) 2020 Collabora Ltd
+# Copyright © 2020, 2022 Collabora Ltd
 # Copyright © 2020 Valve Corporation.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
@@ -26,12 +26,13 @@
 import base64
 import hashlib
 import hmac
-import requests
 import xml.etree.ElementTree as ET
 
+from email.utils import formatdate
 from os import path
 from time import time
-from email.utils import formatdate
+import requests
+from requests.adapters import HTTPAdapter, Retry
 from requests.utils import requote_uri
 
 from framework import core, exceptions
@@ -42,6 +43,7 @@ __all__ = ['ensure_file']
 
 minio_credentials = None
 
+
 def sign_with_hmac(key, message):
     key = key.encode("UTF-8")
     message = message.encode("UTF-8")
@@ -49,6 +51,7 @@ def sign_with_hmac(key, message):
     signature = hmac.new(key, message, hashlib.sha1).digest()
 
     return base64.encodebytes(signature).strip().decode()
+
 
 def get_minio_credentials(url):
     global minio_credentials
@@ -84,6 +87,7 @@ def get_minio_credentials(url):
             minio_credentials['SecretAccessKey'],
             minio_credentials['SessionToken'])
 
+
 def get_authorization_headers(url, resource):
     minio_key, minio_secret, minio_token = get_minio_credentials(url)
 
@@ -100,6 +104,50 @@ def get_authorization_headers(url, resource):
                'Authorization': 'AWS %s:%s' % (minio_key, signature),
                'x-amz-security-token': minio_token}
     return headers
+
+
+def download(url: str, file_path: str, headers, attempts=2) -> None:
+    """Downloads a URL content into a file
+
+    :param url: URL to download
+    :param file_path: Local file name to contain the data downloaded
+    :param attempts: Number of attempts
+    """
+    retries = Retry(
+        connect=attempts,
+        read=attempts,
+        redirect=attempts,
+        raise_on_redirect=False
+    )
+    session = requests.Session()
+    adapter = HTTPAdapter(max_retries=retries)
+    for protocol in ["http://", "https://"]:
+        session.mount(protocol, adapter)
+
+    with session.get(url,
+                     allow_redirects=True,
+                     stream=True,
+                     headers=headers) as req:
+        with open(file_path, "wb") as file:
+            req.raise_for_status()
+            for chunk in req.iter_content(chunk_size=1048576):
+                if chunk:
+                    file.write(chunk)
+
+    # Checking file integrity
+    try:
+        file_size = int(req.headers["Content-length"])
+    except KeyError:
+        print("Error getting Content-Length from server. "
+              "Skipping file size check.")
+        return
+
+    if file_size != path.getsize(file_path):
+        raise exceptions.PiglitFatalError(
+                f"Invalid filesize src {file_size}"
+                f"doesn't match {path.getsize(file_path)}"
+        )
+
 
 def ensure_file(file_path):
     destination_file_path = path.join(OPTIONS.db_path, file_path)
@@ -131,14 +179,7 @@ def ensure_file(file_path):
         headers = None
 
     download_time = time()
-    with open(destination_file_path, 'wb') as file:
-        with requests.get(url + file_path,
-                          allow_redirects=True, stream=True,
-                          headers=headers) as r:
-            if r.status_code >= 400:
-                print(r.text)
-            r.raise_for_status()
-            for chunk in r.iter_content(chunk_size=8194):
-                if chunk:
-                    file.write(chunk)
+
+    download(url + file_path, destination_file_path, headers)
+
     print('took %ds.' % (time() - download_time), flush=True)
