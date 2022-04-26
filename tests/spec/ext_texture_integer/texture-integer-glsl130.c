@@ -392,8 +392,11 @@ test_format(const struct format_info *info, int shader_base)
 	glTexImage2D(GL_TEXTURE_2D, 0, info->IntFormat, TexWidth, TexHeight, 0,
 		     info->BaseFormat, type, buf);
 
-	if (check_error(__FILE__, __LINE__))
+	if (check_error(__FILE__, __LINE__)) {
+		free(buf);
+		free(name);
 		return GL_FALSE;
+	}
 
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT,
 				 &f);
@@ -490,14 +493,20 @@ test_format(const struct format_info *info, int shader_base)
 	glTexCoord2f(0, 1);   glVertex2f(0, h);
 	glEnd();
 
-	if (check_error(__FILE__, __LINE__))
+	if (check_error(__FILE__, __LINE__)) {
+		free(buf);
+		free(name);
 		return GL_FALSE;
+	}
 
 	/* test */
 	glReadPixels(w/2, h/2, 1, 1, GL_RGBA, GL_FLOAT, result);
 
-	if (check_error(__FILE__, __LINE__))
+	if (check_error(__FILE__, __LINE__)) {
+		free(buf);
+		free(name);
 		return GL_FALSE;
+	}
 
 	if (fabsf(result[0] - expected[0]) > error ||
 	    fabsf(result[1] - expected[1]) > error ||
@@ -511,6 +520,8 @@ test_format(const struct format_info *info, int shader_base)
 			expected[0], expected[1], expected[2], expected[3]);
 		fprintf(stderr, "  result color = %g, %g, %g, %g\n",
 			result[0], result[1], result[2], result[3]);
+		free(buf);
+		free(name);
 		return GL_FALSE;
 	}
 
