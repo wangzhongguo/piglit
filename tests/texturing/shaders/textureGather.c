@@ -427,7 +427,7 @@ do_shader_setup(void)
 	GLint prog;
 	GLint sampler_loc, offset_loc;
 	char *vs_code = NULL, *fs_code = NULL;
-	char *offset_coords;
+	char *offset_coords = NULL;
 	char *prefix[] = { "" /* unorm */, "" /* float */, "i" /* int */, "u" /* uint */, "" /* shadow */ };
 	char *scale[] = {
 		"vec4(1)",		/* unorm + GL_ONE swizzle */
@@ -552,6 +552,7 @@ do_shader_setup(void)
 	}
 	free(vs_code);
 	free(fs_code);
+	free(offset_coords);
 }
 
 static void
