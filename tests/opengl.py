@@ -2361,6 +2361,7 @@ with profile.test_list.group_manager(
       'getuniformlocation-array-of-struct-of-array')
     g(['arb_shader_objects-clear-with-deleted'], 'clear-with-deleted')
     g(['arb_shader_objects-delete-repeat'], 'delete-repeat')
+    g(['arb_shader_objects-delete-non-existent'], 'delete-non-existent')
 
 with profile.test_list.group_manager(
         PiglitGLTest,
