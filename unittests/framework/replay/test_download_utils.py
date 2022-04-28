@@ -1,6 +1,7 @@
 # coding=utf-8
 #
 # Copyright © 2020 Valve Corporation.
+# Copyright © 2022 Collabora Ltd
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -52,6 +53,7 @@ ASSUME_ROLE_RESPONSE = '''<?xml version="1.0" encoding="UTF-8"?>
     </AssumeRoleWithWebIdentityResponse>
 '''
 
+
 class TestDownloadUtils(object):
     """Tests for download_utils methods."""
 
@@ -73,10 +75,15 @@ class TestDownloadUtils(object):
             m = path_local.mtime()
             assert m == expected_mtime
 
-    def test_ensure_file_exists(self):
+    @pytest.fixture
+    def prepare_trace_file(self):
+        # Make sure the temporary directory exists
+        os.makedirs(path.dirname(self.trace_file), exist_ok=True)
+
+    def test_ensure_file_exists(self,
+                                prepare_trace_file):
         """download_utils.ensure_file: Check an existing file doesn't get overwritten"""
 
-        os.makedirs(path.dirname(self.trace_file), exist_ok=True)
         self.trace_file.write("local")
         m = self.trace_file.mtime()
         download_utils.ensure_file(self.trace_path)
@@ -89,13 +96,13 @@ class TestDownloadUtils(object):
         download_utils.ensure_file(self.trace_path)
         TestDownloadUtils.check_same_file(self.trace_file, "remote")
 
-    def test_ensure_file_exists_force_download(self):
+    def test_ensure_file_exists_force_download(self,
+                                               prepare_trace_file):
         """download_utils.ensure_file: Check an existing file gets overwritten when forced"""
 
         OPTIONS.download['force'] = True
-        os.makedirs(path.dirname(self.trace_file), exist_ok=True)
         self.trace_file.write("local")
-        m = self.trace_file.mtime()
+        self.trace_file.mtime()
         download_utils.ensure_file(self.trace_path)
         TestDownloadUtils.check_same_file(self.trace_file, "remote")
 
@@ -122,6 +129,53 @@ class TestDownloadUtils(object):
         requests_mock.get(self.full_url, exc=requests.exceptions.ConnectTimeout)
         assert not self.trace_file.check()
         download_utils.ensure_file(self.trace_path)
+
+    @pytest.mark.raises(exception=exceptions.PiglitFatalError)
+    def test_download_with_invalid_content_length(self,
+                                                  requests_mock,
+                                                  prepare_trace_file):
+        """download_utils.download: Check if an exception raises
+        when filesize doesn't match"""
+
+        headers = {"Content-Length": "1"}
+        requests_mock.get(self.full_url,
+                          headers=headers,
+                          text="Binary file content")
+
+        assert not self.trace_file.check()
+        download_utils.download(self.full_url, self.trace_file, None)
+
+    def test_download_works_at_last_retry(self,
+                                          requests_mock,
+                                          prepare_trace_file):
+        """download_utils.download: Check download retry mechanism"""
+
+        bad_headers = {"Content-Length": "1"}
+        # Mock attempts - 1 bad requests and a working last one
+        attempts = 3
+        for _ in range(attempts - 1):
+            requests_mock.get(self.full_url,
+                              headers=bad_headers,
+                              text="Binary file content")
+        requests_mock.get(self.full_url,
+                          text="Binary file content")
+
+        assert not self.trace_file.check()
+        download_utils.download(self.full_url, self.trace_file, None)
+
+    def test_download_without_content_length(self,
+                                             requests_mock,
+                                             prepare_trace_file):
+        """download_utils.download: Check an exception raises
+        when response does not have a Context-Length header"""
+
+        missing_headers = {}
+        requests_mock.get(self.full_url,
+                          headers=missing_headers,
+                          text="Binary file content")
+
+        assert not self.trace_file.check()
+        download_utils.download(self.full_url, self.trace_file, None)
 
     def test_minio_authorization(self, requests_mock):
         """download_utils.ensure_file: Check we send the authentication headers to MinIO"""
