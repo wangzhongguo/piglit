@@ -251,6 +251,8 @@ compile_shader(GLenum target)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buf);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
 		     GL_STATIC_DRAW);
+	free(frag);
+	free(texel_fetch_macro);
 }
 
 void
