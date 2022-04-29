@@ -35,8 +35,6 @@
 #include "piglit-util-egl.h"
 #include "egl-util.h"
 
-static int automatic;
-
 int depth;
 
 int
@@ -179,7 +177,7 @@ event_loop(struct egl_state *state, const struct egl_test *test)
 
 		if (event.type == Expose) {
 			result = test->draw(state);
-			if (automatic || piglit_automatic)
+			if (piglit_automatic)
 				break;
 		}
 
@@ -219,7 +217,7 @@ egl_util_run(const struct egl_test *test, int argc, char *argv[])
 
 	for (i = 1; i < argc; ++i) {
 		if (!strcmp(argv[i], "-auto"))
-			automatic = 1;
+			piglit_automatic = 1;
 		else
 			fprintf(stderr, "Unknown option: %s\n", argv[i]);
 	}
