@@ -82,6 +82,13 @@ draw(Display *dpy)
 int
 main(int argc, char **argv)
 {
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
+
 	piglit_oml_sync_control_test_run(false, draw);
 
 	return 0;

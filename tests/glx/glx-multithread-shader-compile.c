@@ -99,6 +99,13 @@ main(int argc, char **argv)
 	int ret;
 	pthread_t thread1, thread2;
 
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
+
 	XInitThreads();
 
 	pthread_mutex_init(&mutex, NULL);

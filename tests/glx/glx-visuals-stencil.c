@@ -101,6 +101,13 @@ main(int argc, char **argv)
 {
 	enum piglit_result result;
 
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
+
 	if (argc > 1 && strcmp(argv[1], "-pixmap") == 0)
 		result = piglit_glx_iterate_pixmap_fbconfigs(draw);
 	else

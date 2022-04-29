@@ -30,6 +30,13 @@ int main(int argc, char **argv)
 	Display *got_dpy;
 	Window win;
 
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
+
 	GLX_EXT_import_context_setup();
 
 	/* No context is current, so glXGetCurrentDisplayEXT should return

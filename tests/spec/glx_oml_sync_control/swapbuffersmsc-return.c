@@ -104,6 +104,11 @@ draw(Display *dpy)
 int
 main(int argc, char **argv)
 {
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+	}
+
 	if (argc >= 2) {
 		swap_interval = atoi(argv[1]);
 	}

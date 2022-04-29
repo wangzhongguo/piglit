@@ -21,6 +21,7 @@
  */
 #include "piglit-util.h"
 #include "piglit-glx-util.h"
+#include "piglit-framework-gl.h"
 #include "common.h"
 
 static bool try_reset_strategy(int reset_strategy)
@@ -61,6 +62,13 @@ static bool try_reset_strategy(int reset_strategy)
 int main(int argc, char **argv)
 {
 	bool pass = true;
+
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
 
 	GLX_ARB_create_context_setup();
 	piglit_require_glx_extension(dpy, "GLX_ARB_create_context_robustness");

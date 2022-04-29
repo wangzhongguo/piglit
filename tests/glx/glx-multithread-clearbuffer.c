@@ -84,6 +84,13 @@ main(int argc, char **argv)
 	pthread_t thread[16];
 	bool pass = true;
 
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
+
 	XInitThreads();
 
 	pthread_mutex_init(&mutex, NULL);

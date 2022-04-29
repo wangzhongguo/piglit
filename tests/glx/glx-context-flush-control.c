@@ -457,6 +457,13 @@ main(int argc, char **argv)
 	struct window window;
 	bool pass = true;
 
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
+
 	display = piglit_get_glx_display();
 
 	piglit_require_glx_extension(display, "GLX_ARB_get_proc_address");

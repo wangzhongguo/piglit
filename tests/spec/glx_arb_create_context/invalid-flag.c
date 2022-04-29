@@ -70,6 +70,13 @@ int main(int argc, char **argv)
 	uint32_t flag = 0x80000000;
 	uint32_t first_valid_flag = GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
 
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
+
 	GLX_ARB_create_context_setup();
 
         /* Check for extensions that define higher-numbered flags */

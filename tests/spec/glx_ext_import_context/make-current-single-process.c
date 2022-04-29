@@ -34,6 +34,13 @@ int main(int argc, char **argv)
 	pid_t child;
 	int status;
 
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
+
 	GLX_EXT_import_context_setup();
 	get_context_IDs();
 

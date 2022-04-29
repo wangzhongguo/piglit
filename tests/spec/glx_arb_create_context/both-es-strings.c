@@ -22,11 +22,19 @@
  */
 #include "piglit-util.h"
 #include "piglit-glx-util.h"
+#include "piglit-framework-gl.h"
 #include "common.h"
 
 int main(int argc, char **argv)
 {
 	bool has_es, has_es2;
+
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
 
 	GLX_ARB_create_context_setup();
 	has_es = piglit_is_glx_extension_supported(dpy, "GLX_EXT_create_context_es_profile");

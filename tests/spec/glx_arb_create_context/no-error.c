@@ -226,6 +226,13 @@ int main(int argc, char **argv)
 {
 	enum piglit_result result = PIGLIT_SKIP;
 
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
+
 	GLX_ARB_create_context_setup();
 	piglit_require_glx_extension(dpy, "GLX_ARB_create_context_no_error");
 

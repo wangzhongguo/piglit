@@ -36,6 +36,13 @@ expect_badvalue(Display *dpy, XErrorEvent *error)
 
 int main(int argc, char **argv)
 {
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-auto"))
+			piglit_automatic = 1;
+		else
+			fprintf(stderr, "Unknown option: %s\n", argv[i]);
+	}
+
 	int badattribs1[] = {
 		None
 	};
