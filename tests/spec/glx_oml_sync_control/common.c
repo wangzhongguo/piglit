@@ -77,7 +77,5 @@ piglit_oml_sync_control_test_run(bool fullscreen, enum piglit_result (*draw)(Dis
 
 	piglit_dispatch_default_init(PIGLIT_DISPATCH_GL);
 
-	XMapWindow(dpy, win);
-
 	piglit_glx_event_loop(dpy, draw);
 }

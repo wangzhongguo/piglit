@@ -105,9 +105,6 @@ main(int argc, char **argv)
    Windows[0] = piglit_get_glx_window(dpy, visinfo);
    Windows[1] = piglit_get_glx_window(dpy, visinfo);
 
-   XMapWindow(dpy, Windows[0]);
-   XMapWindow(dpy, Windows[1]);
-
    ctx = piglit_get_glx_context(dpy, visinfo);
 
    glXMakeCurrent(dpy, Windows[0], ctx);

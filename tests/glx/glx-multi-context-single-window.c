@@ -134,7 +134,6 @@ main(int argc, char **argv)
 	visinfo = piglit_get_glx_visual(dpy);
 
 	win = piglit_get_glx_window(dpy, visinfo);
-	XMapWindow(dpy, win);
 
 	for (i = 0; i < num_contexts; i++) {
 		ctx[i] = piglit_get_glx_context(dpy, visinfo);

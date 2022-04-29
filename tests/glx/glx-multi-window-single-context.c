@@ -108,7 +108,6 @@ main(int argc, char **argv)
 	for (i = 0; i < num_windows; i++) {
 		win[i] = piglit_get_glx_window(dpy, visinfo);
 		XMoveWindow(dpy, win[i], 60*i, 10);
-		XMapWindow(dpy, win[i]);
 	}
 
 	ctx = piglit_get_glx_context(dpy, visinfo);

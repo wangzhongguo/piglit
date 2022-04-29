@@ -134,7 +134,6 @@ main(int argc, char **argv)
 	win = piglit_get_glx_window(dpy, visinfo);
 	XFree(visinfo);
 
-	XMapWindow(dpy, win);
 	gwin = glXCreateWindow(dpy, config[0], win, NULL);
 	ctx = glXCreateNewContext(dpy, config[0], GLX_RGBA_TYPE, 0, GL_TRUE);
 	glXMakeContextCurrent(dpy, gwin, gwin, ctx);

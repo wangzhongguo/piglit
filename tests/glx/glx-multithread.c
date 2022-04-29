@@ -129,8 +129,6 @@ main(int argc, char **argv)
 	visinfo = piglit_get_glx_visual(dpy);
 	win = piglit_get_glx_window(dpy, visinfo);
 
-	XMapWindow(dpy, win);
-
 	piglit_glx_event_loop(dpy, draw);
 
 	return 0;

@@ -191,8 +191,6 @@ main(int argc, char **argv)
     piglit_width, piglit_height, visinfo->depth);
   load_win = glXCreateGLXPixmap(dpy, visinfo, pixmap);
 
-  XMapWindow(dpy, draw_win);
-
   piglit_glx_event_loop(dpy, draw);
 
   return 0;

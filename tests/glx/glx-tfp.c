@@ -325,8 +325,6 @@ int main(int argc, char**argv)
 	if (piglit_automatic)
 		piglit_glx_set_no_input();
 
-	XMapWindow(dpy, win);
-
 	piglit_require_glx_extension(dpy, "GLX_EXT_texture_from_pixmap");
 	if (!piglit_is_extension_supported("GL_ARB_texture_env_combine")) {
 		fprintf(stderr, "Test requires GL_ARB_texture_env_combine\n");
