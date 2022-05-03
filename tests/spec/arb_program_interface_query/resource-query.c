@@ -702,6 +702,17 @@ run_subtest(const struct subtest_t st, bool *pass)
 
 	check_pname(prog, st.programInterface, GL_ACTIVE_RESOURCES,
 		    &local_pass, st.active_resources_str, st.active_resources);
+	if (!local_pass) {
+		GLint active;
+		glGetProgramInterfaceiv(prog, st.programInterface, GL_ACTIVE_RESOURCES, &active);
+		printf("Active resources:\n");
+		for (int i = 0; i < active; i++) {
+			char name[1024];
+			GLsizei len;
+			glGetProgramResourceName(prog, st.programInterface, i, ARRAY_SIZE(name), &len, name);
+			printf("  %s\n", name);
+		}
+	}
 
 	check_pname(prog, st.programInterface, GL_MAX_NAME_LENGTH,
 		    &local_pass, st.max_length_name_str, st.max_length_name);
