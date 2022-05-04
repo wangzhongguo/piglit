@@ -163,10 +163,6 @@ create_device(struct vk_ctx *ctx, VkPhysicalDevice pdev)
 
 	ctx->qfam_idx = -1;
 	vkGetPhysicalDeviceQueueFamilyProperties(pdev, &prop_count, 0);
-	if (prop_count < 0) {
-		fprintf(stderr, "Invalid queue family properties.\n");
-		return VK_NULL_HANDLE;
-	}
 
 	fam_props = malloc(prop_count * sizeof *fam_props);
 	vkGetPhysicalDeviceQueueFamilyProperties(pdev, &prop_count, fam_props);
