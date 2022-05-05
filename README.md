@@ -173,7 +173,7 @@ https://gitlab.freedesktop.org/mesa/waffle
 Open the Command Prompt.
 CD to piglit directory.
 
-    cmake -H. -Bbuild -G "Ninja" -DGLEXT_INCLUDE_DIR=\path\to\glext -DPIGLIT_USE_WAFFLE=TRUE -DWAFFLE_INCLUDE_DIRS=\path\to\waffle\include\waffle WAFFLE_LDFLAGS=\path\to\waffle\lib\libwaffle-1.a
+    cmake -H. -Bbuild -G "Ninja" -DGLEXT_INCLUDE_DIR=\path\to\glext -DPIGLIT_USE_WAFFLE=TRUE -DWaffle_INCLUDE_DIRS=\path\to\waffle\include\waffle -DWaffle_LDFLAGS=\path\to\waffle\lib\libwaffle-1.dll.a
 
 
 ## 3. How to run tests
