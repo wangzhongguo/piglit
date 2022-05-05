@@ -168,7 +168,7 @@ http://www.transmissionzero.co.uk/software/freeglut-devel/
 #### 2.5.2 Waffle
 
 Download and build waffle for MinGW.
-http://www.waffle-gl.org/
+https://gitlab.freedesktop.org/mesa/waffle
 
 Open the Command Prompt.
 CD to piglit directory.

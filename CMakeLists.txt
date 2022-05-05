@@ -67,7 +67,7 @@ if(PIGLIT_USE_WAFFLE)
 		if(NOT Waffle_FOUND)
 			message(FATAL_ERROR "Failed to find Waffle. If Waffle "
 			"is not packaged for your distribution, you can get "
-			"it at http://www.waffle-gl.org."
+			"it at https://gitlab.freedesktop.org/mesa/waffle."
 		)
 		endif()
 
@@ -91,8 +91,8 @@ if(PIGLIT_USE_WAFFLE)
 			set(Waffle_FOUND TRUE)
 		else()
 			message(FATAL_ERROR "Failed to find Waffle. Get and build Waffle from "
-				"http://www.waffle-gl.org and set Waffle_INCLUDE_DIRS and "
-				"Waffle_LDFLAGS variables accordingly."
+				"https://gitlab.freedesktop.org/mesa/waffle and set "
+				"Waffle_INCLUDE_DIRS and Waffle_LDFLAGS variables accordingly."
 			)
 		endif()
 	endif ()
