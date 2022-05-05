@@ -279,8 +279,12 @@ test_logicop(void * data)
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 				       GL_TEXTURE_2D_MULTISAMPLE, fbo_tex_name, 0);
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			free(dst_data);
+			free(src_data);
+			free(exp_data);
 			return PIGLIT_FAIL;
+		}
 	}
 
 	glDisable(GL_DITHER);
@@ -361,6 +365,8 @@ test_logicop(void * data)
 	if (!piglit_automatic)
 		piglit_present_results();
 
+	free(dst_data);
+	free(src_data);
 	free(exp_data);
 
 	return pass ? PIGLIT_PASS : PIGLIT_FAIL;
