@@ -144,7 +144,7 @@ Install MinGW-w64
 https://mingw-w64.org/
 
 Download OpenGL Core API and Extension Header Files.
-http://www.opengl.org/registry/#headers
+https://github.com/KhronosGroup/OpenGL-Registry
 Pass `-DGLEXT_INCLUDE_DIR=/path/to/headers`
 
 Install python mako.
