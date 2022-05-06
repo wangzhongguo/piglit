@@ -28,12 +28,13 @@ import argparse
 import atexit
 import os
 import shutil
-import sys
 import tempfile
 from pathlib import Path
 
+
 def cleanup(dirpath):
     shutil.rmtree(dirpath)
+
 
 TMP_DIR = tempfile.mkdtemp()
 atexit.register(cleanup, TMP_DIR)
@@ -41,7 +42,7 @@ RENDERDOC_DEBUG_FILE = TMP_DIR + "/renderdoc.log"
 
 # Needs to be in the environment before importing the module
 os.environ['RENDERDOC_DEBUG_LOG_FILE'] = RENDERDOC_DEBUG_FILE
-import renderdoc as rd
+import renderdoc as rd  # noqa: E402
 
 
 def find_draw_with_event_id(controller, event_id):
@@ -69,7 +70,7 @@ def dump_image(controller, event_id, output_dir, tracefile):
         return
 
     filepath = Path(output_dir)
-    filepath.mkdir(parents = True, exist_ok = True)
+    filepath.mkdir(parents=True, exist_ok=True)
     filepath = filepath / (tracefile + "-" + str(int(draw.eventId)) + ".png")
 
     print("Saving image at event ID %d: %s to %s" % (draw.eventId,
@@ -111,7 +112,7 @@ def load_capture(filename):
 
 def renderdoc_dump_images(filename, event_ids, output_dir):
     rd.InitialiseReplay(rd.GlobalEnvironment(), [])
-    cap, controller = load_capture(filename);
+    cap, controller = load_capture(filename)
 
     tracefile = Path(filename).name
 

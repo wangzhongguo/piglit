@@ -26,6 +26,7 @@
 import argparse
 
 
+
 class FileContentType(argparse.FileType):
     """A FileType type argument which reads the file content
     and closes the file"""

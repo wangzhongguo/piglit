@@ -29,6 +29,7 @@
 # By importing every exported function from each module in the package we
 # create a general use API, but allow it to be controlled by setting the
 # __all__ in each module
+# flake8: noqa F401,F403
 
 from .compare_replay import *
 from .download_utils import *

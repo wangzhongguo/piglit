@@ -30,12 +30,10 @@ try:
 except ImportError:
     import json
 
-from enum import Enum, unique
 from glob import glob
 from os import path
 
 from framework import core
-from framework import exceptions
 from framework import status
 from framework.replay import backends
 from framework.replay import query_traces_yaml as qty

@@ -76,17 +76,14 @@ class DumpBackend(metaclass=abc.ABCMeta):
             self._output_dir = path.join('trace', OPTIONS.device_name,
                                          path.dirname(self._trace_path))
 
-
     @staticmethod
     def log(severity, msg, end='\n'):
         print('[dump_trace_images] {}: {}'.format(severity, msg), flush=True,
               end=end)
 
-
     @staticmethod
     def log_result(msg):
         print(msg, flush=True)
-
 
     @staticmethod
     def _run_logged_command(cmd, env):
@@ -104,11 +101,9 @@ class DumpBackend(metaclass=abc.ABCMeta):
                 '[dump_trace_images] Process failed with error code: {}'.format(
                     ret.returncode))
 
-
     @abc.abstractmethod
     def _get_last_frame_call(self):
         """Get the number of the last frame call from the trace"""
-
 
     @abc.abstractmethod
     def dump(self):

@@ -29,7 +29,6 @@ This is as close to a true global function as python gets.
 
 """
 
-import os
 import sys
 
 from urllib.parse import urlparse
@@ -82,8 +81,7 @@ class _Options(object):  # pylint: disable=too-many-instance-attributes
                          'minio_host': '',
                          'minio_bucket': '',
                          'role_session_name': '',
-                         'jwt': ''
-        }
+                         'jwt': ''}
 
     def clear(self):
         """Reinitialize all values to defaults."""

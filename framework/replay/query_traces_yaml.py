@@ -95,7 +95,6 @@ def traces(y, trace_extensions=None, device_name=None, checksum=False):
 
     traces = list(traces)
 
-    result = list()
     if checksum:
         for t in traces:
             try:

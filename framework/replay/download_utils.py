@@ -92,7 +92,6 @@ def get_minio_credentials(url):
 def get_authorization_headers(url, resource):
     minio_key, minio_secret, minio_token = get_minio_credentials(url)
 
-    content_type = 'application/octet-stream'
     date = formatdate(timeval=None, localtime=False, usegmt=True)
     to_sign = "GET\n\n\n%s\nx-amz-security-token:%s\n/%s/%s" % (date,
                                                                 minio_token,

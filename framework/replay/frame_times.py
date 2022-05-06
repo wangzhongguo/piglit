@@ -29,13 +29,10 @@ try:
 except ImportError:
     import json
 
-from enum import Enum, unique
 from os import path
 
-from framework import core
 from framework import status
 from framework.replay import backends
-from framework.replay.backends.apitrace import APITraceBackend
 from framework.replay import query_traces_yaml as qty
 from framework.replay.download_utils import ensure_file
 from framework.replay.options import OPTIONS
@@ -69,9 +66,9 @@ def _run_trace(trace_path):
 
     frame_times = _replay(path.join(OPTIONS.db_path, trace_path))
     if frame_times is None:
-       print('[frame_times] error')
+        print('[frame_times] error')
     else:
-       print('[frame_times] {}'.format(len(frame_times)))
+        print(f'[frame_times] {format(len(frame_times))}')
 
     json_result['images'] = [
         {'image_desc': trace_path,

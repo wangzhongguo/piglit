@@ -27,7 +27,6 @@
 
 """ Module providing an apitrace dump backend for replayer """
 
-import os
 import subprocess
 import sys
 
@@ -119,7 +118,6 @@ class APITraceBackend(DumpBackend):
                 'Invalid trace_path: "{}" tried to be dumped '
                 'by the APITraceBackend.\n'.format(self._trace_path))
 
-
     def _get_last_frame_call(self):
         cmd_wrapper = self._retrace_cmd[:-1]
         if cmd_wrapper:
@@ -137,10 +135,10 @@ class APITraceBackend(DumpBackend):
         logoutput = '[dump_trace_images] Running: {}\n'.format(
             ' '.join(cmd)) + ret.stdout.decode(errors='replace')
         print(logoutput)
-        for l in reversed(ret.stdout.decode(errors='replace').splitlines()):
-            s = l.split(None, 1)
-            if s and s[0].isnumeric():
-                return int(s[0])
+        for line in reversed(ret.stdout.decode(errors='replace').splitlines()):
+            split = line.split(None, 1)
+            if split and split[0].isnumeric():
+                return int(split[0])
         return -1
 
     @dump_handler
@@ -172,6 +170,7 @@ class APITraceBackend(DumpBackend):
                                    self._trace_path]
         ret = _run_command(cmd, None)
         return _collect_frame_times(ret.stdout.decode().splitlines())
+
 
 REGISTRY = Registry(
     extensions=['.trace', '.trace-dxgi'],

@@ -52,6 +52,7 @@ _VERSION_RE = re.compile(r'\s*GFXReconstruct Version\s*([0-9]\.[0-9]\.[0-9])')
 
 _TOTAL_FRAMES_RE = re.compile(r'\s*Total frames:\s*([0-9]*)')
 
+
 class GFXReconstructBackend(DumpBackend):
     """ replayer's GFXReconstruct dump backend
 
@@ -86,7 +87,7 @@ class GFXReconstructBackend(DumpBackend):
         try:
             frames = re.search(_TOTAL_FRAMES_RE, lines[2])
             return int(frames.group(1))
-        except:
+        except Exception:
             return -1
 
     def _check_version(self, gfxrecon_replay_bin):
@@ -97,7 +98,7 @@ class GFXReconstructBackend(DumpBackend):
         try:
             v = re.search(_VERSION_RE, lines[1])
             current = version.Version(v.group(1))
-        except:
+        except Exception:
             raise DumpBackendError(
                 '[dump_trace_images] Unable to check the current '
                 'gfxrecon-replay version.')
@@ -130,8 +131,8 @@ class GFXReconstructBackend(DumpBackend):
         self._run_logged_command(cmd, None)
         for c in self._calls:
             bmp = '{}_frame_{}.bmp'.format(path.join(self._output_dir,
-                                                    'screenshot'),
-                                          c)
+                                                     'screenshot'),
+                                           c)
             outputfile = '{}-{}.png'.format(outputprefix, c)
             print('Writing: {} to {}'.format(bmp, outputfile))
             Image.open(bmp).save(outputfile)
