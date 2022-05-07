@@ -207,7 +207,7 @@ create_shader_sources(char *vertex, char *fragment)
 		"void main() { gl_Position = vec4(piglit_vertex*2.0-1.0, 0.0, 1.0); pos = piglit_vertex; }\n";
 
 	int glsl_major, glsl_minor, glsl_ver;
-	bool use_gl_sample_position, use_interpolate_at_sample;
+	bool use_gl_sample_position = false, use_interpolate_at_sample = false;
 
 	piglit_get_glsl_version(NULL, &glsl_major, &glsl_minor);
 	glsl_ver = glsl_major*100 + glsl_minor;
