@@ -94,7 +94,7 @@ PIGLIT_CONFIG = PiglitConfig(allow_no_value=True)
 
 def get_config(arg=None):
     if arg:
-        PIGLIT_CONFIG.read_file(open(arg))
+        PIGLIT_CONFIG.read_file(arg)
     else:
         # Load the piglit.conf. First try looking in the current directory,
         # then trying the XDG_CONFIG_HOME, then $HOME/.config/, finally try the
