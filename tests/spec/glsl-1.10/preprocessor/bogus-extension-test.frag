@@ -4,7 +4,7 @@
  * [end config]
  */
 
-// Test using a non-existant function.  Should not compile.
+// Test using a non-existent function.  Should not compile.
 #extension GL_FOO_bar: require
 void main()
 {

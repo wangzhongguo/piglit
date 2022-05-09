@@ -4,7 +4,7 @@
 //
 // [end config]
 
-//mutiple line macros - test case.
+//multiple line macros - test case.
 
 #define test 5
 #define t1 1

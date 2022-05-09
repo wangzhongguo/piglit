@@ -33,9 +33,9 @@ import pytest
 # pylint: disable=invalid-name
 
 posix = pytest.mark.skipif(
-    os.name != 'posix', reason="Test is only relavent on posix systems.")
+    os.name != 'posix', reason="Test is only relevant on posix systems.")
 windows = pytest.mark.skipif(
-    os.name != 'nt', reason="Test is only relavent on Microsoft Windows.")
+    os.name != 'nt', reason="Test is only relevant on Microsoft Windows.")
 linux = pytest.mark.skipif(
     not sys.platform.startswith('linux'),
-    reason="Test is only relavent on Linux OSes.")
+    reason="Test is only relevant on Linux OSes.")

@@ -13,7 +13,7 @@ out vec4 piglit_fragcolor;
 void main()
 {
     /* Create a value that, if it were a number, would have to be > 0.  Due to
-     * possilbe flush-to-zero semantics, pretty much anything involving
+     * possible flush-to-zero semantics, pretty much anything involving
      * multiplication or division can be zero.  However, gt_zero + ge_zero is
      * gt_zero.
      */

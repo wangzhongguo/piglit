@@ -40,7 +40,7 @@
  * This extension avoids adding a constant number even in an intermediate
  * step which would destroy the effective depth precision possible with
  * the floating point depth buffers.
- * Roughtly in numbers:
+ * Roughly in numbers:
  * Two fragments at 5000001 and 5000000 \about 5000001*(1 - eps) distance
  * from the eye point should yield to different values in the depth buffer.
  * The same goes for about any fragment distance x that you should be able

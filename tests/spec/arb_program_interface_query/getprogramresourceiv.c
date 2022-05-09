@@ -820,7 +820,7 @@ check_prop(GLuint prog, GLenum programInterface, int index, const char *name,
 			break;
 		}
 
-		/* harcode the index test for GL_ATOMIC_COUNTER_BUFFER */
+		/* hardcode the index test for GL_ATOMIC_COUNTER_BUFFER */
 		if (programInterface == GL_ATOMIC_COUNTER_BUFFER) {
 
 			if (values[0] != 0) {

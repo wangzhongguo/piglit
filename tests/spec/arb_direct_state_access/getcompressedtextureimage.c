@@ -223,7 +223,7 @@ getTexImage(bool doPBO, GLenum target, GLubyte *data,
 	 */
 	if (target == GL_TEXTURE_CUBE_MAP)
 		comp_size *= num_faces;
-	printf("\tThe size of the texture in bytes is %d.\n", comp_size);
+	printf("\the size of the texture in bytes is %d.\n", comp_size);
 
 	/* Show the uncompressed data. */
 	show_image(data, num_layers * num_faces, "Data Before Compression");

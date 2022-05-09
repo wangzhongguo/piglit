@@ -194,7 +194,7 @@ test_getsubimage(GLenum target,
 		y1 = MAX2(1, mip_height / 3);
 		z1 = MAX2(1, mip_depth / 3);
 		if (intFormat == GL_COMPRESSED_RGBA_S3TC_DXT5_EXT) {
-			/* x1, y1 must be a multipe of 4 */
+			/* x1, y1 must be a multiple of 4 */
 			x1 &= ~0x3;
 			y1 &= ~0x3;
 		}

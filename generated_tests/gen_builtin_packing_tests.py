@@ -944,7 +944,7 @@ def func_info(name, requirements):
     - vector_type: The type of the GLSL function's parameter  or return value.
       E.g., vec4 for a 4x8 function and vec2 for a 2x16 function.
 
-    - requirements: A set of API/extension requirments to be listed in the
+    - requirements: A set of API/extension requirements to be listed in the
       .shader_test's [requires] section.
 
     - exact: Whether the generated results must be exact (e.g., 0.0 and 1.0

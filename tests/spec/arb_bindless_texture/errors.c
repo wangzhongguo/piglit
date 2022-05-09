@@ -299,7 +299,7 @@ check_MakeImageHandleResident_invalid_enum(void *data)
 	 *  <access> specifies whether the texture bound to the image handle
 	 *  will be treated as READ_ONLY, WRITE_ONLY, or READ_WRITE."
 	 *
-	 * NOTE: The spec doesn't explicitely say that INVALID_ENUM should
+	 * NOTE: The spec doesn't explicitly say that INVALID_ENUM should
 	 * be returned, but I think it makes sense (like NVIDIA).
 	 */
 	tex = piglit_rgbw_texture(GL_RGBA32F, 16, 16, GL_FALSE, GL_FALSE,

@@ -60,14 +60,14 @@ clear_buffer(GLenum target)
 {
 	if (piglit_is_extension_supported("GL_ARB_clear_buffer_object")) {
 		/* Clear the buffer just to make the device busy, so that
-		 * the driver can't optimize MapBufferRange to unsychronized
+		 * the driver can't optimize MapBufferRange to unsynchronized
 		 * without explicit_flush.
 		 */
 		glClearBufferData(target, GL_R32I, GL_RED_INTEGER, GL_INT, NULL);
 	}
 }
 
-/* This test relies on simple patterns, so using offets which are multiples of
+/* This test relies on simple patterns, so using offsets which are multiples of
  * 0x100 is bad
  */
 void

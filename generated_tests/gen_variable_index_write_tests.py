@@ -186,7 +186,7 @@ class TestParams(object):
         """Generate the matrix used in a test section.
 
         This will take the matrix used by the test, and replace specific values
-        with sentinal values, and return the matrix as a string.
+        with sentinel values, and return the matrix as a string.
 
         """
         bad = ['666.0', '777.0', '888.0', '999.0']

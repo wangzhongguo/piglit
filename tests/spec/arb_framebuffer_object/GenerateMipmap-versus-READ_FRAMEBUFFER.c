@@ -70,7 +70,7 @@ piglit_init(int argc, char **argv)
 		fprintf(stderr,
 			"Either OpenGL 3.0, or GL_ARB_framebuffer_object, or "
 			"GL_EXT_framebuffer_object and GL_EXT_framebuffer_blit "
-			"is requred.\n");
+			"is required.\n");
 		piglit_report_result(PIGLIT_SKIP);
 	}
 

@@ -63,7 +63,7 @@ NO_OPS = [status.SKIP, status.NOTRUN]
 
 @pytest.mark.raises(exception=status.StatusException)
 def test_bad_lookup():
-    """status.status_lookup: An unexepcted value raises a StatusException"""
+    """status.status_lookup: An unexpected value raises a StatusException"""
     status.status_lookup('foobar')
 
 

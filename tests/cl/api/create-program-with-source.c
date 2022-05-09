@@ -142,7 +142,7 @@ piglit_cl_test(const int argc,
 		     "Create program with 1 source string and defined length");
 		test(env->context->cl_ctx, 1, &strings[i], NULL,
 		     CL_SUCCESS, &result,
-		     "Create program with 1 source string and lenghts == NULL");
+		     "Create program with 1 source string and lengths == NULL");
 		
 		/* all, i-th length is 0 */
 		partial_lengths[i] = 0;
@@ -150,7 +150,7 @@ piglit_cl_test(const int argc,
 		
 		test(env->context->cl_ctx, 2, strings, partial_lengths,
 		     CL_SUCCESS, &result,
-		     "Create program with multiple source strings and only some lenghts defined (others are NULL)");
+		     "Create program with multiple source strings and only some lengths defined (others are NULL)");
 
 		free(partial_lengths);
 	}
@@ -161,7 +161,7 @@ piglit_cl_test(const int argc,
 	     "Create program with multiple source strings and defined lengths");
 	test(env->context->cl_ctx, 2, strings, NULL,
 	     CL_SUCCESS, &result,
-	     "Create program with multiple source strings and lenghts == NULL");
+	     "Create program with multiple source strings and lengths == NULL");
 	
 	
 	/*** Errors ***/

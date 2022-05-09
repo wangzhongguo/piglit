@@ -135,7 +135,7 @@ class TestTestResult(object):
                 backends.json.piglit_decoder, not by the from_dict method of
                 TestResult. So in this case the test is that the object is a
                 dictionary, not a TimeAttribute because this method shouldn't
-                make the coversion.
+                make the conversion.
 
                 """
                 # pylint: disable=unsubscriptable-object
@@ -423,7 +423,7 @@ class TestStringDescriptor(object):
         assert test.val == 'foo'
 
     def test_set_str_unicode_literals(self, test):
-        """results.StringDescriptor.__set__: handles unicode litterals in strs.
+        """results.StringDescriptor.__set__: handles unicode literals in strs.
         """
         test.val = '\ufffd'
         assert test.val == '�'

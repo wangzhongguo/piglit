@@ -326,7 +326,7 @@ run_subtest(int n_streams, int array_sizes[], int stream, GLuint query_type,
 	} else if (!strcmp(test_type, "buffer_object")) {
 		pass = overflow_buffer_object(query, expected);
 	} else {
-		printf("Unkown test.\n");
+		printf("Unknown test.\n");
 		pass = PIGLIT_FAIL;
 	}
 

@@ -27,7 +27,7 @@
 
 /** @file useshaderprogram-flushverts-1.c
  *
- * Tests that a change in the shader progarm results in previous
+ * Tests that a change in the shader program results in previous
  * vertices getting flushed correctly with the previous shader.
  */
 

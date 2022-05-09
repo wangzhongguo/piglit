@@ -38,7 +38,7 @@ void main()
 	/* This is INTENTIONALLY not a loop.  Putting it in a loop causes the
 	 * optimization that generates the extract instructions to trigger
 	 * before the shift count is known to be a constant.  The effectively
-	 * prevents the bad code generation in the i965 driver from occuring.
+	 * prevents the bad code generation in the i965 driver from occurring.
 	 */
 	i = 0;
 	result = (ival[i] >> (i * 8u)) & 0x0FFul;

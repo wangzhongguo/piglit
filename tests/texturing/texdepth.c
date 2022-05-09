@@ -305,13 +305,13 @@ static struct test_step Tests[] = {
 	{ test_AmbientShadow, GL_GEQUAL, "Ambient + ARB_shadow: GL_GEQUAL" },
 	{ test_AmbientShadow, GL_GREATER, "Ambient + EXT_shadow_func: GL_GREATER" },
 	{ test_AmbientShadow, GL_ALWAYS, "Ambient + EXT_shadow_func: GL_ALWAYS" },
-	{ test_Homogenous, GL_NEVER, "homogenous: GL_NEVER" },
-	{ test_Homogenous, GL_LESS, "homogenous: GL_LESS" },
-	{ test_Homogenous, GL_LEQUAL, "homogenous: GL_LEQUAL" },
+	{ test_Homogenous, GL_NEVER, "homogeneous: GL_NEVER" },
+	{ test_Homogenous, GL_LESS, "homogeneous: GL_LESS" },
+	{ test_Homogenous, GL_LEQUAL, "homogeneous: GL_LEQUAL" },
 	/* don't test GL_EQUAL and GL_NOTEQUAL: they're bound to be unreliable due to precision problems */
-	{ test_Homogenous, GL_GEQUAL, "homogenous: GL_GEQUAL" },
-	{ test_Homogenous, GL_GREATER, "homogenous: GL_GREATER" },
-	{ test_Homogenous, GL_ALWAYS, "homogenous: GL_ALWAYS" },
+	{ test_Homogenous, GL_GEQUAL, "homogeneous: GL_GEQUAL" },
+	{ test_Homogenous, GL_GREATER, "homogeneous: GL_GREATER" },
+	{ test_Homogenous, GL_ALWAYS, "homogeneous: GL_ALWAYS" },
 };
 #define NumTests (ARRAY_SIZE(Tests))
 

@@ -26,7 +26,7 @@
  *
  * This file defines the functions which can be utilized to develop
  * new piglit test cases. These functions initialize a framebuffer
- * object based on paramaters passed.
+ * object based on parameters passed.
  */
 #include "piglit-fbo.h"
 using namespace piglit_util_fbo;

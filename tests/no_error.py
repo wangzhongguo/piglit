@@ -15,7 +15,7 @@ profile = TestProfile()
 profile.filters = _profile1.filters + _profile2.filters
 
 # Add a modified version of each PiglitGLTest as a khr_no_error variant.
-# Shader runner doesn't explitly test for expected errors so we add shader
+# Shader runner doesn't explicitly test for expected errors so we add shader
 # tests as is. We actively filter GLSL parser and any other type of tests.
 for name, test in itertools.chain(_profile1.test_list.items(),
                                   _profile2.test_list.items()):

@@ -284,7 +284,7 @@ if os.name == 'posix':
                     # unless there was no line
                     self._last_message = lines[-1] if lines else None
             except Exception:
-                # if an error occured, we consider there are no new messages
+                # if an error occurred, we consider there are no new messages
                 self._new_messages = []
                 pass
 

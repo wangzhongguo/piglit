@@ -28,7 +28,7 @@
  * texture where the first four texels are cleared to known values
  * using separate calls to glClearTexSubImage. The values are chosen
  * to potentially trigger problems with signed conversions. The rest
- * of the texture is initalised to zeroes. The textures are then read
+ * of the texture is initialised to zeroes. The textures are then read
  * back with glGetTexImage and compared with the expected values.
  */
 

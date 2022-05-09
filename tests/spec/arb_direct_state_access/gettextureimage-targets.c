@@ -58,7 +58,7 @@ init_layer_data(GLubyte *layer_data, int num_layers)
 				int b = (z + 1) * 255 / (num_layers - 1);
 				int a = x ^ y ^ z;
 
-				/* each 4x4 block constains only one color (for S3TC) */
+				/* each 4x4 block contains only one color (for S3TC) */
 				for (i = 0; i < 4; i++) {
 					for (j = 0; j < 4; j++) {
 						data[((y + j) * IMAGE_WIDTH + x

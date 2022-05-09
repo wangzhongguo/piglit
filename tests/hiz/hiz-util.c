@@ -188,7 +188,7 @@ hiz_delete_fbo(GLuint fbo)
 /* ------------------------------------------------------------------------ */
 
 /**
- * \name hiz_run_depth_test utilties
+ * \name hiz_run_depth_test utilities
  *
  * Utilities for testing depth testing.
  *
@@ -281,7 +281,7 @@ hiz_run_test_depth_test_window()
 /* ------------------------------------------------------------------------ */
 
 /**
- * \name hiz_run_depth_read utilties
+ * \name hiz_run_depth_read utilities
  *
  * Utilities for testing depth reads.
  *
@@ -385,7 +385,7 @@ hiz_run_test_depth_read_window()
 /* ------------------------------------------------------------------------ */
 
 /**
- * \name hiz_run_stencil_test utilties
+ * \name hiz_run_stencil_test utilities
  *
  * Utilities for testing stencil testing.
  *
@@ -492,7 +492,7 @@ hiz_run_test_stencil_test_window()
 /* ------------------------------------------------------------------------ */
 
 /**
- * \name hiz_run_stencil_read utilties
+ * \name hiz_run_stencil_read utilities
  *
  * Utilities for testing the reading of the stencil buffer.
  *

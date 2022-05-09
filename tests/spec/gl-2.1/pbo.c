@@ -1071,7 +1071,7 @@ piglit_display(void)
 		{ "test_tex_sub_image", "", test_tex_sub_image, NULL },
 		{ "test_polygon_stip", "", test_polygon_stip, NULL },
 		{ "test_error_handling", "", test_error_handling, NULL },
-		{ NULL, NULL, NULL, NULL } /* End of list sentinal */
+		{ NULL, NULL, NULL, NULL } /* End of list sentinel */
 	};
 
 	result = piglit_run_selected_subtests(funcs, NULL, 0, result);

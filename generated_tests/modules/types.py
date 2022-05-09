@@ -114,7 +114,7 @@ class Type(object):
     signed  -- True if the type is a signed type
     float   -- True if the type is a floating point type
     size    -- The integer size of the type (8, 16, 32, 64, 128, etc)
-    name    -- A formated string name of the type. (float, double, int64, ...)
+    name    -- A formatted string name of the type. (float, double, int64, ...)
 
     """
     def __init__(self, name, integer=False, signed=False, floating=False,

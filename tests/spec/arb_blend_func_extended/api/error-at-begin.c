@@ -30,7 +30,7 @@
  * implicitly calls Begin if any draw buffer has a blend function requiring the
  * second color input (SRC1_COLOR, ONE_MINUS_SRC1_COLOR, SRC1_ALPHA or
  * ONE_MINUS_SRC1_ALPHA), and a framebuffer is bound that has more than
- * the value of MAX_DUAL_SOURCE_DRAW_BUFFERS-1 active color attachements."
+ * the value of MAX_DUAL_SOURCE_DRAW_BUFFERS-1 active color attachments."
  */
 #include "piglit-util-gl.h"
 

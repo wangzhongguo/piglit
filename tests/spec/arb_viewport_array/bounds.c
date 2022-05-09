@@ -74,7 +74,7 @@ viewport_bounds(GLint maxVP)
 	bool pass = true;
 	int i;
 
-	/* intial values for x,y,w,h */
+	/* initial values for x,y,w,h */
 	for (i = 0; i < maxVP; i++) {
 		glGetFloati_v(GL_VIEWPORT, i, vp);
 		if (vp[0] != 0.0 || vp[1] != 0.0 ||
@@ -154,7 +154,7 @@ depth_range_bounds(GLint maxVP)
 #endif
 	int i;
 
-	/* intial values for near, far are 0.0, 1.0 repsectively */
+	/* initial values for near, far are 0.0, 1.0 respectively */
 	for (i = 0; i < maxVP; i++) {
 #ifdef PIGLIT_USE_OPENGL
 		glGetDoublei_v(GL_DEPTH_RANGE, i, dr);
@@ -219,7 +219,7 @@ scissor_bounds(GLint maxVP)
 	bool pass = true;
 	int i;
 
-	/* intial values for left, bottom, width, height */
+	/* initial values for left, bottom, width, height */
 	for (i = 0; i < maxVP; i++) {
 		glGetIntegeri_v(GL_SCISSOR_BOX, i, sc);
 		if (sc[0] != 0 || sc[1] != 0 || sc[2] != piglit_width ||

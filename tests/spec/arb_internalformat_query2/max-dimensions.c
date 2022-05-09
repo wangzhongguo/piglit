@@ -316,7 +316,7 @@ try(const GLenum *targets, unsigned num_targets,
                                 value_test = test_data_is_unsupported_response(data, pname);
                         } else {
                                 /*
-                                 * If suppported and enough dimensions, we compare against the values
+                                 * If supported and enough dimensions, we compare against the values
                                  * returned by GetInteger
                                  */
                                 value_test = check_params_against_get_integer(data,
@@ -607,7 +607,7 @@ check_against_combined_dimensions(test_data *data,
  *
  * This method compares against zero if unsupported. If supported it
  * computes the value using MAX_WIDTH, MAX_HEIGHT, MAX_DEPTH,
- * MAX_LAYERS and SAMPLES, and compare it agains the returned value.
+ * MAX_LAYERS and SAMPLES, and compare it against the returned value.
  */
 static bool
 try_max_combined_dimensions(const GLenum *targets, unsigned num_targets,

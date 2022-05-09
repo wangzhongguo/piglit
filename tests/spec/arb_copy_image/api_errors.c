@@ -241,7 +241,7 @@ test_compressed_alignment_errors()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
 			GL_NEAREST_MIPMAP_NEAREST);
 
-	/* Check for alignment constaints */
+	/* Check for alignment constraints */
 	/* bad width = 21 */
 	glCopyImageSubData(tex[0], GL_TEXTURE_2D, 0, 0, 0, 0,
 			   tex[1], GL_TEXTURE_2D, 0, 0, 0, 0, 21, 24, 1);

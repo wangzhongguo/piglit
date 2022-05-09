@@ -88,7 +88,7 @@ test_one_prim(GLenum tf_prim, int i)
 		}
 	} else {
 		if (error != 0) {
-			printf("Unxpected GL error 0x%x when "
+			printf("Unexpected GL error 0x%x when "
 			       "rendering %s during %s transform feedback\n",
 			       error,
 			       prim_name, tf_name);

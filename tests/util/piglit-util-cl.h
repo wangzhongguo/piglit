@@ -447,14 +447,14 @@ piglit_cl_fail_build_program_with_source(piglit_cl_context context,
  * \c piglit_cl_context.
  *
  * @param context      Context on which to create and build program.
- * @param lenghts      Lenghts of binaries in \c binaries.
+ * @param lengths      Lengths of binaries in \c binaries.
  * @param binaries     Array of pointers to binaries.
  * @param options      NULL-terminated string that describes build options.
  * @return             Built program or NULL on fail.
  */
 cl_program
 piglit_cl_build_program_with_binary(piglit_cl_context context,
-                                    size_t* lenghts,
+                                    size_t* lengths,
                                     unsigned char** binaries,
                                     const char* options);
 
@@ -465,14 +465,14 @@ piglit_cl_build_program_with_binary(piglit_cl_context context,
  * in \c piglit_cl_context.
  *
  * @param context      Context on which to create and build program.
- * @param lenghts      Lenghts of binaries in \c binaries.
+ * @param lengths      Lengths of binaries in \c binaries.
  * @param binaries     Array of pointers to binaries.
  * @param options      NULL-terminated string that describes build options.
  * @return             Unsuccessfully built program or NULL on fail.
  */
 cl_program
 piglit_cl_fail_build_program_with_binary(piglit_cl_context context,
-                                         size_t* lenghts,
+                                         size_t* lengths,
                                          unsigned char** binaries,
                                          const char* options);
 
@@ -497,7 +497,7 @@ piglit_cl_create_buffer(piglit_cl_context context,
  * @param offset         Offset in buffer.
  * @param cb             Size of data in bytes.
  * @param ptr            Pointer to data to be written to buffer.
- * @return               \c true on succes, \c false otherwise.
+ * @return               \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_write_buffer(cl_command_queue command_queue,
@@ -515,7 +515,7 @@ piglit_cl_write_buffer(cl_command_queue command_queue,
  * @param command_queue  Command queue to enqueue operation on.
  * @param buffer         Memory buffer to write to.
  * @param ptr            Pointer to data to be written to buffer.
- * @return               \c true on succes, \c false otherwise.
+ * @return               \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_write_whole_buffer(cl_command_queue command_queue,
@@ -530,7 +530,7 @@ piglit_cl_write_whole_buffer(cl_command_queue command_queue,
  * @param offset         Offset in buffer.
  * @param cb             Size of data in bytes.
  * @param ptr            Pointer to data to be written from buffer.
- * @return               \c true on succes, \c false otherwise.
+ * @return               \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_read_buffer(cl_command_queue command_queue,
@@ -548,7 +548,7 @@ piglit_cl_read_buffer(cl_command_queue command_queue,
  * @param command_queue  Command queue to enqueue operation on.
  * @param buffer         Memory buffer to read from.
  * @param ptr            Pointer to data to be written from buffer.
- * @return               \c true on succes, \c false otherwise.
+ * @return               \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_read_whole_buffer(cl_command_queue command_queue,
@@ -614,7 +614,7 @@ piglit_cl_create_image(piglit_cl_context context,
  * @param origin         (x, y, z) offset in pixels.
  * @param region         (width, height, depht) size in pixels.
  * @param ptr            Pointer to data to be written to image.
- * @return               \c true on succes, \c false otherwise.
+ * @return               \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_write_image(cl_command_queue command_queue,
@@ -632,7 +632,7 @@ piglit_cl_write_image(cl_command_queue command_queue,
  * @param command_queue  Command queue to enqueue operation on.
  * @param image          Image to write to.
  * @param ptr            Pointer to data to be written to image.
- * @return               \c true on succes, \c false otherwise.
+ * @return               \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_write_whole_image(cl_command_queue command_queue,
@@ -647,7 +647,7 @@ piglit_cl_write_whole_image(cl_command_queue command_queue,
  * @param origin         (x, y, z) offset in pixels.
  * @param region         (width, height, depht) size in pixels.
  * @param ptr            Pointer to data read from image.
- * @return               \c true on succes, \c false otherwise.
+ * @return               \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_read_image(cl_command_queue command_queue,
@@ -665,7 +665,7 @@ piglit_cl_read_image(cl_command_queue command_queue,
  * @param command_queue  Command queue to enqueue operation on.
  * @param image          Image to read from.
  * @param ptr            Pointer to data read from image.
- * @return               \c true on succes, \c false otherwise.
+ * @return               \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_read_whole_image(cl_command_queue command_queue,
@@ -704,7 +704,7 @@ piglit_cl_create_kernel(cl_program program, const char* kernel_name);
  * @param arg_index    Argument index.
  * @param size         Size of argument.
  * @param arg_value    Pointer to argument value.
- * @return             \c true on succes, \c false otherwise.
+ * @return             \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_set_kernel_arg(cl_kernel kernel,
@@ -718,7 +718,7 @@ piglit_cl_set_kernel_arg(cl_kernel kernel,
  * @param kernel       Kernel for which to set an buffer argument.
  * @param arg_index    Argument index.
  * @param buffer       Buffer to be set as argument.
- * @return             \c true on succes, \c false otherwise.
+ * @return             \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_set_kernel_buffer_arg(cl_kernel kernel,
@@ -735,7 +735,7 @@ piglit_cl_set_kernel_buffer_arg(cl_kernel kernel,
  * @param global_work_size  Global work sizes.
  * @param local_work_size   Local work sizes.
  * @param ev                Location to store execution event.
- * @return                  \c true on succes, \c false otherwise.
+ * @return                  \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_enqueue_ND_range_kernel(cl_command_queue command_queue,
@@ -755,7 +755,7 @@ piglit_cl_enqueue_ND_range_kernel(cl_command_queue command_queue,
  * @param global_offset     Global offset.
  * @param global_work_size  Global work sizes.
  * @param local_work_size   Local work sizes.
- * @return                  \c true on succes, \c false otherwise.
+ * @return                  \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_execute_ND_range_kernel(cl_command_queue command_queue,
@@ -770,7 +770,7 @@ piglit_cl_execute_ND_range_kernel(cl_command_queue command_queue,
  *
  * @param command_queue     Command queue to enqueue operation on.
  * @param kernel            Kernel to be enqueued.
- * @return                  \c true on succes, \c false otherwise.
+ * @return                  \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_enqueue_task(cl_command_queue command_queue, cl_kernel kernel);
@@ -780,7 +780,7 @@ piglit_cl_enqueue_task(cl_command_queue command_queue, cl_kernel kernel);
  *
  * @param command_queue     Command queue to enqueue operation on.
  * @param kernel            Kernel to be enqueued.
- * @return                  \c true on succes, \c false otherwise.
+ * @return                  \c true on success, \c false otherwise.
  */
 bool
 piglit_cl_execute_task(cl_command_queue command_queue, cl_kernel kernel);

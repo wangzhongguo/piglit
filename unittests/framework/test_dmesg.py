@@ -205,7 +205,7 @@ class TestLinuxDmesgTimestamps(object):
 
     def test_not_timestamps(self, mocker):
         """If _last_message is populated but doesn't have a valid timestamp
-        then an PiglitFatalException shoudl be raised.
+        then an PiglitFatalException should be raised.
         """
         mocker.patch('framework.dmesg.subprocess.check_output',
                      mocker.Mock(return_value=b'foo\nbar\n'))
@@ -274,7 +274,7 @@ class TestLinuxDmesg(object):
         assert result.dmesg == '[2.0]is\n[2.5]dmesg!'
 
     def test_update_result_no_change(self):
-        """When update_result is called but no changes to dmesg have occured it
+        """When update_result is called but no changes to dmesg have occurred it
         should not set the dmesg attribute.
         """
         result = results.TestResult('pass')
@@ -342,7 +342,7 @@ class TestGetDmesg(object):
         ],
         ids=_name_get_dmesg)
     def test_get_dmesg(self, platform, dummy, expected, mocker):
-        """Test that get_dmesg returns the expected dmesg type on variuos
+        """Test that get_dmesg returns the expected dmesg type on various
         platforms with various configurations.
         """
         mocker.patch('framework.dmesg.sys.platform', platform)

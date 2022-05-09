@@ -27,7 +27,7 @@ this framework if it is ran without the -fbo argument.
 -----------------------
 
 This framework, after creating a window, uses it only for making the GL
-context current and attemtps to prevent it from appearing on the screen. For
+context current and attempts to prevent it from appearing on the screen. For
 rendering, it instead creates an FBO and sets it as the read and draw buffer.
 
 If you configure Piglit to build with Waffle, each test will usually attempt

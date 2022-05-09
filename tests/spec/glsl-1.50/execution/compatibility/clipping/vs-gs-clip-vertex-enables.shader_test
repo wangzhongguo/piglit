@@ -5,7 +5,7 @@
 #
 # To verify that each enable works, the combinations of enables were
 # chosen such that:
-# - Every plane is enabled at least once and disbled at least once.
+# - Every plane is enabled at least once and disabled at least once.
 # - Every plane is enabled and disabled in a different pattern.
 #
 # Note: Some implementations have bugs related to improper coordinate

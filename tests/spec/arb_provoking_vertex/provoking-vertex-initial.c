@@ -22,7 +22,7 @@
  */
 
 /**
- * Test that the intitial value of PROVOKING_VERTEX is LAST_VERTEX_CONVENTION
+ * Test that the initial value of PROVOKING_VERTEX is LAST_VERTEX_CONVENTION
  *
  * Section 2.18(Flatshading) of OpenGL 3.2 Core says:
  * "The initial value of the provoking vertex mode is LAST_VERTEX_CONVENTION."

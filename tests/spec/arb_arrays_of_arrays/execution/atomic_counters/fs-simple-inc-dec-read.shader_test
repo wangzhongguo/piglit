@@ -25,7 +25,7 @@ void main()
 	uint v0[12];
 	uint v1[12];
 
-	/* Get all initail values of a0 */
+	/* Get all initial values of a0 */
 	v0[0] = atomicCounter(a0[0][0]);
 	v0[1] = atomicCounter(a0[0][1]);
 	v0[2] = atomicCounter(a0[0][2]);
@@ -59,7 +59,7 @@ void main()
 	atomicCounterDecrement(a1[0][1][1]);
 	atomicCounterDecrement(a1[2][0][1]);
 
-	/* Get all initail values of a1 */
+	/* Get all initial values of a1 */
 	v0[0] = atomicCounter(a1[0][0][0]);
 	v0[1] = atomicCounter(a1[0][0][1]);
 	v0[2] = atomicCounter(a1[0][1][0]);

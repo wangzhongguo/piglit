@@ -133,7 +133,7 @@ piglit_check_gl_error_(GLenum expected_error, const char *file, unsigned line);
 /**
  * \brief Drain all GL errors.
  *
- * Repeatly call glGetError and discard errors until it returns GL_NO_ERROR.
+ * Repeatedly call glGetError and discard errors until it returns GL_NO_ERROR.
  */
 void piglit_reset_gl_error(void);
 

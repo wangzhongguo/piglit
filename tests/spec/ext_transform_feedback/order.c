@@ -38,7 +38,7 @@
  * correct order by using a vertex shader whose execution time is
  * dramatically different for different vertices.
  *
- * The test requries two command line arguments:
+ * The test requires two command line arguments:
  *
  * - drawcall indicates which drawing function should be called.  A
  *   value of "arrays" causes DrawArrays() to be used.  A value of

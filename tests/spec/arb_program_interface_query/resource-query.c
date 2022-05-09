@@ -303,8 +303,8 @@ static const char *st_r_tes_sub_uni[] = {"TESS_EVALUATION", NULL};
  * include all active variables for the interface, including any active
  * built-in variables.
  *
- * For PROGRAM_INPUT and PROGRAM_OUTPUT interfaces for shaders that recieve
- * or produce patch primitves, the active resource list will include both
+ * For PROGRAM_INPUT and PROGRAM_OUTPUT interfaces for shaders that receive
+ * or produce patch primitives, the active resource list will include both
  * per-vertex and per-patch inputs and outputs.
  *
  * For the TRANSFORM_FEEDBACK_VARYING interface, the active resource list

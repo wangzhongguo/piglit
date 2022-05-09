@@ -277,7 +277,7 @@ test_miptrees(void* input_type)
 	int block_dims;
 
 	if (is_srgb_test)
-		/* Loosen up the tolerence for sRGB tests. This will allow testing
+		/* Loosen up the tolerance for sRGB tests. This will allow testing
 		 * sRGB formats which have known precision issues in void extent
 		 * blocks. See khronos bug#11294 for details.
 		 */

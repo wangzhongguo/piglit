@@ -251,7 +251,7 @@ testFramebufferBlitLayered(int x, int y, bool srcLayered, bool dstLayered)
 		return false;
 	}
 
-	/* Check for if any errors have occured */
+	/* Check for if any errors have occurred */
 	if (!piglit_check_gl_error(GL_NO_ERROR)) {
 		printf("Error setting up framebuffers for test.\n");
 		return false;
@@ -286,7 +286,7 @@ testFramebufferBlitLayered(int x, int y, bool srcLayered, bool dstLayered)
 	glDeleteTextures(1, &srcTex);
 	glDeleteTextures(1, &dstTex);
 
-	/* Check for if any errors have occured */
+	/* Check for if any errors have occurred */
 	if (!piglit_check_gl_error(GL_NO_ERROR)) {
 		printf("Error setting up framebuffers for test.\n");
 		return false;
@@ -324,7 +324,7 @@ piglit_display(void)
 	pass = testFramebufferBlitLayered(2 * texWidth, texDepth * texHeight,
                                         false, false) && pass;
 
-	/* Check for if any errors have occured */
+	/* Check for if any errors have occurred */
 	pass = piglit_check_gl_error(GL_NO_ERROR) && pass;
 
 	piglit_present_results();

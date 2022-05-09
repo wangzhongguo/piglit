@@ -128,7 +128,7 @@ int asprintf(char **strp, const char *fmt, ...)
  *
  * The null-terminated string \a separators is a list of characters at
  * which to perform the splits. For example, if separators is " ,", then
- * the function will split the string at each occurence of ' ' and ','.
+ * the function will split the string at each occurrence of ' ' and ','.
  */
 const char**
 piglit_split_string_to_array(const char *string, const char *separators)

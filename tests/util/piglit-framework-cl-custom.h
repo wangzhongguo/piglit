@@ -73,7 +73,7 @@ piglit_cl_test_run_t piglit_cl_custom_test_run;
  * This macro must be used to create an CUSTOM test configuration
  * instance and must be followed by \c PIGLIT_CL_TEST_CUSTOM_CONFIG_END macro.
  *
- * In beetween \c PIGLIT_CL_CUSTOM_TEST_CONFIG_BEGIN and
+ * In between \c PIGLIT_CL_CUSTOM_TEST_CONFIG_BEGIN and
  * \c PIGLIT_CL_CUSTOM_TEST_CONFIG_END macros you can set the test
  * configuration values.
  *

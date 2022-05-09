@@ -115,12 +115,12 @@ class Status(object):
 
     This class creatse the necessary magic values to use python's rich
     comparison methods. This allows two objects to be compared using common
-    operators like <. >, ==, etc. It also alows them to be looked up in
+    operators like <. >, ==, etc. It also allows them to be looked up in
     containers using ``for x in []`` syntax.
 
     This class is meant to be immutable, it (ab)uses two tools to provide this
     psuedo-immutability: the property decorator, and the __slots__ attribute to
-    1: make the three attributes getters, therefor unwritable, and 2: make
+    1: make the three attributes getters, therefore unwritable, and 2: make
     adding additional attributes impossible
 
     Arguments:
@@ -137,7 +137,7 @@ class Status(object):
     def __init__(self, name, value, fraction=(0, 1)):
         assert isinstance(value, int), type(value)
         # The object is immutable, so calling self.foo = foo will raise a
-        # TypeError. Using setattr from the parrent object works around this.
+        # TypeError. Using setattr from the parent object works around this.
         self.__name = str(name)
         self.__value = value
         self.__fraction = fraction
@@ -202,7 +202,7 @@ class Status(object):
 
 
 class NoChangeStatus(Status):
-    """ Special sublcass of status that overides rich comparison methods
+    """ Special sublcass of status that overrides rich comparison methods
 
     This special class of a Status is for use with NOTRUN and SKIP, it never
     returns that it is a pass or regression

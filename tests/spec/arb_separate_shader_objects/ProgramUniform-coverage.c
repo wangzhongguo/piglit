@@ -219,7 +219,7 @@ random_uints(unsigned int *v, unsigned count)
  * \name Data checking functions.
  *
  * Each of these functions verifies that one set of data matches another set
- * of data.  If a discrepency is found, the failing location is logged.
+ * of data.  If a discrepancy is found, the failing location is logged.
  */
 /*@{*/
 static bool

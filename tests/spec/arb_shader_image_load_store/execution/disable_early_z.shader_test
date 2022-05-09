@@ -1,4 +1,4 @@
-# Test that Z runs lates when the fragment shader contains stores.
+# Test that Z runs later when the fragment shader contains stores.
 #
 [require]
 GL >= 3.3

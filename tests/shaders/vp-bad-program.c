@@ -79,7 +79,7 @@ piglit_display(void)
 	}
 
 	/* Check that we correctly produce GL_INVALID_OPERATION when rendering
-	 * with an invalid/non-existant program.
+	 * with an invalid/non-existent program.
 	 */
         glBindProgramARB(GL_VERTEX_PROGRAM_ARB, 99);
         glEnable(GL_VERTEX_PROGRAM_ARB);
@@ -104,7 +104,7 @@ piglit_display(void)
 	}
 
 	/* Check that we correctly produce GL_INVALID_OPERATION when doing
-	 * glDrawArrays with an invalid/non-existant program.
+	 * glDrawArrays with an invalid/non-existent program.
 	 */
 
 	glVertexPointer(3, GL_FLOAT, 0, vertcoords);

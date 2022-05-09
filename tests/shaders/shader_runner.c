@@ -727,7 +727,7 @@ program_binary_save_restore(bool script_command)
 	free(binary);
 	if (!piglit_check_gl_error(GL_NO_ERROR)) {
 		fprintf(stderr, "glProgramBinary error "
-			"(should not happend according to spec.)\n");
+			"(should not happen according to spec.)\n");
 		piglit_report_result(PIGLIT_FAIL);
 	}
 

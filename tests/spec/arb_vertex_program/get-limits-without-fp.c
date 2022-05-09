@@ -29,7 +29,7 @@
  * \file get-vp-limit-without-fp.c
  *
  * Test for the crash reported in bugs.freedesktop.org bug #24066.
- * This occured when the native limits of a vertex program are queried
+ * This occurred when the native limits of a vertex program are queried
  * before a fragment program has been setup.
  */
 

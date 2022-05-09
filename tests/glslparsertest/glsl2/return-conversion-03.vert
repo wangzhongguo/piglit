@@ -9,7 +9,7 @@
  *     by other sections of this specification."
  *
  * Neither section 6.1 (Function Definitions) nor section 6.4 (Jumps) make any
- * mention of implicit conversions occuring on the expression of a return
+ * mention of implicit conversions occurring on the expression of a return
  * statement.
  */
 #version 120

@@ -141,7 +141,7 @@ filter(const TestCase &test, float coord, GLint &coord0, GLint &coord1, float &w
 	switch (test.filter) {
 	case GL_NEAREST:
 		coord0 = roundf(coord);
-		// ambigious
+		// ambiguous
 		assert(fabsf(coord0 - coord) != 0.5f);
 		weight = 0.0f;
 		break;

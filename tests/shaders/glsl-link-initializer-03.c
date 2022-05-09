@@ -27,7 +27,7 @@
  *
  * Each of the 3 shaders involved in this test have a global variable called
  * \c global_variable.  Two of the shaders have (differing) initializers for
- * this variable, and the other lacks an initalizer.  The test verifies that
+ * this variable, and the other lacks an initializer.  The test verifies that
  * the shader lacking an initializer can successfully be linked with each of
  * the shaders that have initalizers.
  *

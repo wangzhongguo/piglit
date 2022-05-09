@@ -208,7 +208,7 @@ class VerboseLog(QuietLog):
 
         For the verbose logger there are times that one wants both an
         overwritten line, and a line that is static. This method adds the
-        ability to print a newline charcater at the end of the line.
+        ability to print a newline character at the end of the line.
 
         This is useful for the non-status lines (running: <name>, and <status>:
         <name>), since these lines should be be overwritten, but the running

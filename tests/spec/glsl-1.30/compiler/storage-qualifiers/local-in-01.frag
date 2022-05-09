@@ -3,7 +3,7 @@
 // glsl_version: 1.30
 // [end config]
 //
-// Declare a local varaible with 'in'.
+// Declare a local variable with 'in'.
 //
 // From section 4.3.4 of the GLSL 1.30 spec:
 //     Input variables must be declared at global scope.

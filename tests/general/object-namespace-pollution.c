@@ -161,7 +161,7 @@ lfsr(uint16_t *state)
  * Fill some memory with pseudorandom values
  *
  * Using two seed values, a pair of LFSRs are used to generate pseudorandom
- * values to fill the specified memory buffer.  Seprarate invocations with
+ * values to fill the specified memory buffer.  Separate invocations with
  * identical \c bytes, \c seed1, and \c seed2 parameters will generate
  * identical data.  This can be used generate data to initialize a buffer and
  * regenerate the same data to validate the buffer.

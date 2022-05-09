@@ -33,7 +33,7 @@ INITIAL_METADATA = {
 }
 
 # This is current JSON data, in raw form with only the minimum required
-# changes. This does not contain piglit specifc objects, only strings, floats,
+# changes. This does not contain piglit specific objects, only strings, floats,
 # ints, and Nones (instead of JSON's null)
 JSON = {
     "results_version": 10,

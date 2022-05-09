@@ -29,7 +29,7 @@ varying out float gs_out;
 
 void main()
 {
-	/* This sould fail at link time once the size of the outer dimension of
+	/* This should fail at link time once the size of the outer dimension of
 	 * gs_input (3) is known.
 	 */
 	float s = gs_input[3][0];

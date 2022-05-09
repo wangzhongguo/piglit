@@ -59,7 +59,7 @@ struct light7 {
 
 light3 struct_var = light3(5.0); 
 
-// Attribtue variables can only be Global
+// Attribute variables can only be Global
 attribute float flt_attrib;
 attribute vec2 vec2_attrib;
 attribute vec3 vec3_attrib;

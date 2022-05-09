@@ -278,7 +278,7 @@ void piglit_test_max_float(GLenum token, GLfloat max)
 	piglit_test_float(token, max, true);
 }
 
-/** Tests tha the range referneced by the token covers at least low-high. */
+/** Tests that the range referenced by the token covers at least low-high. */
 void piglit_test_range_float(GLenum token, GLfloat low, GLfloat high)
 {
 	const char *name = piglit_get_gl_enum_name(token);

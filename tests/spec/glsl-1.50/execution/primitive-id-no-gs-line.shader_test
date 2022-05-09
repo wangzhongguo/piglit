@@ -61,7 +61,7 @@ piglit_vertex/float/2
 # shader will draw a different color for failing pixels, and "probe all" will
 # detect the problem.
 #
-# This won't catch cases where the test doesn't draw anything.  Hopefullly
+# This won't catch cases where the test doesn't draw anything.  Hopefully
 # problems of that nature will have already been caught by other tests.
 
 clear color 0.0 1.0 0.0 1.0

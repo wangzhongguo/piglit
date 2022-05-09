@@ -50,6 +50,6 @@ int foo(int test)
 #pragma bind
 #pragma (on)
 #pragma on (on) 
-#pragma optmize(on
+#pragma optimize(on
 
  

@@ -39,7 +39,7 @@
  * restart to split it into a pair of 3-triangle strips (this ensures
  * that triangles in the first strip have the same parity in relation
  * to the strip as they have when measured by gl_PrimitiveIDIn;
- * triangles in the second strip hav opposite parity in relation to
+ * triangles in the second strip have opposite parity in relation to
  * the strip from what they have when measured by gl_PrimitiveIDIn).
  * The vertex IDs of all vertices are collected using transform
  * feedback, and checked in C to make sure it matches the expected

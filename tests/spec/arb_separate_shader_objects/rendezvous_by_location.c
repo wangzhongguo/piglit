@@ -26,13 +26,13 @@
  * Simple test for separate shader objects that use rendezvous-by-location.
  *
  * There are two ways one might expect rendezvous-by-location to fail.  One
- * predicatble failure mode is for variables between two program objects to be
- * linked in the order they appear in the shader text.  Another predicatble
+ * predictable failure mode is for variables between two program objects to be
+ * linked in the order they appear in the shader text.  Another predictable
  * failure mode is for variables between two program objects to be linked by
  * name.
  *
- * This test tries both modes using a single fragement shader program.  This
- * program outputs two varibles, a and b, with locations specified.  Two
+ * This test tries both modes using a single fragment shader program.  This
+ * program outputs two variables, a and b, with locations specified.  Two
  * fragment shader programs are created, each having input variables a and b,
  * with locations specified.  In the first case, a and b are listed in the
  * same order as in the vertex shader, but the locations are reversed (vertex

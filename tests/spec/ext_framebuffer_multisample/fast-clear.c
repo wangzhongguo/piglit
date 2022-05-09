@@ -27,7 +27,7 @@
  * Clears a multisample texture with various formats to various
  * different colors and then samples from it in a shader to ensure
  * that the expected color is returned. This includes verifying that
- * when there are components missing they are overriden to the right
+ * when there are components missing they are overridden to the right
  * value (such as GL_RED should report 0 for green and blue and 1 for
  * the alpha). The main reason to do this is that the i965 driver has
  * various different code paths to implement a fast clear optimisation

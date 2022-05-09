@@ -611,7 +611,7 @@ draw_lines_adj(GLuint vao, unsigned n)
 						       provoking_vertex, 1 + i/4);
 			set_color(gray);
 
-			// draw preceeding "wing" line
+			// draw preceding "wing" line
 			glDrawArrays(GL_LINES, i, 2);
 			// draw trailing "wing" line
 			glDrawArrays(GL_LINES, i+2, 2);

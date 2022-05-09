@@ -52,7 +52,7 @@ PIGLIT_GL_TEST_CONFIG_BEGIN
 
 PIGLIT_GL_TEST_CONFIG_END
 
-/* number of viewport/scissor rectangle divisons in x and y */
+/* number of viewport/scissor rectangle divisions in x and y */
 static const int divX=2, divY=3;
 
 /**
@@ -128,7 +128,7 @@ draw_multi_scissor_rect(void)
  * Draws a single quad full window size, with different scissor rectangles
  * and different scissor test enables for each viewport index.
  * Scissor rectangles or viewport restrict drawing to sub-area of full
- * window surface.  Geometry shader is responsible for exapnding primitves
+ * window surface.  Geometry shader is responsible for exapnding primitives
  * to cover all divX * divY viewport/scissor indices.  The function reads
  * back the expected color to test if the scissored drawing was correct.
  */

@@ -53,7 +53,7 @@ struct test_data {
 	bool msaa;
 };
 
-static struct test_data datas[] = {
+static struct test_data data[] = {
 	{ GL_CLEAR, false },
 	{ GL_SET, false },
 	{ GL_COPY, false },
@@ -88,20 +88,20 @@ static struct test_data datas[] = {
 	{ GL_OR_INVERTED, true },
 };
 
-static struct piglit_subtest tests[ARRAY_SIZE(datas) + 1];
+static struct piglit_subtest tests[ARRAY_SIZE(data) + 1];
 
 PIGLIT_GL_TEST_CONFIG_BEGIN
 
 	piglit_config = &config;
 
-	for (int i = 0; i < ARRAY_SIZE(datas); i++) {
+	for (int i = 0; i < ARRAY_SIZE(data); i++) {
 		char *name;
-		asprintf(&name, "%s%s", piglit_get_gl_enum_name(datas[i].mode),
-			datas[i].msaa ? "_MSAA" : "");
+		asprintf(&name, "%s%s", piglit_get_gl_enum_name(data[i].mode),
+			data[i].msaa ? "_MSAA" : "");
 		tests[i].name = name;
 		tests[i].option = name;
 		tests[i].subtest_func = test_logicop;
-		tests[i].data = &datas[i];
+		tests[i].data = &data[i];
 	}
 
 	config.subtests = tests;

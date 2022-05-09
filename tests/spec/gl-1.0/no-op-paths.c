@@ -30,7 +30,7 @@
  *
  *
  *     Based on the original Glean tpaths.cpp test, this test verifies
- *     that basic, trival OpenGL paths work as expected. For example,
+ *     that basic, trivial OpenGL paths work as expected. For example,
  *     glAlphaFunc(GL_GEQUAL, 0.0) should always pass and
  *     glAlphaFunc(GL_LESS, 0.0) should always fail.  We setup trivial
  *     pass and fail conditions for each of alpha test, blending, color mask,

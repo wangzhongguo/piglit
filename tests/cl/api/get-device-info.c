@@ -651,9 +651,9 @@ piglit_cl_test(const int argc,
 
 	if (env->version >= 12) {
 		// for some check we need some infos to be read before others
-		// piglit-util-cl-enum could be re ordered partialy
+		// piglit-util-cl-enum could be re ordered partially
 		// the first 10 elements are ok,
-		// after that we want to start with dependant stuff
+		// after that we want to start with dependent stuff
 		int sorted_idx;
 		cl_device_info *sorted_infos = malloc(sizeof(cl_device_info) * num_device_infos);
 		memcpy(sorted_infos, device_infos_enum, sizeof(cl_device_info) * 10);

@@ -25,7 +25,7 @@
  * \file uniform-invalid-operation.c
  *
  * From the GL_ARB_gpu_shader_fp64 spec:
- *     "regarding INVALID_OPERATION errors in Uniform* comamnds, if the type of
+ *     "regarding INVALID_OPERATION errors in Uniform* commands, if the type of
  *     the uniform declared in the shader does not match the component type and
  *     count indicated in the Uniform* command name (where a boolean uniform
  *     component type is considered to match any of the Uniform*i{v},

@@ -119,7 +119,7 @@ check_subtest(struct subtest *t)
 		return PIGLIT_FAIL;
 	}
 
-	/* verify that the new value stuck (or didnt, if we expected failure) */
+	/* verify that the new value stuck (or didn't, if we expected failure) */
 	glGetTexParameteriv(GL_TEXTURE_2D_MULTISAMPLE, t->param, &val);
 	expected_val = t->expected_error == GL_NO_ERROR ? t->value : t->initial_value;
 

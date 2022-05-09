@@ -76,7 +76,7 @@ gpb_restore_program(GLuint prog, void *binary, GLsizei length, GLenum format)
 	glProgramBinary(prog, format, binary, length);
 	if (!piglit_check_gl_error(GL_NO_ERROR)) {
 		fprintf(stderr, "glProgramBinary error "
-			"(should not happend according to spec.)\n");
+			"(should not happen according to spec.)\n");
 		piglit_report_result(PIGLIT_FAIL);
 	}
 

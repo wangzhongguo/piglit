@@ -230,7 +230,7 @@ piglit_init(int argc, char **argv)
 	}
 
 	/* check the types of the active uniforms and check which ones got
-	 * references by glGetActiveUniform for later comparaison. */
+	 * references by glGetActiveUniform for later comparison. */
 	for (i = 0; i < numUniforms; i++) {
 		struct builtin_uniform_t *uniform;
 		GLcharARB name[100];

@@ -293,7 +293,7 @@ cleanup:
 
 /**
  * Verify that eglCreateSyncKHR(), when given an empty attribute list,
- * intializes the sync object's attributes to the correct values.
+ * initializes the sync object's attributes to the correct values.
  *
  * From the EGL_KHR_fence_sync spec:
  *

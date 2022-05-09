@@ -23,7 +23,7 @@
 """ Module implementing classes for reading posix dmesg
 
 Currently this module only has the default DummyDmesg, and a LinuxDmesg.
-The method used on Linux requires that timetamps are enabled, and no other
+The method used on Linux requires that timestamps are enabled, and no other
 posix system has timestamps.
 
 On OSX and *BSD one would likely want to implement a system that reads the

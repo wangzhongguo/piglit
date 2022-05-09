@@ -287,7 +287,7 @@ static bool test_push_pop_debug_group()
 			pass = false;
 		}
 
-		/* double check that TestMessage3 didnt sneak into the log */
+		/* double check that TestMessage3 didn't sneak into the log */
 		nextMessage = 0;
 		for (i = 0; i < count; i++) {
 			if (strstr(messageLog+nextMessage, TestMessage3) != NULL) {

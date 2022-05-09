@@ -166,7 +166,7 @@ piglit_display(void)
 	bool pass = true;
 	const float clearColor[3] = { 1, 1, 0 };
 
-	/* Clear Defualt Framebuffer */
+	/* Clear Default Framebuffer */
 	glBindFramebuffer(GL_FRAMEBUFFER, piglit_winsys_fbo);
 	glClearColor(1,1,0,1);
 	glClear(GL_COLOR_BUFFER_BIT);

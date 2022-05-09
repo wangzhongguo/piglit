@@ -3,7 +3,7 @@
 // glsl_version: 1.30
 // [end config]
 //
-// Attempt to declare a local varaible with 'smooth'.
+// Attempt to declare a local variable with 'smooth'.
 
 #version 130
 

@@ -23,7 +23,7 @@
 
 /**
  * \file coverage.c
- * Attempt quering every enum in the spec.  Sanity check initial values.
+ * Attempt querying every enum in the spec.  Sanity check initial values.
  *
  * GL_NUM_PROGRAM_BINARY_FORMATS and GL_PROGRAM_BINARY_FORMATS are not
  * covered by this test because they are heavily covered by the

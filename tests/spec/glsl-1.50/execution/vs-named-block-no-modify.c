@@ -25,7 +25,7 @@
 /**
  * \file named-block-no-modify.c
  *
- * Test that uniform variables containted within a named uniform block cannot be
+ * Test that uniform variables contained within a named uniform block cannot be
  * accessed by the glUniform* commands.
  *
  * Section 2.11.4 (Uniform Variables) of the GL 3.2 spec says:

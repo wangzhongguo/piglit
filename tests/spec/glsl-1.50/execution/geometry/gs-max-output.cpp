@@ -59,7 +59,7 @@ struct testcase {
 	unsigned num_instances; /* draw instances */
 	unsigned num_points; /* draw size / count */
 	unsigned num_invocations; /* GS invocations / instances */
-	unsigned num_outputs; /* # vertex ouput per GS invocation */
+	unsigned num_outputs; /* # vertex output per GS invocation */
 	unsigned num_components; /* # extra components per GS output vertex */
 
 

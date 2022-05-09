@@ -40,7 +40,7 @@
  *
  * If the input cannot be parsed as a "foo" object, the boolean return
  * value will evaluate to false and the input string will be returned
- * as output string as-is (which mimicks the behavior of the C
+ * as output string as-is (which mimics the behavior of the C
  * standard library strto* functions).  The "foo" output argument will
  * be left in an undefined state in that case.
  */
@@ -157,7 +157,7 @@ parse_word(const char *s, const char **t, const char **rest);
  * buffer pointed to by \p t and null-terminated.
  *
  * The parse is considered to fail if the size of the result
- * (including the terminating null character) would have exceded the
+ * (including the terminating null character) would have exceeded the
  * number of characters allocated for it in the buffer as given by the
  * \p n argument.
  */

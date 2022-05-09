@@ -165,7 +165,7 @@ piglit_display(void)
 
 	piglit_present_results();
 
-	/* Checking that calling glBufferSubData updates buffer succesfully. */
+	/* Checking that calling glBufferSubData updates buffer successfully. */
 	glBindBuffer(GL_ARRAY_BUFFER, gl_vk_vb);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, vk_vb.mobj.mem_sz, checkerboard);
 	if (glGetError() != GL_NO_ERROR) {

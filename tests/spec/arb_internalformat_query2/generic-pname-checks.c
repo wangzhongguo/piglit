@@ -244,7 +244,7 @@ piglit_display(void)
 /*
  * Executes try_basic on a list of pnames/possible values.
  *
- * check_basic and try_basic are splitted because for some pnames, we
+ * check_basic and try_basic are split because for some pnames, we
  * would need to check more than just try_basic.
  */
 static bool

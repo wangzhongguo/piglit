@@ -31,7 +31,7 @@
  *     present if the static function call graph of the program contains
  *     cycles."
  *
- * This langauge leaves a lot of questions unanswered.
+ * This language leaves a lot of questions unanswered.
  *
  *     - Is the error generated at compile-time or link-time?
  *

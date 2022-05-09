@@ -31,7 +31,7 @@
  * Tests that width 1.0 AA lines are of the appropriate thickness.
  *
  * The 965 driver was rendering them so that when the line was
- * centered on a pixel it was fullly lit and when it was off the pixel
+ * centered on a pixel it was fully lit and when it was off the pixel
  * center neither of the neighbors would be lit at all.  It's quite
  * ugly.
  */

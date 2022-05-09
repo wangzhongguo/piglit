@@ -47,7 +47,7 @@ class Results(object):  # pylint: disable=too-few-public-methods
     def get_result(self, name):
         """Get all results for a single test.
 
-        Replace any missing vaules with status.NOTRUN, correctly handles
+        Replace any missing values with status.NOTRUN, correctly handles
         subtests.
 
         """
@@ -133,13 +133,13 @@ class Names(object):
 
     @lazy_property
     def regressions(self):
-        # By ensureing tha min(x, y) is >= so.PASS we eleminate NOTRUN and SKIP
+        # By ensureing that min(x, y) is >= so.PASS we eliminate NOTRUN and SKIP
         # from these pages
         return self.__diff(lambda x, y: x < y and min(x, y) >= so.PASS)
 
     @lazy_property
     def fixes(self):
-        # By ensureing tha min(x, y) is >= so.PASS we eleminate NOTRUN and SKIP
+        # By ensureing that min(x, y) is >= so.PASS we eliminate NOTRUN and SKIP
         # from these pages
         return self.__diff(lambda x, y: x > y and min(x, y) >= so.PASS)
 
@@ -296,7 +296,7 @@ def find_diffs(results, tests, comparator, handler=lambda *a: None):
     comparator -- a function with the signautre f(x, y), that returns True when
                   the test should be added to the set of diffs
 
-    Keyword Arguemnts:
+    Keyword Arguments:
     handler -- a function with the signature f(names, name, prev, cur). in the
                event of a KeyError while comparing the results with comparator,
                handler will be passed the (<the set of names>, <the current

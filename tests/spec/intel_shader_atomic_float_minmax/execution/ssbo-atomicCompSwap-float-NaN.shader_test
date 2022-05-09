@@ -17,7 +17,7 @@ layout(binding = 0, std430) buffer bufblock {
 #define POS_NAN(x) (0x7f800000u | (0x007fffffu & uint(x)))
 #define NEG_NAN(x) (0xff800000u | (0x007fffffu & uint(x)))
 
-uniform uint comparitors[] = uint[](POS_NAN(0x00ffffff),
+uniform uint comparators[] = uint[](POS_NAN(0x00ffffff),
 				    NEG_NAN(0x00ffffff),
 				    POS_NAN(0x00555555),
 				    NEG_NAN(0x00555555),
@@ -38,7 +38,7 @@ void main()
 	 * element will forever be set to float(idx).
 	 */
 	atomicCompSwap(value[idx],
-		       uintBitsToFloat(comparitors[idx]),
+		       uintBitsToFloat(comparators[idx]),
 		       42.0);
 
 	color = value[idx] == 42.0

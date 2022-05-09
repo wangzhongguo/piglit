@@ -151,7 +151,7 @@ test_data_value_at_index(test_data *data,
 {
         if (index > data->params_size || index < 0) {
                 fprintf(stderr, "ERROR: invalid index while retrieving"
-                        " data from auxiliar test data\n");
+                        " data from auxiliary test data\n");
                 return -1;
         }
 
@@ -329,7 +329,7 @@ void print_failing_case_full(const GLenum target, const GLenum internalformat,
  * the cases where the set of returned values is not specified in
  * detail by the spec (like INTERNALFORMAT_PREFERRED). On that case,
  * it is not tested the returned value, and just tested that if not
- * suppported, the returned value is the usupported value defined by
+ * supported, the returned value is the unsupported value defined by
  * the spec.
  *
  */
@@ -875,7 +875,7 @@ check_query2_target_dependencies(const GLenum target)
         return true;
 }
 
-/* Returns is @pname and @target dependencies are fullfilled */
+/* Returns is @pname and @target dependencies are fulfilled */
 bool
 check_query2_dependencies(const GLenum pname,
                           const GLenum target)
@@ -1010,7 +1010,7 @@ test_data_set_value_at_index(test_data *data,
 {
         if (index > data->params_size || index < 0) {
                 fprintf(stderr, "ERROR: invalid index while setting"
-                        " auxiliar test data\n");
+                        " auxiliary test data\n");
                 return;
         }
 
@@ -1027,18 +1027,18 @@ test_data_equal_at_index(test_data *data,
                          unsigned index)
 {
         if (data->testing64 != data_copy->testing64) {
-                fprintf(stderr, "ERROR: trying to compare imcompatible"
-                        " auxiliar test data structures\n");
+                fprintf(stderr, "ERROR: trying to compare incompatible"
+                        " auxiliary test data structures\n");
                 return false;
         }
         if (data->params_size != data_copy->params_size) {
-                fprintf(stderr, "ERROR: trying to compare imcompatible"
-                        " auxiliar test data structures\n");
+                fprintf(stderr, "ERROR: trying to compare incompatible"
+                        " auxiliary test data structures\n");
                 return false;
         }
         if (index > data->params_size) {
                 fprintf(stderr, "ERROR: invalid index while setting"
-                        " auxiliar test data\n");
+                        " auxiliary test data\n");
                 return false;
         }
 

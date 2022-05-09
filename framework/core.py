@@ -69,7 +69,7 @@ class PiglitConfig(configparser.ConfigParser):
             return fallback
 
     def required_get(self, section, option, **kwargs):
-        """A version fo self.get that raises PiglitFatalError.
+        """A version of self.get that raises PiglitFatalError.
 
         If self.get returns NoSectionError or NoOptionError then this will
         raise a PiglitFatalException, aborting the program.
@@ -133,7 +133,7 @@ def get_option(env_varname, config_option, default=None, required=False):
 def check_dir(dirname, failifexists=False, handler=None):
     """Check for the existence of a directory and create it if possible.
 
-    This function will check for the existance of a directory. If that
+    This function will check for the existence of a directory. If that
     directory doesn't exist it will try to create it. If the directory does
     exist than it does one of two things.
     1) If "failifexists" is False (default): it will just return
@@ -173,10 +173,10 @@ def check_dir(dirname, failifexists=False, handler=None):
 
 
 def collect_system_info():
-    """ Get relavent information about the system running piglit
+    """ Get relevant information about the system running piglit
 
     This method runs through a list of tuples, where element 1 is the name of
-    the program being run, and elemnt 2 is a command to run (in a form accepted
+    the program being run, and element 2 is a command to run (in a form accepted
     by subprocess.Popen)
 
     """
@@ -194,7 +194,7 @@ def collect_system_info():
             result[name] = out.decode('utf-8')
         except OSError as e:
             # If we get the 'no file or directory' error then pass, that means
-            # that the binary isn't installed or isn't relavent to the system.
+            # that the binary isn't installed or isn't relevant to the system.
             # If it's any other OSError, then raise
             if e.errno != errno.ENOENT and e.errno != errno.EACCES:
                 raise

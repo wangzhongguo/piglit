@@ -56,7 +56,7 @@ def template_file(generator, template):
     If the generator uses more than one template use template_dir instead.
 
     Arguments:
-    generator -- the name of the generator, which coresponds to the subdir of
+    generator -- the name of the generator, which corresponds to the subdir of
                  the templates folder.
     template -- the name of the template to get. If getting a single template
                 it's probably template.*.mako, where * is shader_test,
@@ -80,7 +80,7 @@ def template_dir(generator):
     This is useful if a generator uses more than one template.
 
     Arguments:
-    generator -- the name of the generator, which coresponds to the subdir of
+    generator -- the name of the generator, which corresponds to the subdir of
                  the templates folder.
 
     """

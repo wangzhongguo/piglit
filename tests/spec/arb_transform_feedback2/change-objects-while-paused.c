@@ -29,7 +29,7 @@
  *
  * - Bind an XFB object, start XFB, draw something, pause XFB.
  *
- * - Bind a different XFB object, start XFB, draw someting, pause XFB.
+ * - Bind a different XFB object, start XFB, draw something, pause XFB.
  *
  * - Rebind the first XFB object, resume XFB, draw something, end XFB.
  *

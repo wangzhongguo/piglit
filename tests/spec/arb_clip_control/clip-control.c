@@ -225,7 +225,7 @@ draw_test(void)
 	pass = piglit_probe_pixel_depth(5, 5, 1.0) && pass;
 
 
-	/* Defaut depth rage all clip control combinations */
+	/* Default depth rage all clip control combinations */
 	pass = test_patches(GL_LOWER_LEFT, GL_NEGATIVE_ONE_TO_ONE,
 			    near, far, 10) && pass;
 	pass = test_patches(GL_LOWER_LEFT, GL_ZERO_TO_ONE,

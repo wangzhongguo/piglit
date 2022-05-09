@@ -298,7 +298,7 @@ class TestSetMeta(object):
 
     def test_notimplemented(self, mock_backend):  # pylint: disable=redefined-outer-name,unused-argument
         """backends.load(): An error is raised if a set_meta isn't properly
-        implmented.
+        implemented.
         """
         with pytest.raises(backends.BackendNotImplementedError):
             backends.set_meta('test_backend', {})

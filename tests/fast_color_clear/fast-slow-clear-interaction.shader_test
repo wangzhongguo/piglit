@@ -7,7 +7,7 @@
 # that they happen either during rendering or at the time buffer data
 # is read (e.g. by glReadPixels).  If two fast clears appear in a row,
 # the second clear can be elided.  But if other rendering (in this
-# case a slow clear) occurrs between the two fast clears, the second
+# case a slow clear) occurs between the two fast clears, the second
 # fast clear is necessary, since some of the first fast clear's writes
 # may already have been performed.
 #

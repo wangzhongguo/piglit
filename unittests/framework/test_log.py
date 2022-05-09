@@ -97,7 +97,7 @@ class TestQuietLog(object):
             quiet.summary()
             sys.stdout.seek(0)
 
-            # Because of the 'lastlength' mechanims there will likely be
+            # Because of the 'lastlength' mechanisms there will likely be
             # trainling whitespace after the the output, it's not useful to
             # test that here, so just strip it.
             assert sys.stdout.read().rstrip() == '[1/1] pass: 1'

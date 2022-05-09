@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
 	/* Since the writing of the GLX_ARB_create_context_spec, versions 3.3,
 	 * 4.0, 4.1, and 4.2 have been released.  There is no expectation that
-	 * 3.4 will ever exist becuase it would have to include functionality
+	 * 3.4 will ever exist because it would have to include functionality
 	 * not in 4.0, and that would be weird.
 	 */
 	pass = try_version(3, 4) && pass;

@@ -146,7 +146,7 @@ struct subtest_index_t {
 	GLenum programInterface;
 	const char *name;
 	bool valid_index;
-	GLint expect_value; /* -1, means don't check for an epected value */
+	GLint expect_value; /* -1, means don't check for an expected value */
 	GLenum expected_error;
 };
 

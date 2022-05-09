@@ -54,7 +54,7 @@ const char* strings[] = {
 };
 
 const char* invalid_strings[] = {
-	"kernel void dummy_kernel {}", // missing brackets intentionaly
+	"kernel void dummy_kernel {}", // missing brackets intentionally
 };
 
 const char* empty_strings[] = {

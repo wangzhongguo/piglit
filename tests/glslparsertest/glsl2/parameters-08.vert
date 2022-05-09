@@ -4,7 +4,7 @@
 //
 // [end config]
 
-/* FAIL - size must be speicified for formal parameter arrays
+/* FAIL - size must be specified for formal parameter arrays
  */
 float a(float x[], int y)
 {

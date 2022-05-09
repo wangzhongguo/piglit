@@ -160,7 +160,7 @@ def gen_test_local_private(suffix, t, mem_type, vec_sizes, addr_space, aligned):
     f.close()
 
 
-# vload_half is special, becuase CLC won't allow us to use half type without
+# vload_half is special, because CLC won't allow us to use half type without
 # cl_khr_fp16
 def gen_test_local_private_half(suffix, t, vec_sizes, addr_space, aligned):
     f = begin_test(suffix, t, 'half', vec_sizes, addr_space, aligned)

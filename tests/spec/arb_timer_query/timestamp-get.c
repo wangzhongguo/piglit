@@ -80,7 +80,7 @@ validate_times(GLint64 t1, GLint64 t2, GLint64 tolerance)
 		piglit_report_result(PIGLIT_FAIL);
 	}
 
-	/* the tolerance of 1 milisecond seems to be sufficient */
+	/* the tolerance of 1 millisecond seems to be sufficient */
 	if (t2 - t1 > tolerance) {
 		printf("time 1 = %" PRIu64 " us\n", (uint64_t) t1 / 1000);
 		printf("time 2 = %" PRIu64 " us\n", (uint64_t) t2 / 1000);

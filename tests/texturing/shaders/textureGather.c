@@ -315,7 +315,7 @@ do_requires(void)
 	}
 
 	/* if we are trying to specify the component from the shader,
-	 * or use non-constant offsets, or use shadow comparitor, or
+	 * or use non-constant offsets, or use shadow comparator, or
 	 * use gsampler2DRect, check that we have ARB_gpu_shader5
 	 */
 	if (comp_select != -1 || use_offsets || use_nonconst || comptype == SHADOW_T || sampler == SAMPLER_2DRECT)

@@ -83,7 +83,7 @@ static GLint progs[2];
 enum piglit_result
 piglit_display(void)
 {
-	const GLfloat comparitor[4] = { 0.5, 0.5, 0.5, 0.5 };
+	const GLfloat comparator[4] = { 0.5, 0.5, 0.5, 0.5 };
 	unsigned i;
 	unsigned j;
 	enum piglit_result result = PIGLIT_PASS;
@@ -106,7 +106,7 @@ piglit_display(void)
 		glProgramEnvParameter4fvARB(GL_FRAGMENT_PROGRAM_ARB, 0,
 					    color);
 		glProgramEnvParameter4fvARB(GL_FRAGMENT_PROGRAM_ARB, 1,
-					    comparitor);
+					    comparator);
 
 		piglit_draw_rect(x, 1, BOX_SIZE, BOX_SIZE);
 

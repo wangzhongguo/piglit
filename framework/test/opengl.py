@@ -53,7 +53,7 @@ class FastSkip(object):
                       One of [gles1, gles2, gles3, core, compat]
     extensions     -- A set of extensions required
     api_version    -- The version of the API required
-    shader_version -- The versoin of the shader language required
+    shader_version -- The version of the shader language required
     """
     __slots__ = ['api', 'extensions', 'api_version', 'shader_version']
 

@@ -895,7 +895,7 @@ def fudge_type_for_setter(type):
 def bit_exact_data(raw_data, type):
     """Several places in the test want bit-exact data for all types.
     For integer types, this is just the raw data.  For floating point (both
-    single and double precission) types, the bit-exact data is the hex
+    single and double precision) types, the bit-exact data is the hex
     representation of the IEEE 754 encoding.
     """
     if type in ["float", "vec2",   "vec3",   "vec4",

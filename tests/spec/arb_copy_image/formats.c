@@ -327,7 +327,7 @@ piglit_init(int argc, char **argv)
 
 	if (src_format_arg) {
 		/* Since we know the source format, we know the number of
-		 * bits per texel, so we can restrict the ammount of random
+		 * bits per texel, so we can restrict the amount of random
 		 * data we generate.
 		 */
 		Bpp = src_format_arg->bytes;
@@ -455,7 +455,7 @@ setup_test_data(const struct texture_format *src_format,
 	for (j = 0; j < samples; ++j) {
 		src_image = src_data + (j * image_size);
 		res_image = res_data + (j * image_size);
-		/* Copy the center TEX_SIZE/2 x TEX_SIZE/2 pixels froms
+		/* Copy the center TEX_SIZE/2 x TEX_SIZE/2 pixels forms
 		 * src_data to res_data
 		 */
 		memcpy_rect(src_image, stride, TEX_SIZE/4, TEX_SIZE/4,
@@ -563,7 +563,7 @@ load_compare_program(const struct texture_format *format)
 		} else if (compare == &icomp) {
 			gtype = "i";
 		} else {
-			assert(!"Invalid comparison fucntion");
+			assert(!"Invalid comparison function");
 			gtype = "";
 		}
 

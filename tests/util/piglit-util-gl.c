@@ -464,7 +464,7 @@ piglit_get_compressed_block_size(GLenum format,
 
 
 /**
- * Compute size (in bytes) neede to store an image in the given compressed
+ * Compute size (in bytes) needed to store an image in the given compressed
  * format.
  */
 unsigned
@@ -3250,7 +3250,7 @@ static const char multisample_texture_fs_source[] =
  * \param samples        the number of samples
  * \param format         format of the pixel data
  * \param type           type of the pixel data
- * \param data           pixel data with whitch to fill the texture
+ * \param data           pixel data with which to fill the texture
  *
  * \return the new texture object id
  */

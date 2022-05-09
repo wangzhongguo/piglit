@@ -269,7 +269,7 @@ class WflInfo(object):
                 self.__compat_init = True
                 comp = self.__build_info('compat')
                 if comp.api_version == 0.0:
-                    # In this case there are not compat profiles, try agian
+                    # In this case there are not compat profiles, try again
                     # with a "legacy" profile, which could be promoted to
                     # compat
                     return self.__build_info('none')

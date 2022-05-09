@@ -40,7 +40,7 @@
  * gl_VertexID). VS emits a float, 0 for pass, 1 for fail. This is done because
  * bool cannot be sent as a varying, and using flat shading for sending an int
  * results in additional vertex info being discarded. FS draws GREEN if it
- * received the expeced 0 from the VS, RED if !0.
+ * received the expected 0 from the VS, RED if !0.
 */
 
 #include "piglit-util-gl.h"

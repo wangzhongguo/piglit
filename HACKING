@@ -188,7 +188,7 @@ access; that way once your patch has been revised to meet our
 standards of correctness and coding style, we will know that we should
 commit it for you.  If we forget, please remind us!  Once you have
 successfully contributed a handful of patches, feel free to apply for
-commit access usind the process described here:
+commit access using the process described here:
 http://www.freedesktop.org/wiki/AccountRequests/
 
 Please be patient--most of us develop graphics drivers (such as Mesa)

@@ -242,7 +242,7 @@ __piglit_summary_console() {
 # Completions for 'summary csv'
 #
 # This is super simple, it has basically no switches, and the one positional
-# arugment can be provided multiple times
+# argument can be provided multiple times
 __piglit_summary_csv() {
     local cur=${COMP_WORDS[COMP_CWORD]}
     local prev=${COMP_WORDS[COMP_CWORD-1]}
@@ -314,7 +314,7 @@ __piglit_summary_feature() {
 # Completions for 'piglit summary html'
 #
 # This is another fairly complex function to complete. It provides two
-# different positional arugments, the first can be specified only once, the
+# different positional arguments, the first can be specified only once, the
 # second can be provided an infinite number of times.  It also provides a few
 # switches that have positional arguments.
 __piglit_summary_html() {

@@ -17,7 +17,7 @@
             }
         },
         "options": {
-            "descrption": "The options that were invoked with this run. These are implementation specific and not required.",
+            "description": "The options that were invoked with this run. These are implementation specific and not required.",
             "type": "object",
             "properties": {
                 "exclude_tests": { 

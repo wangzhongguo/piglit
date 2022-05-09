@@ -404,7 +404,7 @@ test_format(int width, int height, GLfloat *image, GLenum requested_format)
 
 	pass = piglit_check_gl_error(GL_INVALID_OPERATION) && pass;
 
-	/* Try CompressedTexImage of size zero - should not be an erorr */
+	/* Try CompressedTexImage of size zero - should not be an error */
 	w = 0;
 	h = 0;
 	glCompressedTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0,

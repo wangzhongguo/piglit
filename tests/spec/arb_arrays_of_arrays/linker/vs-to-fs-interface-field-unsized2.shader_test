@@ -4,7 +4,7 @@
 #
 # Note: The size of the arrays also means this tests the
 # max boundary of GL_MAX_VERTEX_ATTRIBS when it's set
-# to 64 (the mininum allowed for an implementation).
+# to 64 (the minimum allowed for an implementation).
 
 [require]
 GLSL >= 1.50

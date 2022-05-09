@@ -27,7 +27,7 @@
 /**
  * @file reimport-bug.c
  *
- * Test verifies that we can succesfully reimport and map a DMABUF.  This
+ * Test verifies that we can successfully reimport and map a DMABUF.  This
  * specifically checks that drivers, which may map a DMABUF, invalidates any
  * such mappings (as needed) when it is reimported. This test has been tuned
  * specifically for the iris driver.

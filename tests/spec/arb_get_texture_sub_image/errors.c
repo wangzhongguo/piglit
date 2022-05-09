@@ -125,7 +125,7 @@ test_buffer_size(void)
 	if (!piglit_check_gl_error(GL_INVALID_OPERATION))
 		pass = false;
 
-	/* Test getting a quadrant, sufficent buffer size */
+	/* Test getting a quadrant, sufficient buffer size */
 	glPixelStorei(GL_PACK_SKIP_ROWS, 0);
 	glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
 	glPixelStorei(GL_PACK_ROW_LENGTH, 0);
@@ -137,7 +137,7 @@ test_buffer_size(void)
 	if (!piglit_check_gl_error(GL_NO_ERROR))
 		pass = false;
 
-	/* Test getting a quadrant, insufficent buffer size */
+	/* Test getting a quadrant, insufficient buffer size */
 	glPixelStorei(GL_PACK_SKIP_ROWS, 0);
 	glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
 	glPixelStorei(GL_PACK_ROW_LENGTH, 0);
@@ -194,7 +194,7 @@ test_invalid_values(void)
 	if (!piglit_check_gl_error(GL_INVALID_VALUE))
 		pass = false;
 
-	/* Test non-existant level */
+	/* Test non-existent level */
 	glGetTextureSubImage(tex, 4,
 			     0, 0, 0, /* offset */
 			     8, 8, 1, /* size */

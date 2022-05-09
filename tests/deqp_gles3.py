@@ -32,7 +32,7 @@ __all__ = ['profile']
 
 
 def _deprecated_get(env_, conf_, dep_env=None, dep_conf=('', ''), **kwargs):
-    """Attempt to get deprecated values, then modern vaules.
+    """Attempt to get deprecated values, then modern values.
 
     If a deprecated value is found give the user a warning, this uses
     deqp_get_option internally for both the deprecated and undeprecated paths,

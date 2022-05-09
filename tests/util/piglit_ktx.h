@@ -52,7 +52,7 @@ struct piglit_ktx_info {
 	/**
 	 * \brief GL texture target.
 	 *
-	 * This is the `target` agument passed to glTexImage() It is
+	 * This is the `target` argument passed to glTexImage() It is
 	 * completely determined by pixel_size, array_length, and num_faces.
 	 * Valid values are
 	 *   - GL_TEXTURE_1D
@@ -99,7 +99,7 @@ struct piglit_ktx_info {
 	 * gl_internal_format. For non-compressed textures,
 	 * gl_base_internal_format is the same as gl_internal_format.
 	 *
-	 * (I (chadv) dont' understand what purpose this field serves, But
+	 * (I (chadv) don't understand what purpose this field serves, But
 	 * the KTX spec requires it in the header).
 	 */
 	uint32_t gl_base_internal_format;

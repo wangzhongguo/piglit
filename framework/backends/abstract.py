@@ -50,7 +50,7 @@ def write_compressed(filename):
     """
     mode = compression.get_mode()
     if mode != 'none':
-        # if the suffix (final .xxx) is a knwon compression suffix
+        # if the suffix (final .xxx) is a known compression suffix
         suffix = os.path.splitext(filename)[1]
         if suffix in compression.COMPRESSION_SUFFIXES:
             filename = '{}.{}'.format(os.path.splitext(filename)[0], mode)
@@ -79,7 +79,7 @@ class Backend(metaclass=abc.ABCMeta):
     def __init__(self, dest, metadata, **kwargs):
         """ Generic constructor
 
-        This method should setup the container and open any files or conections
+        This method should setup the container and open any files or connections
         as necessary. It should not however, write anything into the backend
         store, that job is for the iniitalize method.
 

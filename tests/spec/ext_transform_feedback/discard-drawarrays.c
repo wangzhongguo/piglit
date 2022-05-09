@@ -33,7 +33,7 @@
  *
  *     "Primitives can be optionally discarded before rasterization by
  *      calling Enable and Disable with RASTERIZER_DISCARD_EXT. When
- *      enabled, primitives are discared right before the
+ *      enabled, primitives are discarded right before the
  *      rasterization stage, but after the optional transform feedback
  *      stage. When disabled, primitives are passed through to the
  *      rasterization stage to be processed

@@ -88,6 +88,6 @@ class TestDump(object):
     ])
     def test_notimplemented(self, mock_backend):  # pylint: disable=unused-argument
         """backends.dump(): An error is raised if a dumper isn't properly
-        implmented.
+        implemented.
         """
         backends.dump('foo.test_backend')

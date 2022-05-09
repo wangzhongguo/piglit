@@ -29,7 +29,7 @@
  * texture where the first four texels are cleared to known values
  * using separate calls to glClearTexSubImage. The values are chosen
  * to potentially trigger problems with signed conversions for integer
- * textures. The restof the texture is initalised to zeroes. The textures
+ * textures. The restof the texture is initialised to zeroes. The textures
  * are then read back by attaching them to a fbo and calling glReadPixels
  * or glReadnPixelsKHR if robustness is supported.
  */

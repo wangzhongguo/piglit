@@ -1,5 +1,5 @@
 # This test verifies that dynamic uniform indexing of samplers inside
-# a stuct array in the fragment shader behaves correctly.
+# a struct array in the fragment shader behaves correctly.
 
 [require]
 GLSL >= 1.50

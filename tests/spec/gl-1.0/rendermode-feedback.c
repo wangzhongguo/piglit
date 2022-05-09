@@ -122,7 +122,7 @@ report_failure(struct type *type, float *buffer, int count)
 {
 	int i;
 
-	fprintf(stderr, "Feeback failed for %s:\n",
+	fprintf(stderr, "Feedback failed for %s:\n",
 		piglit_get_gl_enum_name(type->type));
 
 	fprintf(stderr, "  Expected:    Observed: (%d/%d)\n",

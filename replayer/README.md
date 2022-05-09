@@ -151,7 +151,7 @@ Examples:
 Unless specified when comparing or dumping, replayer places the
 produced artifacts at the `CWD/results` directory. By default, created
 images from traces are only stored in case of a checksum
-mismatch. This can be overriden with the `--keep-image` parameter to
+mismatch. This can be overridden with the `--keep-image` parameter to
 force storing images, e.g., to get a complete set of reference images.
 
 By default when dumping, only the image corresponding to the last frame
@@ -192,5 +192,5 @@ version of apitrace (and d3dretrace) for Windows which should be
 reachable through Windows' `PATH` environment variable.
 
 Alternatively, all of the paths for specific binaries can be set via
-piglit's configuration file or env variables. Check the documenation
+piglit's configuration file or env variables. Check the documentation
 at [piglit.conf.example](piglit.conf.example) for further details.

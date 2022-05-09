@@ -140,7 +140,7 @@ piglit_init(int argc, char **argv)
 	/* Check for errors during setup */
 	if(!check_framebuffer_status(GL_FRAMEBUFFER, GL_FRAMEBUFFER_COMPLETE) ||
 	   !piglit_check_gl_error(GL_NO_ERROR)) {
-		printf("Error occured during setup.\n");
+		printf("Error occurred during setup.\n");
 		piglit_report_result(PIGLIT_FAIL);
 	}
 
@@ -165,7 +165,7 @@ piglit_init(int argc, char **argv)
 
 		if(!check_framebuffer_status(GL_FRAMEBUFFER,
 					     GL_FRAMEBUFFER_COMPLETE)) {
-			printf("Error occured while probing texture\n");
+			printf("Error occurred while probing texture\n");
 			piglit_report_result(PIGLIT_FAIL);
 		}
 

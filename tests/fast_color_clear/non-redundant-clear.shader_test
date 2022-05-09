@@ -6,7 +6,7 @@
 # memory writes that would normally be done during a buffer clear so
 # that they happen either during rendering or at the time buffer data
 # is read (e.g. by glReadPixels).  If two fast clears appear in a row,
-# the second clear can be elided.  But if rendering occurrs between
+# the second clear can be elided.  But if rendering occurs between
 # the two fast clears, the second clear is necessary, since some of
 # the first clear's writes may already have been performed.
 #

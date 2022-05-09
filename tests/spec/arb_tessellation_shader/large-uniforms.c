@@ -154,7 +154,7 @@ test_uniform_array(const GLenum shader, const int n, const bool expect_fail)
 
 	if (link_status && expect_fail) {
 		fprintf(stderr, "Program with %d uniform components in %s "
-			"linked succesfully\n", n,
+			"linked successfully\n", n,
 			piglit_get_gl_enum_name(shader));
 		free(source_uniforms);
 		return false;

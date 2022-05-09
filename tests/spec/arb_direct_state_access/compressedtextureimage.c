@@ -121,7 +121,7 @@ display_mipmaps(int x, int y)
 
 	glEnable(GL_TEXTURE_2D);
 
-	/* Disply all the mipmap levels */
+	/* Display all the mipmap levels */
 	for (i = SIZE; i > 0; i /= 2) {
 		piglit_draw_rect_tex(x, y, i, i,
 				     0, 0, 1, 1);

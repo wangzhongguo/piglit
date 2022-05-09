@@ -132,7 +132,7 @@ piglit_init(int argc, char**argv)
 	msConfig.num_tex_attachments = 1;
 	multisampled_fbo.setup(msConfig);
 
-	/* Reduced tolerence for stricter color matching */
+	/* Reduced tolerance for stricter color matching */
 	piglit_set_tolerance_for_bits(16, 16, 16, 16);
 	draw_prog_left = piglit_build_simple_program(
 		"#version 130\n"

@@ -48,7 +48,7 @@ def booltype(val):
     elif val.lower() in ['true', 'yes', '1']:
         return True
     raise argparse.ArgumentTypeError(
-        'Case insensitve values of "yes", "no", "false", "true", and "0" or '
+        'Case insensitive values of "yes", "no", "false", "true", and "0" or '
         '"1" are accepted.')
 
 

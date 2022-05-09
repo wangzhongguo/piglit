@@ -129,7 +129,7 @@ protected:
       for (int y = 0; y < height; ++y) {
          for (int x = 0; x < width; ++x) {
             Colour& pixel = result[x + y * width];
-            /* A easily identifiable pattern with x / y co-ordinates in color values
+            /* A easily identifiable pattern with x / y coordinates in color values
             pixel[0] = (x % 10) / 10.0f;
             pixel[1] = (y % 10) / 10.0f;
             pixel[2] = (x % 10) / 10.0f + (y % 10) / 100.0f;

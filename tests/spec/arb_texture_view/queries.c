@@ -42,7 +42,7 @@ PIGLIT_GL_TEST_CONFIG_BEGIN
 PIGLIT_GL_TEST_CONFIG_END
 
 /**
- * make sure default intial state is correct for textureView
+ * make sure default initial state is correct for textureView
  * In OpenGL Core 4.3 spec see  table 23.15 for default values.
  */
 static bool

@@ -18,7 +18,7 @@
  *
  *
  * Tests the case when all the fragment shaders which use gl_FragCoord,
- * redeclare it with matching layout qualifiers. The specfic order of
+ * redeclare it with matching layout qualifiers. The specific order of
  * attached fragment shaders is important here.
  */
 [require]

@@ -55,7 +55,7 @@ piglit_display(void)
 	glColor3fv(color);
 
 
-	/* Compile a list.  Start with two-component vertexes, then, after the
+	/* Compile a list.  Start with two-component vertices, then, after the
 	 * first primitive is complete, use a three-component vertex.
 	 * in the list.
 	 */

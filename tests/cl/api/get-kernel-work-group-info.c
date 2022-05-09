@@ -157,7 +157,7 @@ piglit_cl_test(const int argc,
 
 #if defined(CL_VERSION_1_2)
 		/* CL_KERNEL_GLOBAL_WORK_SIZE query
-		 * is valid for custom device or build-in kernel
+		 * is valid for custom device or built-in kernel
 		 */
 		if (kernel_work_group_infos[i] == CL_KERNEL_GLOBAL_WORK_SIZE) {
 			cl_device_type* dev_type_ptr =

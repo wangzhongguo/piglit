@@ -36,7 +36,7 @@
  *      an <id> of zero, if the active query object name for <target>
  *      is non-zero, if <id> is the active query object name for any
  *      query type, or if <id> is the active query object for
- *      condtional rendering (Section 2.X), the error INVALID
+ *      conditional rendering (Section 2.X), the error INVALID
  *      OPERATION is generated."
  */
 

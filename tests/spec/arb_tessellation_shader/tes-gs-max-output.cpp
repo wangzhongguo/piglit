@@ -67,7 +67,7 @@ struct testcase {
 	unsigned tessfactor_u;
 	unsigned tessfactor_v;
 	unsigned num_invocations; /* GS invocations / instances */
-	unsigned num_outputs; /* # vertex ouput per GS invocation */
+	unsigned num_outputs; /* # vertex output per GS invocation */
 	unsigned num_extra_components; /* # extra components per GS output vertex */
 
 	bool operator<(const testcase &o) const {

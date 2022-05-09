@@ -161,7 +161,7 @@ test_preserve_invalid_index(GLint maxVP)
 	GLboolean scEnabled;
 	int i;
 
-	/* intialize all indices to know values */
+	/* initialize all indices to know values */
 	for (i = 0; i < maxVP; i++) {
 		glViewportIndexedfv(i, vp);
 #ifdef PIGLIT_USE_OPENGL

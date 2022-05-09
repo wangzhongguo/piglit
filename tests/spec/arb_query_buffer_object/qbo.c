@@ -27,8 +27,8 @@
  * \file qbo.c
  * Tests ARB_query_buffer_object
  * - synchronous wait for result
- * - asynchrounous result, default value is left intact if result unavailable
- * - asynchrounous result, retrieve result to client memory before & after
+ * - asynchronous result, default value is left intact if result unavailable
+ * - asynchronous result, retrieve result to client memory before & after
  */
 
 #include "common.h"

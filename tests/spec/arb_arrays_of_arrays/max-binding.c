@@ -23,7 +23,7 @@
 
 /** @file max-binding.c
  *
- * Test that using more than the maximum number of suported interface block,
+ * Test that using more than the maximum number of supported interface block,
  * sampler, or atomic bindings fails with a compile error.
  */
 

@@ -549,7 +549,7 @@ tests = {
         ],
         'num_out_args' : 2
     },
-# FIXME: kernel names are broken, and we cant really compare nans to see if the
+# FIXME: kernel names are broken, and we can't really compare nans to see if the
 # code made it
 #    'nan' : {
 #        'arg_types': [F, U],

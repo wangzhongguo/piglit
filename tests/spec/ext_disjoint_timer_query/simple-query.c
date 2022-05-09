@@ -24,7 +24,7 @@
 /**
  * @file
  * Tests GL_EXT_disjoint_timer_query extension. Test does not to cover
- * the whole API as that is tested throughly by existing query tests for
+ * the whole API as that is tested thoroughly by existing query tests for
  * desktop GL. Main objective is to test that timer queries work on OpenGL
  * ES 2.0 and we can get GL_GPU_DISJOINT_EXT value from the driver.
  */
@@ -132,7 +132,7 @@ piglit_display(void)
 
 	glGetQueryObjectui64vEXT(query, GL_QUERY_RESULT_EXT, &time);
 
-	/* Check if disjoint operation occured. */
+	/* Check if disjoint operation occurred. */
 	glGetInteger64vEXT(GL_GPU_DISJOINT_EXT, &disjoint);
 	if (!piglit_check_gl_error(GL_NO_ERROR))
 		piglit_report_result(PIGLIT_FAIL);

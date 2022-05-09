@@ -77,7 +77,7 @@ check_texture_parameters(GLenum objType, int objName, int level, int layer, int 
 	}
 
 	if(!piglit_check_gl_error(GL_NO_ERROR)) {
-		printf("Error has occured in check_texture_parameters()\n");
+		printf("Error has occurred in check_texture_parameters()\n");
 		return false;
 	}
 
@@ -119,7 +119,7 @@ check_texture_parameters(GLenum objType, int objName, int level, int layer, int 
 		}
 
 		if(!piglit_check_gl_error(GL_NO_ERROR)) {
-			printf("Error has occured in check_texture_parameters()\n");
+			printf("Error has occurred in check_texture_parameters()\n");
 			return false;
 		}
 	}

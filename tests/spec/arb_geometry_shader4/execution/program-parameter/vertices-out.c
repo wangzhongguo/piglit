@@ -28,7 +28,7 @@
  * variable number of output components.
  *
  * The value of GEOMETRY_VERTICES_OUT is limited by the implementation
- * dependend constants MAX_GEOMETRY_OUTPUT_VERTICES and
+ * dependent constants MAX_GEOMETRY_OUTPUT_VERTICES and
  * MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS.
  *
  * From the ARB_geometry_shader4 spec (section Errors):
@@ -126,7 +126,7 @@ test_geometry_vertices_out(const GLuint prog)
 	 * > MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS, the spec requires
 	 * ProgramParameter to throw an INVALID_VALUE and subsequent linking to
 	 * fail.
-	 * But the number of output components can only be infered from the
+	 * But the number of output components can only be inferred from the
 	 * geometry shader source (and a geometry shader might not even be
 	 * attached to the program object when ProgramParameter is called).
 	 * So, ignore any errors generated from ProgramParameter and only check

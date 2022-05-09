@@ -129,7 +129,7 @@ class DEQPBaseTest(Test, metaclass=abc.ABCMeta):
 
     @abc.abstractproperty
     def deqp_bin(self):
-        """The path to the exectuable."""
+        """The path to the executable."""
 
     @abc.abstractproperty
     def extra_args(self):

@@ -59,7 +59,7 @@ display_mipmaps(int start_x, int start_y)
 
 	glEnable(GL_TEXTURE_2D);
 
-	/* Disply all the mipmap levels */
+	/* Display all the mipmap levels */
 	for (i = SIZE; i > 0; i /= 2) {
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0, 0.0); glVertex2f(start_x + 0, start_y + 0);

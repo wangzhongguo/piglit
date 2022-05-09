@@ -190,7 +190,7 @@ class TestGetMode(object):
 
     def test_env(self, env, config, compressor):
         """Test that when env doesn't have a PIGLIT_COMPRESSION environment
-        varaible set, but the configuraiton has a compression method set that
+        variable set, but the configuration has a compression method set that
         it is used.
         """
         compressor.add('foo', None)
@@ -202,7 +202,7 @@ class TestGetMode(object):
 
     def test_piglit_conf(self, env, config, compressor):
         """Test that when env doesn't have a PIGLIT_COMPRESSION environment
-        varaible set, but the configuraiton has a compression method set that
+        variable set, but the configuration has a compression method set that
         it is used.
         """
         compressor.add('foobar', None)
@@ -214,7 +214,7 @@ class TestGetMode(object):
 
 @pytest.mark.parametrize("extension", ['bz2', 'gz', 'xz'])
 def test_duplicate_extensions(extension, tmpdir, config):
-    """Tests that exersizes a bug that caused the compressed extension to be
+    """Tests that exercises a bug that caused the compressed extension to be
     duplicated in some cases.
     """
     tmpdir.chdir()
@@ -230,7 +230,7 @@ def test_duplicate_extensions(extension, tmpdir, config):
 @pytest.mark.parametrize("orig,new", itertools.permutations(
     ['bz2', 'gz', 'xz'], 2))
 def test_changed_extension(orig, new, tmpdir, config):
-    """Tests that exersizes a bug that caused two extensions to be present if
+    """Tests that exercises a bug that caused two extensions to be present if
     the compression method changed.
     """
     tmpdir.chdir()

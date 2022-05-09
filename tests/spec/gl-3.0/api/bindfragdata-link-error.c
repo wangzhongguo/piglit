@@ -104,7 +104,7 @@ void piglit_init(int argc, char **argv)
 	/* Page 237 (page 253 of the PDF) of the OpenGL 3.0 spec says:
 	 *
 	 *     "LinkProgram will fail if the assigned binding of a varying out
-	 *     variable would cause the GL to reference a non-existant
+	 *     variable would cause the GL to reference a non-existent
 	 *     fragment color number (one greater than or equal to MAX DRAW
 	 *     BUFFERS)."
 	 *
@@ -140,7 +140,7 @@ void piglit_init(int argc, char **argv)
 	 *     variable is bound to the same number. This type of aliasing is
 	 *     not allowed."
 	 *
-	 * Try this by assiging 'a[0]' and 'v' to the same slot, and also try
+	 * Try this by assigning 'a[0]' and 'v' to the same slot, and also try
 	 * assigning 'a[1]' and 'v' to the same slot.
 	 *
 	 * This should not generate a GL error.  It should only cause linking

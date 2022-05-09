@@ -127,7 +127,7 @@
     % if params.array_dim != 0:
      *
      * NOTE: This test assumes that reads of arrays using non-constant
-     * indicies works correctly.  If reads and writes happen to fail in an
+     * indices works correctly.  If reads and writes happen to fail in an
      * identical manner, this test may give false positives.
     % endif
      */

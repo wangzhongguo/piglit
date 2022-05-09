@@ -94,7 +94,7 @@ piglit_display(void)
         }
 
 	size = MIN2(30, size);
-	probeSize = size - 2; /* to accomodate small rasterization errors */
+	probeSize = size - 2; /* to accommodate small rasterization errors */
 
 	glUniform4fv(color_scale_uniform, 1, scale);
 	glUniform4fv(color_bias_uniform, 1, bias);

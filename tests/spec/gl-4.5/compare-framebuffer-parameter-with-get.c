@@ -211,7 +211,7 @@ get_framebuffer_name(int index)
 }
 
 /*
- * Gets a framebuffer and attachs to it renderbuffer and other stuff,
+ * Gets a framebuffer and attaches to it renderbuffer and other stuff,
  * in order to ensure that it is a complete framebuffer.
  *
  * returns if it was successful.

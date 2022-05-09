@@ -180,7 +180,7 @@ piglit_init(int argc, char **argv)
 
 	if(!probe_texture_layered_depth(texture[0], 0, 0, 0, 10,
 					10, 4, expected)) {
-		printf("Incorrect depth values recieved with glClear()\n");
+		printf("Incorrect depth values received with glClear()\n");
 		pass = false;
 	}
 
@@ -190,7 +190,7 @@ piglit_init(int argc, char **argv)
 
 	if(!probe_texture_layered_depth(texture[1], 0, 0, 0, 10,
 					10, 4, expected)) {
-		printf("Incorrect depth values recieved with glClearBuffer()\n");
+		printf("Incorrect depth values received with glClearBuffer()\n");
 		pass = false;
 	}
 

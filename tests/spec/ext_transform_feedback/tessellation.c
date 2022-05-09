@@ -62,7 +62,7 @@
  *
  * The images are rendered using a fragment shader that attenuates the
  * color of back-facing primitives, so that the test will verify that
- * tesellation preserves winding order properly.
+ * tessellation preserves winding order properly.
  *
  * The test can be run in four different coloring modes:
  *
@@ -432,7 +432,7 @@ draw(GLuint prog, bool use_xfb, float y_offset, GLenum mode,
 	if (use_xfb) {
 		glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, xfb_buf);
 		/* Initialize the buffer with 0 so that we will be
-		 * able to identify membory that was not overwitten by
+		 * able to identify membory that was not overwritten by
 		 * the transform feedback.
 		 */
 		memset(buffer, 0, sizeof(buffer));

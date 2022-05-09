@@ -24,7 +24,7 @@
 
 /**
  * \file api-errors.c
- * Verify miscelaneous API error conditions from the specification.
+ * Verify miscellaneous API error conditions from the specification.
  */
 #include "piglit-util-gl.h"
 #include "sso-common.h"

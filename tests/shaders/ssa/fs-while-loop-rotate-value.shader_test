@@ -1,6 +1,6 @@
 # test to check a bug in r600 sb backend
 # it miscompiles this due to the 1.0
-# at the end wierdly.
+# at the end weirdly.
 [require]
 GLSL >= 1.10
 

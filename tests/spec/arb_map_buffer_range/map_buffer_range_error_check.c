@@ -80,7 +80,7 @@ piglit_init(int argc, char *argv[])
 	if (!piglit_check_gl_error(GL_INVALID_VALUE))
 		piglit_report_result(PIGLIT_FAIL);
 
-	/* offset + lenght > GL_BUFFER_SIZE */
+	/* offset + length > GL_BUFFER_SIZE */
 	glMapBufferRange(target, 1, GL_BUFFER_SIZE, access);
 	if (!piglit_check_gl_error(GL_INVALID_VALUE))
 		piglit_report_result(PIGLIT_FAIL);

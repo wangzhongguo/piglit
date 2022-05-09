@@ -23,7 +23,7 @@
 
 /** @file max-counters.c
  *
- * Test that using more than the maximum number of suported atomic
+ * Test that using more than the maximum number of supported atomic
  * counters, buffers or bindings fails with a linking error.
  */
 

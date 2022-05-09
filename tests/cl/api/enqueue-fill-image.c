@@ -145,7 +145,7 @@ piglit_cl_test(const int argc,
 
 	/*
 	 * fill the host buffer with the pattern
-	 * for exemple : pattern == 1234
+	 * for example : pattern == 1234
 	 *
 	 * 12341234abcdabcd
 	 * 12341234abcdabcd

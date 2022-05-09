@@ -207,7 +207,7 @@ interpolate_square(const Vertex square[4],
 /*
  * Tesselates @square_pos, returning a set of vertex information and
  * indices compatible to draw with glDrawElements at (@tesselated_pos,
- * @indices). @granularity is the number of vertexes per side. So the
+ * @indices). @granularity is the number of vertices per side. So the
  * minimum should be 2.
  *
  * Is assumed that the vertex at @square_pos are in the order
@@ -231,7 +231,7 @@ util_tesselate_square(const Vertex square_pos[4],
 
         if (granularity < 2) {
                 fprintf(stderr, "Granularity should be equal or greater to 2"
-                        " in order to tesselate a square. Setting it to 2.\n");
+                        " in order to tessellate a square. Setting it to 2.\n");
                 granularity = 2;
         }
 

@@ -11,7 +11,7 @@ void main()
 }
 
 [fragment shader]
-/* Tests for what was a crasher bug in glsl_copy_propagation_elements */
+/* Tests for what was a crash bug in glsl_copy_propagation_elements */
 varying vec4 color;
 
 void main()

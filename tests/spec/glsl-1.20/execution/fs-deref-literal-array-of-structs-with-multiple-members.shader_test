@@ -15,7 +15,7 @@ void main()
 struct Foo {
   int value;
 
-  /* A second member of a differnt size helps ensures we calculate member
+  /* A second member of a different size helps ensures we calculate member
    * offsets correctly.
    */
   ivec2 value2;

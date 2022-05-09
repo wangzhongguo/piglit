@@ -14,7 +14,7 @@ PIGLIT_INSTALL_VERSION_CHOICES = [None, '1234']
 
 DESCRIPTION = dedent("""\
     Test that the main piglit script, when installed, successfully imports
-    the corrrect framework module.
+    the correct framework module.
 
     Failure modes
         1. The script fails to find any framework module and dies.

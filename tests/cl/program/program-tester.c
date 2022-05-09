@@ -983,7 +983,7 @@ get_test_arg_value(struct test_arg* test_arg, const char* value, size_t length)
 	size_t i; // index in array
 	size_t c; // component in element
 	size_t ra; // offset from the beginning of array
-	size_t rb; // offset from the beginning of bufffer
+	size_t rb; // offset from the beginning of buffer
 
 	int64_t* int_array = NULL;
 	uint64_t* uint_array = NULL;
@@ -2180,7 +2180,7 @@ test_kernel(const struct piglit_cl_program_test_config* config,
 		return PIGLIT_SKIP;
 	}
 
-	/* Create or use apropriate kernel */
+	/* Create or use appropriate kernel */
 	if(test.kernel_name == NULL) {
 		kernel_name = config->kernel_name;
 		kernel = env->kernel;

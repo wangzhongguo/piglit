@@ -25,7 +25,7 @@
  *
  * Verify behavior when a program object with no shaders attached is used.
  * Neither the OpenGL spec nor the GLSL spec are explicit about what happens
- * in this case.  However, the correct behavior can be infered from a few bits
+ * in this case.  However, the correct behavior can be inferred from a few bits
  * in the spec.  Section 2.15 of the GL 2.1 spec says:
  *
  *     "When the program object currently in use includes a vertex shader, its

@@ -3,7 +3,7 @@
 // glsl_version: 1.10
 // [end config]
 //
-// Compilation should fail becuase the type 'B' is unknown.
+// Compilation should fail because the type 'B' is unknown.
 //
 // Reproduces Mesa bugzilla #33313.
 

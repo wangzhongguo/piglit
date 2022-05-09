@@ -3,7 +3,7 @@
 // glsl_version: 1.30
 // [end config]
 //
-// Check that 'centroid in' cannot be used a parameter qualifer.
+// Check that 'centroid in' cannot be used a parameter qualifier.
 
 #version 130
 

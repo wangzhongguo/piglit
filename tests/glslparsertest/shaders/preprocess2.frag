@@ -6,7 +6,7 @@
 
 // #line directive-- test cases.
 // chks for Invalid directives, all possible #line errors
-// Also checks the correct verions of #line dorective.
+// Also checks the correct versions of #line dorective.
 
 #define t1 1
 #define t2 2

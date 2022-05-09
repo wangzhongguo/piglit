@@ -396,7 +396,7 @@ test_target_and_format(GLint x, GLint y, GLenum target, GLenum format,
 	}
 
 	/* To avoid failures not related to this test case,
-	 * loosen up the tolerence for compressed texture
+	 * loosen up the tolerance for compressed texture
 	 * formats
 	 */
 	if (is_compressed_format(format))
@@ -544,7 +544,7 @@ test_target_and_format(GLint x, GLint y, GLenum target, GLenum format,
 		break;
 	}
 
-	/* If a GLSL program is in use, then the preceeding code should not
+	/* If a GLSL program is in use, then the preceding code should not
 	 * have called glEnable(target).  In that case, this code should not
 	 * disable it.  For some targets, like GL_TEXTURE_1D_ARRAY,
 	 * glDisable(target) will generate an error.

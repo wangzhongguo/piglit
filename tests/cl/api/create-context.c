@@ -256,7 +256,7 @@ piglit_cl_test(const int argc,
 	if(env->version >= 11) {
 		test(invalid_context_properties, num_devices, devices, NULL, NULL,
 		     CL_INVALID_PROPERTY, &result,
-		     "Trigger CL_INVALID_PROPERTY if context property name in poperties is not a supported property name");
+		     "Trigger CL_INVALID_PROPERTY if context property name in properties is not a supported property name");
 		test(multiple_platform_context_properties, num_devices, devices,
 		     NULL, NULL,
 		     CL_INVALID_PROPERTY, &result,

@@ -29,7 +29,7 @@
  * For a long time idTech2- and idTech3-based games contained a bug in
  * extension string handling.  The engine would copy the extension string
  * returned by the driver into a buffer on the stack.  The engine would not be
- * able to detect the existence of any extensions that occured after the size
+ * able to detect the existence of any extensions that occurred after the size
  * of the buffer.
  *
  * A 2011 Wine bug

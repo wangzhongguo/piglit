@@ -221,7 +221,7 @@ compute_expected(void)
 		for (i = 0; i < num_rects; i++) {
 
 			float samples_used = coverage[i] * num_samples;
-			/* Exepected color values are computed only for integer
+			/* Expected color values are computed only for integer
 			 * number of samples_used
 			 */
 			if(samples_used == (int)samples_used) {

@@ -41,7 +41,7 @@ def main():
 
     targets_1 = ["1D", "2D", "3D", "CUBE", "RECT", "SHADOW1D", "SHADOW2D"]
 
-    # The ordering in this loop is wierd, it's an artifact of the growth of the
+    # The ordering in this loop is weird, it's an artifact of the growth of the
     # original script and is required to ensure that the names of the tests
     # don't change
     for inst in ["TEX", "TXB", "TXD", "TXF", "TXL", "TXP", "TXQ"]:

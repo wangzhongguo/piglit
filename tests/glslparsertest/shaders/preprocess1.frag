@@ -4,7 +4,7 @@
 //
 // [end config]
 
-// tests for macro redifinition (t2) and the #if and #else nestings.
+// tests for macro redefinition (t2) and the #if and #else nestings.
 // takes care of elif also. 
 
 #define t1 (1+2) 

@@ -511,7 +511,7 @@ piglit_glx_error_string(int err)
 }
 
 /**
- * Get the procedure adddresses for a group of function names
+ * Get the procedure addresses for a group of function names
  *
  * \note
  * If any call to \c glXGetProcAddress fails, this function will call

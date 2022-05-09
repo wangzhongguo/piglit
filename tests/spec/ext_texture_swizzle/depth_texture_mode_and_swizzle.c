@@ -26,7 +26,7 @@
  *
  * Tests the interactions between EXT_texture_swizzle and DEPTH_TEXTURE_MODE.
  *
- * From the EXT_texture_swizzle specfication:
+ * From the EXT_texture_swizzle specification:
  * "4) How does this interact with depth component textures?
  *
  *  RESOLVED: The swizzle is applied after the DEPTH_TEXTURE_MODE. This

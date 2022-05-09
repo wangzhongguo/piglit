@@ -24,7 +24,7 @@
 /**
  * @file
  * Tests GL_EXT_occlusion_query_boolean extension. Test does not to cover
- * the whole API as that is tested throughly by existing arb_occlusion_query
+ * the whole API as that is tested thoroughly by existing arb_occlusion_query
  * and arb_occlusion_query2 tests. Main objective is to test that boolean
  * query works on OpenGL ES 2.0.
  */

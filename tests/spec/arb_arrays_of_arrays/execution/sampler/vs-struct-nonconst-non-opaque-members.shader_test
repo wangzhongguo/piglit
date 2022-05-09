@@ -1,5 +1,5 @@
 # This test verifies that dynamically uniform indexing of sampler arrays
-# in the vertex shader behaves correctly, and the offests for the
+# in the vertex shader behaves correctly, and the offsets for the
 # non-opaque members are calculated correctly.
 
 [require]

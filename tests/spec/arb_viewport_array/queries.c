@@ -84,7 +84,7 @@ piglit_init(int argc, char **argv)
 		 * depthrange-indices and viewport-indices tests.
 		 * OpenGL 4.3 Core section 22.1 ref:
 		 *     "An INVALID_ENUM error is generated if target is not
-		 *     indexed state queriable with these commands."
+		 *     indexed state queryable with these commands."
 		 */
 		for (i = 0; i < ARRAY_SIZE(tokens); i++) {
 			glGetFloati_v(tokens[i], 1, valf);

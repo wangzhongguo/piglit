@@ -113,7 +113,7 @@ class TestTest(object):
 
             # localpath doesn't have a seek option
             with tmpdir.join('test').open(mode='w', ensure=True) as f:
-                # Create a file that wll be executed as a python script Create
+                # Create a file that will be executed as a python script Create
                 # a process with two subproccesses (not threads) that will run
                 # for a long time.
                 f.write(textwrap.dedent("""\
@@ -192,14 +192,14 @@ class TestTest(object):
     class TestExecuteTraceback(object):
         """Test.execute tests for Traceback handling."""
 
-        class Sentinal(Exception):
+        class Sentinel(Exception):
             pass
 
         @pytest.fixture
         def shared_test(self, mocker):
             """Do some setup."""
             test = _Test(['foo'])
-            test.run = mocker.Mock(side_effect=self.Sentinal)
+            test.run = mocker.Mock(side_effect=self.Sentinel)
 
             test.execute(mocker.Mock(spec=str),
                          mocker.Mock(spec=log.BaseLog),
@@ -348,7 +348,7 @@ class TestValgrindMixin(object):
     """Tests for the ValgrindMixin class."""
 
     def test_command(self, mocker):
-        """test.base.ValgrindMixin.command: self.command doesnt change."""
+        """test.base.ValgrindMixin.command: self.command doesn't change."""
         opts = mocker.patch('framework.test.base.OPTIONS',
                             new_callable=Options)
 
@@ -396,7 +396,7 @@ class TestValgrindMixin(object):
                                  ids=lambda x: str(x).upper())
         def test_problem_status_changes_valgrind_enabled(self, starting, mocker):
             """When running with valgrind mode we're actually testing the test
-            binary itself, so any status other than pass is irrelavent, and
+            binary itself, so any status other than pass is irrelevant, and
             should be marked as skip.
             """
             mock_opts = mocker.patch('framework.test.base.OPTIONS',
@@ -411,7 +411,7 @@ class TestValgrindMixin(object):
         @pytest.mark.parametrize("starting", PROBLEMS,
                                  ids=lambda x: str(x).upper())
         def test_problems_with_valgrind_disabled(self, starting, mocker):
-            """When valgrind is disabled nothign shoud change
+            """When valgrind is disabled nothing should change
             """
             mock_opts = mocker.patch('framework.test.base.OPTIONS',
                                      new_callable=Options)
@@ -545,7 +545,7 @@ class TestReducedProcessMixin(object):
 
             # Since interpret_result isn't called this would normally be left
             # as NOTRUN, but we want to ensure that _run_command isn't mucking
-            # with it, so we set it to this PASS, which acts as a sentinal
+            # with it, so we set it to this PASS, which acts as a sentinel
             test.result.subtests['b'] = status.PASS
             test._run_command()
 

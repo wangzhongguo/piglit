@@ -53,7 +53,7 @@ piglit_init(int argc, char **argv)
 	glGetIntegerv(GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS,
 		&max_attrib_n);
 	if (!max_attrib_n) {
-		printf("Maximum number of separete attributes is zero\n");
+		printf("Maximum number of separate attributes is zero\n");
 		piglit_report_result(PIGLIT_FAIL);
 	}
 

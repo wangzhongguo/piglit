@@ -127,7 +127,7 @@ test_tcs_layout(const int i, const int j)
 
 	if (link_status && (i != j)) {
 		fprintf(stderr, "Program with different vertices "
-			"specifications linked succesfully\n");
+			"specifications linked successfully\n");
 		return false;
 	}
 	if (!link_status && (i == j)) {
@@ -164,7 +164,7 @@ test_tes_layout(const char *const layout1, const char *const layout2,
 
 	if (link_status && (layout1 != layout2)) {
 		fprintf(stderr, "Program with different %s "
-			"specifications linked succesfully\n", layout_name);
+			"specifications linked successfully\n", layout_name);
 		return false;
 	}
 	if (!link_status && (layout1 == layout2)) {

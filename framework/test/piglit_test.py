@@ -137,7 +137,7 @@ class PiglitGLTest(WindowResizeMixin, PiglitBaseTest):
         # What we really want is __init__(self, *args, new_arg=None, **kwargs),
         # but this doesn't work in python2. In python3 thanks to PEP3102, you
         # can in fact do just that
-        # The work around is to explicitely pass the arguments down.
+        # The work around is to explicitly pass the arguments down.
         super(PiglitGLTest, self).__init__(command, **kwargs)
 
         assert not (require_platforms and exclude_platforms)

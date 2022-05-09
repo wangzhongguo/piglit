@@ -83,8 +83,7 @@ def is_crash_returncode(returncode):
     """Determine whether the given process return code correspond to a
     crash.
     """
-    # In python 2 NoneType and other types can be compaired, in python3 this
-    # isn't allowed.
+    # In Python 3 isn't allowed to compare NoneType and other types.
     if returncode is None:
         return False
 
@@ -346,8 +345,8 @@ class WindowResizeMixin(object):
 
     On gnome (and possible other DE's) the window manager may decide to resize
     a window. This causes the test to fail even though otherwise would not.
-    This Mixin overides the _run_command method to run the test 5 times, each
-    time searching for the string 'Got suprious window resize' in the output,
+    This Mixin overrides the _run_command method to run the test 5 times, each
+    time searching for the string 'Got spurious window resize' in the output,
     if it fails to find it it will break the loop and continue.
 
     see: https://bugzilla.gnome.org/show_bug.cgi?id=680214

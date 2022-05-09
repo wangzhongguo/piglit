@@ -26,7 +26,7 @@
  * @author Mathias Fröhlich
  *
  * Create two GLX contexts and concurrently compile shaders.
- * Exercises a race conditon with the r600 llvm compiler.
+ * Exercises a race condition with the r600 llvm compiler.
  */
 
 #include "piglit-util-gl.h"

@@ -24,7 +24,7 @@
 /**
  * @file built-in-matrix-state.c:  Access uniform matrix derived state in GLSL
  *
- * Set coordiante transformation matrices with the OpenGL API and access them
+ * Set coordinate transformation matrices with the OpenGL API and access them
  * and their derived uniforms in a GLSL shader.
  */
 

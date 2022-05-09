@@ -27,7 +27,7 @@
 
 /**
  * @file combine.c:  Test GL_NV_texture_env_combine4
- * Author: Brian Paul (brianp@valinux.com)  Januar 2009
+ * Author: Brian Paul (brianp@valinux.com)  January 2009
  *
  * Generate some random combiner state and colors, compute the expected
  * color, then render with the combiner state and compare the results.

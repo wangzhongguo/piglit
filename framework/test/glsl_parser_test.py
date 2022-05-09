@@ -54,7 +54,7 @@ _FORCE_DESKTOP_VERSION = os.environ.get('PIGLIT_FORCE_GLSLPARSER_DESKTOP', False
 
 
 def _is_gles_version(version):
-    """Return True if version is es, otherwsie false."""
+    """Return True if version is es, otherwise false."""
     assert not isinstance(version, bytes), \
         '{}({})'.format(version, type(version))
 

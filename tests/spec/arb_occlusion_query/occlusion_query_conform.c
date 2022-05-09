@@ -104,7 +104,7 @@ conformOQ_GetObjivAval_multi1(void *data)
 	piglit_draw_rect(-0.51, 0.51, 0.51, -0.51);
 	glEndQueryARB(GL_SAMPLES_PASSED_ARB);
 
-	/* draw the 2nd box (blue) which is occluded by the occluder throughly */
+	/* draw the 2nd box (blue) which is occluded by the occluder thoroughly */
 	glBeginQueryARB(GL_SAMPLES_PASSED_ARB, id);
 	glColor3f(0, 0, 1);
 	piglit_draw_rect(-0.4, 0.4, 0.4, -0.4);
@@ -126,7 +126,7 @@ conformOQ_GetObjivAval_multi1(void *data)
 	return passed > 0 ? PIGLIT_FAIL : PIGLIT_PASS;
 }
 
-/* If mutiple queries are issued on the same target and diff ids prior
+/* If multiple queries are issued on the same target and diff ids prior
  * to calling GetQueryObject[u]iVARB, the results should be
  * corresponding to those queries (ids) respectively.
  */

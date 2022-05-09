@@ -749,7 +749,7 @@ piglit_cl_create_context(cl_platform_id platform_id,
 		return NULL;
 	}
 
-	/* create and assing command queues */
+	/* create and assign command queues */
 	context->command_queues = malloc(num_devices * sizeof(cl_command_queue));
 	for(i = 0; i < num_devices; i++) {
 		context->command_queues[i] = clCreateCommandQueue(context->cl_ctx,
@@ -877,7 +877,7 @@ piglit_cl_fail_build_program_with_source(piglit_cl_context context,
 
 cl_program
 piglit_cl_build_program_with_binary_extended(piglit_cl_context context,
-                                             size_t* lenghts,
+                                             size_t* lengths,
                                              unsigned char** binaries,
                                              const char* options, bool fail)
 {
@@ -889,7 +889,7 @@ piglit_cl_build_program_with_binary_extended(piglit_cl_context context,
 	program = clCreateProgramWithBinary(context->cl_ctx,
 	                                    context->num_devices,
 	                                    context->device_ids,
-	                                    lenghts,
+	                                    lengths,
 	                                    (const unsigned char**)binaries,
 	                                    binary_status,
 	                                    &errNo);
@@ -957,22 +957,22 @@ piglit_cl_build_program_with_binary_extended(piglit_cl_context context,
 }
 
 cl_program
-piglit_cl_build_program_with_binary(piglit_cl_context context, size_t* lenghts,
+piglit_cl_build_program_with_binary(piglit_cl_context context, size_t* lengths,
                                     unsigned char** binaries,
                                     const char* options)
 {
-	return piglit_cl_build_program_with_binary_extended(context, lenghts,
+	return piglit_cl_build_program_with_binary_extended(context, lengths,
 	                                                    binaries, options,
 	                                                    false);
 }
 
 cl_program
 piglit_cl_fail_build_program_with_binary(piglit_cl_context context,
-                                         size_t* lenghts,
+                                         size_t* lengths,
                                          unsigned char** binaries,
                                          const char* options)
 {
-	return piglit_cl_build_program_with_binary_extended(context, lenghts,
+	return piglit_cl_build_program_with_binary_extended(context, lengths,
 	                                                    binaries, options,
 	                                                    true);
 }

@@ -60,8 +60,8 @@ class TestFastSkipMixin(object):  # pylint: disable=too-many-public-methods
     def test_api(self):
         """Tests that the api works.
 
-        Since you're not suppoed to be able to pass gl and gles version, this
-        uses two seperate constructor calls.
+        Since you're not supposed to be able to pass gl and gles version, this
+        uses two separate constructor calls.
         """
         self._Test(['foo'], extensions={'foo'}, api_version=3, shader_version=2)
         self._Test(['foo'], extensions={'foo'}, api_version=3,
@@ -248,8 +248,8 @@ class TestFastSkipMixinDisabled(object):
     def test_api(self):
         """Tests that the api works.
 
-        Since you're not suppoed to be able to pass gl and gles version, this
-        uses two seperate constructor calls.
+        Since you're not supposed to be able to pass gl and gles version, this
+        uses two separate constructor calls.
         """
         self._Test(['foo'], extensions={'foo'}, api_version=3, shader_version=2)
         self._Test(['foo'], extensions={'foo'}, api_version=3,

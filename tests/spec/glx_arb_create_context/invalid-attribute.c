@@ -43,7 +43,7 @@ static bool try_attribute(int attribute)
 
 	if (ctx != NULL) {
 		fprintf(stderr,
-			"Created OpenGL context with invalud attribute "
+			"Created OpenGL context with invalid attribute "
 			"0x%08x, but this should have failed.\n",
 			attribute);
 		glXDestroyContext(dpy, ctx);

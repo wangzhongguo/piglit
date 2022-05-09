@@ -619,7 +619,7 @@ def _store_test_vector(test_suite_dict, name, glsl_version, extension, test_vect
     glsl_version is adjusted if necessary to reflect when the argument
     and return types were introduced into GLSL.
 
-    If template is supplied, it is used insted as the template for the
+    If template is supplied, it is used instead as the template for the
     Signature objects generated.
     """
     if template is None:
@@ -642,7 +642,7 @@ def _store_test_vectors(test_suite_dict, name, glsl_version, extension,
     """Store multiple test vectors in the appropriate places in
     test_suite_dict.
 
-    If template is supplied, it is used insted as the template for the
+    If template is supplied, it is used instead as the template for the
     Signature objects generated.
     """
     for test_vector in test_vectors:
@@ -863,7 +863,7 @@ def _make_vector_or_matrix_test_vectors(test_suite_dict):
         return lambda *args: _argument_types_match(args, indices)
 
     def match_simple_binop(x, y):
-        """Detemine whether the type of the arguments is compatible
+        """Determine whether the type of the arguments is compatible
         for a simple binary operator (such as '+').
 
         Arguments are compatible if one is a scalar and the other is a
@@ -1086,7 +1086,7 @@ def _make_vector_or_matrix_test_vectors(test_suite_dict):
         should be used to compute the tolerance for the test vectors.
         Otherwise, _strict_tolerance is used.
 
-        If template is supplied, it is used insted as the template for
+        If template is supplied, it is used instead as the template for
         the Signature objects generated.
         """
         test_inputs = make_arguments(test_inputs)

@@ -37,7 +37,7 @@ from framework import exceptions
 
 from . import skip
 
-# Making good test names often flies in the face of PEP8 recomendations, ignore
+# Making good test names often flies in the face of PEP8 recommendations, ignore
 # those
 # pylint: disable=invalid-name
 #

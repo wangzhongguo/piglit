@@ -1,4 +1,4 @@
-# Test return lowering when nested in a loop thats nested in an if.
+# Test return lowering when nested in a loop that's nested in an if.
 #
 # Bugzilla: https://bugs.freedesktop.org/show_bug.cgi?id=100303
 [require]

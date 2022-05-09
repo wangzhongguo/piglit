@@ -65,7 +65,7 @@ class TestIterDeqpTestCases(object):
     """Tests for iter_deqp_test_cases."""
 
     def _do_test(self, write, expect, tmpdir):
-        """Run the acutal test."""
+        """Run the actual test."""
         p = tmpdir.join('foo')
         p.write(write)
         gen = deqp.iter_deqp_test_cases(str(p))

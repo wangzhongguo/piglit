@@ -1,4 +1,4 @@
-# Simple test of accessing an atomic counter with dynamic indicies.
+# Simple test of accessing an atomic counter with dynamic indices.
 #
 
 [require]
@@ -26,7 +26,7 @@ void main()
 	uint v0[12];
 	uint v1[12];
 
-	/* Get all initail values of a0 */
+	/* Get all initial values of a0 */
 	v0[0] = atomicCounter(a0[0][0]);
 	v0[1] = atomicCounter(a0[0][1]);
 	v0[2] = atomicCounter(a0[0][2]);

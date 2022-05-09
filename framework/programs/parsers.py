@@ -24,7 +24,7 @@
 Much of this module is based on taking advantage of ArgumentParser's parent
 argument and it's parse_known_args() method. The idea is that some parts of
 parsers can be shared to reduce code duplication, either by parsing the
-argumetns early and acting on them, or by inheriting from a parent object.
+arguments early and acting on them, or by inheriting from a parent object.
 
 """
 

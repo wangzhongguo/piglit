@@ -143,7 +143,7 @@ char *source =
 
 
 
-"//Partial W calculations (used for the begining where only some values are nonzero)\n"
+"//Partial W calculations (used for the beginning where only some values are nonzero)\n"
 "#define P1(n) ((rot(W[(n)-2],15u)^rot(W[(n)-2],13u)^((W[(n)-2])>>10U)))\n"
 "#define P2(n) ((rot(W[(n)-15],25u)^rot(W[(n)-15],14u)^((W[(n)-15])>>3U)))\n"
 

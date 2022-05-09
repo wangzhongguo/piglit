@@ -85,21 +85,21 @@ void main()
 
 	uint idx = (y * width) + x;
 
-	uint comparitor;
+	uint comparator;
 
 	uint j = y & 7u;
 	if (j <= 3u)
-		comparitor = floatBitsToUint(float(idx));
+		comparator = floatBitsToUint(float(idx));
 	else if (j == 4u)
-		comparitor = make_qnan(idx * 101701u, false);
+		comparator = make_qnan(idx * 101701u, false);
 	else if (j == 5u)
-		comparitor = make_qnan(idx * 89137u, true);
+		comparator = make_qnan(idx * 89137u, true);
 	else if (j == 6u)
-		comparitor = make_snan(idx * 2399u, false);
+		comparator = make_snan(idx * 2399u, false);
 	else
-		comparitor = make_snan(idx * 337u, true);
+		comparator = make_snan(idx * 337u, true);
 
-	float result = atomicMax(value[idx], uintBitsToFloat(comparitor));
+	float result = atomicMax(value[idx], uintBitsToFloat(comparator));
 
 	uint k = idx & 7u;
 	if (k <= 3u)
@@ -128,7 +128,7 @@ void main()
 		 *                               does not explicitly state
                  *                               which.
 		 */
-		if (is_snan(comparitor))
+		if (is_snan(comparator))
 			expect(is_snan(after));
 		else
 			expect(floatBitsToUint(after) == floatBitsToUint(result));
@@ -141,9 +141,9 @@ void main()
 		 *                               does not explicitly state
                  *                               which.
 		 */
-		if (is_snan(comparitor))
-			expect(floatBitsToUint(after) == comparitor);
-		else if (is_qnan(comparitor))
+		if (is_snan(comparator))
+			expect(floatBitsToUint(after) == comparator);
+		else if (is_qnan(comparator))
 			expect(is_qnan(after));
 		else
 			expect(after == float(idx));
@@ -153,9 +153,9 @@ void main()
 		 *    fmax(x, sNaN) => sNaN
 		 *    fmax(x, qNaN) => x
 		 */
-		if (is_snan(comparitor))
-			expect(floatBitsToUint(after) == comparitor);
-		else if (is_qnan(comparitor))
+		if (is_snan(comparator))
+			expect(floatBitsToUint(after) == comparator);
+		else if (is_qnan(comparator))
 			expect(after == float(idx) - 0.5);
 		else
 			expect(after == float(idx));

@@ -234,7 +234,7 @@ piglit_rotation_matrix(float mat[16], float angle, float x, float y, float z)
        *  ...etc.  Because of those relations and the standard trigonometric
        *  relations, it is pssible to reduce the transforms down to what
        *  is used below.  It may be that any primary axis chosen will give the
-       *  same results (modulo a sign convention) using thie method.
+       *  same results (modulo a sign convention) using this method.
        *
        *  Particularly nice is to notice that all divisions that might
        *  have caused trouble when parallel to certain planes or
@@ -381,7 +381,7 @@ piglit_matrix_mul_vector(float out[4],
 
 
 /**
- * Transfrom NDC coordinate to window coordinate using a viewport.
+ * Transform NDC coordinate to window coordinate using a viewport.
  */
 void
 piglit_ndc_to_window(float win[3],

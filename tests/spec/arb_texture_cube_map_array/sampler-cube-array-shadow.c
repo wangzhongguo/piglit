@@ -63,7 +63,7 @@ static GLfloat compvals[6][4] = { { -0.50,  0.00,  0.50,  0.00 },
 #define STRIDE (9 * sizeof(GLfloat))
 /* Setup interleaved vertex attributes for 6 * 4 vertices:
  * 4 float vertex coordinates for drawing 6 quads aligned in a 3x2 grid with
- *   some space inbetween.
+ *   some space in between.
  * 4 float texture coordinates for sampling one cube map face per quad.
  * 1 float compare value for shadow texture fetch.
  */

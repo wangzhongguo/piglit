@@ -20,7 +20,7 @@
 //           * if more than one varying out variable is bound to the same
 //             number and index; or
 //
-//           * if the explicit binding assigments do not leave enough space
+//           * if the explicit binding assignments do not leave enough space
 //             for the linker to automatically assign a location for a varying
 //             out array, which requires multiple contiguous locations."
 //

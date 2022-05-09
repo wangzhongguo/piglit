@@ -27,7 +27,7 @@
 /**
  * @file export.c
  *
- * Test verifies that we can succesfully export imported dmabuf.
+ * Test verifies that we can successfully export imported dmabuf.
  */
 
 PIGLIT_GL_TEST_CONFIG_BEGIN

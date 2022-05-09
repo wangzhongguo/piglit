@@ -237,7 +237,7 @@ enter_event_loop(struct piglit_winsys_framework *winsys_fw)
 	enum piglit_result result = PIGLIT_PASS;
 
 	/* The Wayland window fails to appear on the first call to
-	 * swapBuffers (which occured in display_cb above). This is
+	 * swapBuffers (which occurred in display_cb above). This is
 	 * likely due to swapBuffers being called before receiving an
 	 * expose event. Until piglit has proper Wayland support,
 	 * redraw as a workaround.

@@ -28,7 +28,7 @@
 uniform sampler2DRect tex;
 vec3 rgb2hsl (vec3 v)
 {
-/* TODO: check this algorythm */
+/* TODO: check this algorithm */
   float MIN, MAX;
   float r, g, b;
   float h, l, s;

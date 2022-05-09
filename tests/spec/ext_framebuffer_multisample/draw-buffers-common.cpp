@@ -227,7 +227,7 @@ shader_compile(bool sample_alpha_to_coverage,
 	glBindAttribLocation(prog, 0, "pos");
 	glEnableVertexAttribArray(0);
 
-	/* Linking is rquired after glBindFragDataLocation */
+	/* Linking is required after glBindFragDataLocation */
 	glLinkProgram(prog);
 
 	/* Set up uniforms */
@@ -902,7 +902,7 @@ ms_fbo_and_draw_buffers_setup(int samples,
 	ms_config.color_internalformat = color_buffer_zero_format;
 	ms_fbo.setup(ms_config);
 
-	/* Create resolve_fbo with dimensions large enough to accomodate
+	/* Create resolve_fbo with dimensions large enough to accommodate
 	 * all the draw buffers
 	 */
 	FboConfig resolve_config(0, pattern_width,

@@ -302,7 +302,7 @@ class TestWflInfo(object):
 
         def test_gl_version(self, inst):
             """wflinfo.WflInfo.get_gl_version: Handles OSError "no file"
-            gracefull.
+            graceful.
             """
             assert inst.core.api_version == 0.0
 

@@ -588,8 +588,8 @@ piglit_init(int argc, char **argv)
 		tolerance[3] = 0.1;
 		break;
 	case GL_LUMINANCE6_ALPHA2: /* broken but everybody uses 8+8 bits */
-	case GL_LUMINANCE4: /* broken but presumably noone uses just 4 bits */
-	case GL_ALPHA4: /* broken but presumably noone uses just 4 bits */
+	case GL_LUMINANCE4: /* broken but presumably no one uses just 4 bits */
+	case GL_ALPHA4: /* broken but presumably no one uses just 4 bits */
 	case GL_RGBA2: /* broken (4444) but everybody uses more bits anyway */
 	default:
 		break;
@@ -863,10 +863,10 @@ test_exact()
 		int j;
 		for (j = 0; j < texture_size; ++j) {
 			for (i = 0; i < tex_width * channels; i++) {
-				GLshort datas = ((GLshort *)data)[i];
+				GLshort data = ((GLshort *)data)[i];
 				GLshort obss = ((GLshort *)observed)[i];
-				if (!(datas == obss ||
-				      (datas == -32768 && obss == -32767))) {
+				if (!(data == obss ||
+				      (data == -32768 && obss == -32767))) {
 					pass = GL_FALSE;
 				}
 			}

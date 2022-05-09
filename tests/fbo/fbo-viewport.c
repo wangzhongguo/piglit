@@ -151,7 +151,7 @@ piglit_display(void)
 
 	glBindFramebuffer(GL_FRAMEBUFFER, piglit_winsys_fbo);
 
-#if 0	/* for debug/compare (alternate diplaying Window vs. FBO image) */
+#if 0	/* for debug/compare (alternate displaying Window vs. FBO image) */
 	{
 		int i;
 		glWindowPos2i(0,0);

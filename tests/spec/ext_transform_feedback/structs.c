@@ -38,7 +38,7 @@
  *   passed to glTransformFeedbackVaryings().
  *
  * - The intention is for the transform feedback API to behave
- *   similary to glGetUniformLocation() and
+ *   similarly to glGetUniformLocation() and
  *   glGetProgramResourceLocation().
  *
  * This test verifies proper operation of transform feedback varyings

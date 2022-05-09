@@ -212,7 +212,7 @@ static int compare_function_names(const void *x, const void *y)
  *   regardless of whether desktop GL or GLES is in use.
  *
  * - Synonymous function names (e.g. glMapBuffer and glMapBufferARB)
- *   may be used interchangably; the correct function is automatically
+ *   may be used interchangeably; the correct function is automatically
  *   chosen based on the GL version and extension string.
  *
  * - If the requested function is not supported by the implementation,

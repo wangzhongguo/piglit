@@ -3,7 +3,7 @@
 // glsl_version: 1.30
 // [end config]
 //
-// Check that 'centroid in' cannot be used a local variable qualifer.
+// Check that 'centroid in' cannot be used a local variable qualifier.
 
 #version 130
 

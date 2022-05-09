@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 		&& pass;
 
 	/* Create a second indirect-rendering context, and have it share the
-	 * first indirect-rendering context.  The XID of the share conext for
+	 * first indirect-rendering context. The XID of the share context for
 	 * the original context should be unchanged.
 	 */
 	ctx = glXCreateContext(dpy, visinfo, indirectCtx, False);

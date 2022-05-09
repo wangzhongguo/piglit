@@ -1,4 +1,4 @@
-# This tests a bug in the r300 compiler where it was too aggresive
+# This tests a bug in the r300 compiler where it was too aggressive
 # with optimizations (copy propagation) of movs in loops.
 #
 # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/6467

@@ -92,7 +92,7 @@ probe_line_rect(int x1, int y1, int x2, int y2)
 				       black));
 }
 
-/* Sets a range of the color array to a spefific color. */
+/* Sets a range of the color array to a specific color. */
 static void
 set_colors(float *colors, unsigned int start, unsigned int count,
 	   const float *color)

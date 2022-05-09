@@ -157,7 +157,7 @@ tr_func(float a, float b)
 enum piglit_result
 piglit_display(void)
 {
-	const GLfloat comparitor[4] = { 0.5, 0.5, 0.5, 0.5 };
+	const GLfloat comparator[4] = { 0.5, 0.5, 0.5, 0.5 };
 	static const float values[3] = { 0.0, 0.5, 1.0 };
 	unsigned i;
 	unsigned j;
@@ -168,7 +168,7 @@ piglit_display(void)
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_FRAGMENT_PROGRAM_ARB);
 
-	glProgramEnvParameter4fvARB(GL_FRAGMENT_PROGRAM_ARB, 1, comparitor);
+	glProgramEnvParameter4fvARB(GL_FRAGMENT_PROGRAM_ARB, 1, comparator);
 
 	for (i = 0; i < (2 * ARRAY_SIZE(progs)); i++) {
 		const int y = (i * (BOX_SIZE + 1)) + 1;
@@ -194,13 +194,13 @@ piglit_display(void)
 			ref[2] = values[(j /  9) % 3];
 			ref[3] = values[(j / 27) % 3];
 
-			color[0] = tests[idx].func(comparitor[0], ref[0])
+			color[0] = tests[idx].func(comparator[0], ref[0])
 				? 1.0 : 0.0;
-			color[1] = tests[idx].func(comparitor[1], ref[1])
+			color[1] = tests[idx].func(comparator[1], ref[1])
 				? 1.0 : 0.0;
-			color[2] = tests[idx].func(comparitor[2], ref[2])
+			color[2] = tests[idx].func(comparator[2], ref[2])
 				? 1.0 : 0.0;
-			color[3] = tests[idx].func(comparitor[3], ref[3])
+			color[3] = tests[idx].func(comparator[3], ref[3])
 				? 1.0 : 0.0;
 
 			glProgramEnvParameter4fvARB(GL_FRAGMENT_PROGRAM_ARB,

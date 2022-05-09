@@ -420,7 +420,7 @@ void random_triangle(Triangle& tri)
  * which either top, left, bottom or right edges of a triangles 'belong' to it,
  * that is, if one of those edges intersects with a fragment center, the
  * fragment is produced. Additionally, for 'top' and 'bottom'-type triangles
- * either left or right vertical edges 'belong' to it. Similarily the same is
+ * either left or right vertical edges 'belong' to it. Similarly the same is
  * true with horizontal edges and 'left' and 'right'-type triangles.
  *
  * For example: consider these 8 triangles centered around a fragment center:
@@ -437,7 +437,7 @@ void random_triangle(Triangle& tri)
  * and left because all left facing edges 'belong' to it).
  *
  * This function determines the convention by drawing the 8 triangles shown
- * above in sub-pixel-size into 8 seperate pixels and checks which
+ * above in sub-pixel-size into 8 separate pixels and checks which
  * pixel is filled.
  */
 void get_filling_convention(void)

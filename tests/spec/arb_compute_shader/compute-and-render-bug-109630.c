@@ -27,7 +27,7 @@
  * Test verifies that after compute workload geometry renders fine.
  * This exercises hardware issue in Intel's GEN9 GPU which resulted
  * in geometry flickering see https://bugs.freedesktop.org/show_bug.cgi?id=109630
- * There is no guarantied way to reproduce the issue but to run the
+ * There is no guaranteed way to reproduce the issue but to run the
  * core part of the test many times.
  *
  * \author Andrii Kryvytskyi <andrii.o.kryvytskyi@globallogic.com>
@@ -157,7 +157,7 @@ piglit_display(void) {
         glFinish();
 
         if (!piglit_probe_pixel_rgba(0, 0, expected)) {
-            printf("Failed on interation #%d \n", i);
+            printf("Failed on iteration #%d \n", i);
             pass = false;
             break;
         }

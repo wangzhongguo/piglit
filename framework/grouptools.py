@@ -112,11 +112,11 @@ def join(first, *args):
     wrote a number of implementations and timed them with timeit.  I found for
     small number of joins (2-10) that str concatenation was quite a bit faster,
     at around 100 elements list joining became faster. Since most of piglit's
-    use of join is for 2-10 elements I used string concatentation, which is
+    use of join is for 2-10 elements I used string concatenation, which is
     coincidentally very similar to the way posixpath.join is implemented.
 
     """
-    # If first happens to be a non-existant value, walk through args until we
+    # If first happens to be a non-existent value, walk through args until we
     # find a real value and use that.
     args = (a for a in args)
     if not first:

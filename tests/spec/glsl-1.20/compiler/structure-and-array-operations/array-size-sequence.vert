@@ -3,7 +3,7 @@
  * glsl_version: 1.20
  * [end config]
  *
- * The body of the GLSL spec is slient on this issue, but the grammar says:
+ * The body of the GLSL spec is silent on this issue, but the grammar says:
  *
  *     expression:
  *         assignment_expression

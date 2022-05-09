@@ -119,7 +119,7 @@ piglit_display()
 	glClearColor(0.0, 1.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	/* Clear all color attachements of multisample_fbo to blue color */
+	/* Clear all color attachments of multisample_fbo to blue color */
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, multisample_fbo.handle);
 	glDrawBuffers(6, bufs);
 	glClearColor(0.0, 0.0, 1.0, 1.0);

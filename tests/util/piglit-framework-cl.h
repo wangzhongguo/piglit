@@ -149,7 +149,7 @@ piglit_cl_get_test_config(const int argc,
  * that is used to retrieve the test configuration, set default
  * values to it and implement main function.
  *
- * In beetween \c PIGLIT_CL_TEST_CONFIG_BEGIN and
+ * In between \c PIGLIT_CL_TEST_CONFIG_BEGIN and
  * \c PIGLIT_CL_TEST_CONFIG_END macros you can set values of fields
  * defined in \c test_config_struct_t type.
  *
@@ -218,7 +218,7 @@ piglit_cl_get_test_config(const int argc,
  * It defines the first part \c test_config_struct_t type with first bytes
  * set to \c piglit_cl_text_config_header.
  *
- * In beetween \c PIGLIT_CL_DEFINE_TEST_CONFIG_BEGIN and
+ * In between \c PIGLIT_CL_DEFINE_TEST_CONFIG_BEGIN and
  * \c PIGLIT_CL_DEFINE_TEST_CONFIG_END macros you can define additional
  * fields used by the tests.
  *
@@ -352,7 +352,7 @@ piglit_cl_get_device_arg(const int argc,
                          cl_device_id* device_id);
 
 /**
- * \brief Check if the given local work demensions are supported on this device.
+ * \brief Check if the given local work dimensions are supported on this device.
  * @param device_id       Device to check
  * @param local_work_size Local work dimensions
  * @return                \c true if the local work dimensions are supported,

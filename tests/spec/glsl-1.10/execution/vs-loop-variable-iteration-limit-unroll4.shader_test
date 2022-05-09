@@ -21,7 +21,7 @@ void main()
   int x = 0;
 
   /* Here we add a second && and put the known limit i < 4 in parentheses in
-   * order to trigger a Mesa bug seen in a Assasins Creed Odyssey shader
+   * order to trigger a Mesa bug seen in a Assassins Creed Odyssey shader
    */
   while (x < loop_count && (i < 4 && j < loop_count2)) {
     if (x == 0 && i == 0)

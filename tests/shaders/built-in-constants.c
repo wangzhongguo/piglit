@@ -557,7 +557,7 @@ piglit_init(int argc, char **argv)
 
 	for (i = 0; i < num_tests; i++) {
 		bool subtest_pass = true;
-		const char *comparitor =
+		const char *comparator =
 			parse_str(tests[i].name, "gl_Min", NULL) ? "<=" : ">=";
 
 		/* Generate the uniform declaration for the test.  This will
@@ -565,7 +565,7 @@ piglit_init(int argc, char **argv)
 		 */
 		snprintf(uniform, sizeof(uniform),
 			 uniform_template,
-			 tests[i].name, comparitor, tests[i].minimum);
+			 tests[i].name, comparator, tests[i].minimum);
 
 		/* Try to compile the vertex shader.
 		 */

@@ -203,7 +203,7 @@ struct piglit_gl_test_config {
 	/**
 	 * Names of subtests supplied on the command line.
 	 *
-	 * The paramaters passed to each -subtest command line option is
+	 * The parameters passed to each -subtest command line option is
 	 * stored here in the order of appearance on the command line.
 	 */
 	const char **selected_subtests;

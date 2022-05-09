@@ -1123,7 +1123,7 @@ run_multi_texture_test(void)
 }
 
 /* We do a really short, simple test for GL_ARB_texture_env_crossbar since the
- * preceeding tests are pretty comprehensive and the crossbar feature is just
+ * preceding tests are pretty comprehensive and the crossbar feature is just
  * an incremental addition.  Basically, if we have N texture units we run N
  * tests.  For test [i] we set texture unit [i] to fetch the texture color
  * from unit [num_units - i - 1].  For units != i we use the constant color
@@ -1258,7 +1258,7 @@ piglit_init(int argc, char **argv)
 {
 	piglit_require_extension("GL_EXT_texture_env_combine");
 
-	/* Test the availability of the DOT3 extenstion */
+	/* Test the availability of the DOT3 extension */
 	have_dot3 = piglit_is_extension_supported("GL_EXT_texture_env_dot3");
 
 	have_crossbar =

@@ -47,7 +47,7 @@ struct attribute {
 	 * This attribute must be active in the linked shader.
 	 *
 	 * Some attributes must be active and some may or may not be active
-	 * (becuase a clever compiler could optimize them away.  Attributes
+	 * (because a clever compiler could optimize them away.  Attributes
 	 * that must not be active should not be listed in
 	 * \c test::attributes.
 	 */
