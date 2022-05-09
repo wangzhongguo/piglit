@@ -9,7 +9,7 @@
 # with older commits using the same tag.
 variables:
   FDO_UPSTREAM_REPO: mesa/piglit
-  FDO_DISTRIBUTION_TAG: "2021-12-13-use-stable"
+  FDO_DISTRIBUTION_TAG: "2022-08-09-add-linting"
   FDO_DISTRIBUTION_VERSION: bullseye-slim
   WINDOWS_TAG: "2022-07-27-win2022"
   WINDOWS_IMAGE: "$CI_REGISTRY_IMAGE/windows/x64_build:$WINDOWS_TAG"
@@ -23,6 +23,7 @@ include:
 
 stages:
   - container
+  - check
   - build
   - deploy
 
@@ -76,6 +77,19 @@ windows:
     - "2022"
   needs: [windows]
   image: $WINDOWS_IMAGE
+
+# CHECK
+linting:
+  stage: check
+  extends:
+    - .use-debian
+  script:
+    - codespell -f -S ".mypy_cache" -L "lod,LOD,inout,nd,ND,valu,VALU,tese,ba,te,nin"
+    - export CHECKPATH=framework/replay # restrict Python checks only on framework/replay for now
+    - flake8 --max-line-length=120 --show-source $CHECKPATH
+    - mypy --ignore-missing-imports --disallow-incomplete-defs $CHECKPATH
+    - pylint --fail-under=8.5 $CHECKPATH
+
 
 # BUILD
 

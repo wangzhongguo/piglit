@@ -24,6 +24,8 @@ apt-get install -y \
   bison \
   ccache \
   cmake \
+  codespell \
+  flake8 \
   flex \
   freeglut3-dev \
   g++-multilib \
@@ -43,6 +45,7 @@ apt-get install -y \
   libxkbcommon-dev \
   libxrender-dev \
   mingw-w64 \
+  mypy \
   ninja-build \
   ocl-icd-opencl-dev \
   pkg-config \
@@ -64,6 +67,7 @@ apt-get install -y \
   python3-setuptools \
   python3-wheel \
   python3-yaml \
+  pylint \
   tox \
   waffle-utils \
   $EPHEMERAL
