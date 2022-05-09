@@ -78,7 +78,7 @@ def _check_trace(trace_path, expected_checksum):
     json_result = {}
 
     trace_dir = path.dirname(trace_path)
-    dir_in_results = path.join('trace', OPTIONS.device_name, trace_dir)
+    dir_in_results = path.join('trace', OPTIONS.device_name or '', trace_dir)
     results_path = path.join(OPTIONS.results_path, dir_in_results)
     core.check_dir(results_path)
 
