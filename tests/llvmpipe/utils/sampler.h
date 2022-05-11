@@ -277,11 +277,6 @@ public:
       randomise();
    }
 
-   operator GLenum()
-   {
-      return mValue;
-   }
-
    operator GLenum() const
    {
       return mValue;
