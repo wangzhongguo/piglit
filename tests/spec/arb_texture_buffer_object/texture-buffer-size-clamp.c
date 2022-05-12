@@ -43,7 +43,7 @@ struct test_parameter
 	GLuint buffer_id, texture_id;
 
 	enum piglit_result (*test_func)(struct test_parameter *self,
-					size_t texel_count);
+					GLsizeiptr texel_count);
 };
 
 static const struct texture_format
@@ -110,7 +110,7 @@ piglit_display()
 
 static enum piglit_result
 test_sampler_buffer_internal(struct test_parameter *parameters,
-			     size_t texel_count)
+			     GLsizeiptr texel_count)
 {
 	glUseProgram(parameters->program);
 
@@ -145,7 +145,7 @@ test_sampler_buffer_internal(struct test_parameter *parameters,
 
 static enum piglit_result
 test_image_buffer_internal(struct test_parameter *parameters,
-			   size_t texel_count)
+			   GLsizeiptr texel_count)
 {
 	if (!piglit_is_extension_supported("GL_ARB_compute_shader")) {
 		return PIGLIT_SKIP;
@@ -198,7 +198,7 @@ test_buffer(void *param)
 	enum piglit_result pass = PIGLIT_PASS;
 
 	for (size_t i = 0; i < ARRAY_SIZE(offsets); i++) {
-		int32_t texel_count = max_size + offsets[i];
+		GLsizeiptr texel_count = (int64_t)max_size + offsets[i];
 
 		enum piglit_result ret = parameter->test_func(parameter,
 							      texel_count);
@@ -206,7 +206,7 @@ test_buffer(void *param)
 		if (ret == PIGLIT_FAIL) {
 			piglit_loge("Wrong shader texel count result, "
 				    "max buffer texture size %d, "
-				    "texture buffer size: %d",
+				    "texture buffer size: %ld",
 				    max_size, texel_count);
 			return ret;
 		} else if (ret == PIGLIT_SKIP) {
