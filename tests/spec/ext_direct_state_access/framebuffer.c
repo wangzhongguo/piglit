@@ -69,6 +69,7 @@ test_FramebufferDrawBufferEXT(void* d)
 			piglit_loge("glFramebufferDrawBufferEXT(..., %s) failed. Got %s\n",
 				    piglit_get_gl_enum_name(attachments[i]),
 				    piglit_get_gl_enum_name(got));
+			free(attachments);
 			return PIGLIT_FAIL;
 		}
 
@@ -82,6 +83,7 @@ test_FramebufferDrawBufferEXT(void* d)
 					    j,
 					    piglit_get_gl_enum_name(attachments[i + j]),
 					    piglit_get_gl_enum_name(got));
+				free(attachments);
 				return PIGLIT_FAIL;
 			}
 		}
@@ -89,6 +91,7 @@ test_FramebufferDrawBufferEXT(void* d)
 
 	glDeleteFramebuffers(ARRAY_SIZE(fbs), fbs);
 
+	free(attachments);
 	return piglit_check_gl_error(GL_NO_ERROR) ? PIGLIT_PASS : PIGLIT_FAIL;
 }
 
@@ -171,6 +174,7 @@ test_FramebufferReadBufferEXT(void* d)
 			piglit_loge("glFramebufferReadBufferEXT(..., %s) failed. Got %s\n",
 				    piglit_get_gl_enum_name(attachments[i]),
 				    piglit_get_gl_enum_name(got));
+			free(attachments);
 			return PIGLIT_FAIL;
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -178,6 +182,7 @@ test_FramebufferReadBufferEXT(void* d)
 
 	glDeleteFramebuffers(1, &fb);
 
+	free(attachments);
 	return piglit_check_gl_error(GL_NO_ERROR) ? PIGLIT_PASS : PIGLIT_FAIL;
 }
 
