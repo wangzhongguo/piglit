@@ -5061,7 +5061,7 @@ piglit_display(void)
 		}
 		else if (sscanf(line, "xfb buffer object %u %u", &ux, &uy) == 2) {
 			GLuint *xfb_init = calloc(uy, 1);
-			if (ux < 0 || ux >= MAX_XFB_BUFFERS) {
+			if (ux >= MAX_XFB_BUFFERS) {
 				printf("xfb buffer id %d out of range\n", ux);
 				piglit_report_result(PIGLIT_FAIL);
 			}
