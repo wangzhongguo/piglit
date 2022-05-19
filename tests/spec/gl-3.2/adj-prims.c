@@ -158,36 +158,41 @@ static bool draw_elements = false;
  * the vertex which will specify the primitive's flat-shaded color.
  */
 static unsigned
-provoking_vertex_index(GLenum prim_mode, GLenum pv_mode, unsigned prim_index)
+provoking_vertex_index(GLenum prim_mode, GLenum pv_mode, unsigned one_based_prim_index)
 {
+	unsigned one_based_vert_index;
+
 	switch (prim_mode) {
 	case GL_LINES_ADJACENCY:
 		if (pv_mode == GL_FIRST_VERTEX_CONVENTION)
-			return prim_index * 4 + 1;
+			one_based_vert_index = one_based_prim_index * 4 - 2;
 		else
-			return prim_index * 4 + 2;
+			one_based_vert_index = one_based_prim_index * 4 - 1;
+		break;
 	case GL_LINE_STRIP_ADJACENCY:
 		if (pv_mode == GL_FIRST_VERTEX_CONVENTION)
-			return prim_index + 1;
+			one_based_vert_index = one_based_prim_index + 1;
 		else
-			return prim_index + 2;
+			one_based_vert_index = one_based_prim_index + 2;
+		break;
 	case GL_TRIANGLES_ADJACENCY:
 		if (pv_mode == GL_FIRST_VERTEX_CONVENTION)
-			return prim_index * 6 + 0;
+			one_based_vert_index = one_based_prim_index * 6 - 5;
 		else
-			return prim_index * 6 + 4;
+			one_based_vert_index = one_based_prim_index * 6 - 1;
+		break;
 	case GL_TRIANGLE_STRIP_ADJACENCY:
 		if (pv_mode == GL_FIRST_VERTEX_CONVENTION) {
-			if (prim_index & 1)
-				return prim_index * 2 + 2;
-			else
-				return prim_index * 2;
+			one_based_vert_index = one_based_prim_index * 2 - 1;
 		} else
-			return prim_index * 2 + 4;
+			one_based_vert_index = one_based_prim_index * 2 + 3;
+		break;
 	default:
 		assert(!"Unexpected prim_mode");
 		return 0;
 	}
+	assert(one_based_vert_index > 0);
+	return one_based_vert_index - 1;
 }
 
 
@@ -334,7 +339,7 @@ probe_prims(GLenum prim_mode, const float verts[][2], unsigned num_verts,
 		} else {
 			GLfloat buf[9][4];
 			unsigned pvi = provoking_vertex_index(prim_mode,
-						     provoking_vertex, prim);
+						     provoking_vertex, 1 + prim);
 			memcpy(&expected_color, colors[pvi], sizeof(expected_color));
 			if (prim_mode == GL_TRIANGLES_ADJACENCY ||
 			    prim_mode == GL_TRIANGLE_STRIP_ADJACENCY) {
@@ -398,7 +403,7 @@ probe_xfb(GLenum prim_mode, unsigned num_verts)
 		const float *found_color;
 		float expected_color[4];
 		unsigned pvi = provoking_vertex_index(prim_mode,
-						provoking_vertex, prim);
+						provoking_vertex, 1 + prim);
 
 		memcpy(&expected_color, colors[pvi], sizeof(expected_color));
 		expected_color[2] = pvi * (1.0 / 255);
@@ -603,7 +608,7 @@ draw_lines_adj(GLuint vao, unsigned n)
 		for (i = 0; i < n; i += 4) {
 			unsigned pvi =
 				provoking_vertex_index(GL_LINES_ADJACENCY,
-						       provoking_vertex, i/4);
+						       provoking_vertex, 1 + i/4);
 			set_color(gray);
 
 			// draw preceeding "wing" line
@@ -635,7 +640,7 @@ draw_line_strip_adj(GLuint vao, unsigned n)
 	for (i = 1; i < n-2; i++) {
 		unsigned pvi =
 			provoking_vertex_index(GL_LINE_STRIP_ADJACENCY,
-					       provoking_vertex, i-1);
+					       provoking_vertex, 1 + i - 1);
 		set_color(colors[pvi]);
 		glDrawArrays(GL_LINES, i, 2);
 	}
@@ -654,7 +659,7 @@ draw_triangles_adj(GLuint vao, unsigned n)
 	for (i = 0; i < n; i += 6) {
 		unsigned pvi =
 			provoking_vertex_index(GL_TRIANGLES_ADJACENCY,
-					       provoking_vertex, i/6);
+					       provoking_vertex, 1 + i / 6);
 
 		// draw gray outlines of "wing" triangles
 		set_color(gray);
@@ -685,7 +690,7 @@ draw_triangle_strip_adj(GLuint vao, unsigned n)
 	for (i = 0; i < n-4; i += 2) {
 		unsigned pvi =
 			provoking_vertex_index(GL_TRIANGLE_STRIP_ADJACENCY,
-					       provoking_vertex, i/2);
+					       provoking_vertex, 1 + i / 2);
 
 		if (i % 4 == 2) {
 			// even tri
