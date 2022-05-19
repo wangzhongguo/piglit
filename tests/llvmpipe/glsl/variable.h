@@ -41,7 +41,7 @@ namespace glsl
 
    public:
       Variable()
-         : mLocation(0)
+         : mType(BuiltIn), mLocation(0)
       {
       }
 
