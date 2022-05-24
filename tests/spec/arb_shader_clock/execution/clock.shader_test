@@ -18,36 +18,22 @@ layout(std430, binding = 0) buffer ssbo_data {
 	uint64_t ssbo_time[];
 };
 
-uniform uint phase;
-
 void main() {
 	uint64_t start_time = clockARB();
 
-	if (phase == 0u) {
-		ssbo_time[gl_WorkGroupID.x] = start_time;
-	} else {
-		int64_t diff = int64_t(start_time - ssbo_time[gl_WorkGroupID.x]);
-		if (diff > 0l)
-			atomicCounterIncrement(good);
-	}
+	ssbo_time[gl_WorkGroupID.x] = start_time;
 
-	uint64_t late_time = clockARB();
-	int64_t diff = int64_t(late_time - start_time);
-
+	int64_t diff = int64_t(clockARB() - start_time);
 	if (diff <= 0l)
 		atomicCounterIncrement(bad);
+	else
+		atomicCounterIncrement(good);
 }
 
 [test]
 atomic counters 2
 ssbo 0 64
 
-uniform uint phase 0
-compute 8 1 1
-
-memory barrier GL_SHADER_STORAGE_BARRIER_BIT
-
-uniform uint phase 1
 compute 8 1 1
 
 probe atomic counter 0 == 8
