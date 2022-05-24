@@ -314,7 +314,7 @@ test_dither_control()
 			result = false;
 	}
 	/* Check that both the halves are green */
-	else if(enable_dither & visualize & (num_samples = 0)) {
+	else if(enable_dither & visualize & (num_samples == 0)) {
 		const float expected[4] = {0.0, 1.0, 0.0, 1.0};
 		if (!piglit_probe_rect_rgba(pattern_width, 0, pattern_width, pattern_height, expected))
 			result = false;
