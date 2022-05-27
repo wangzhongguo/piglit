@@ -55,6 +55,7 @@ static GLint max_ds_buffers;
 static GLuint fbo;
 
 static bool use_gpu_shader4;
+static bool use_gles2_shader;
 
 static GLenum srcFactors[] = {
 	GL_ZERO,
@@ -207,6 +208,23 @@ static void blend_expected(float *expected, const float *src, const float *src1,
 	}
 }
 
+static const char *vs_text_gles2 =
+	"#version 100\n"
+	"attribute vec4 piglit_vertex;\n"
+	"void main() {\n"
+	"        gl_Position = piglit_vertex;\n"
+	"}\n"
+	;
+static const char *fs_text_gles2 =
+	"#version 100\n"
+	"#extension GL_EXT_blend_func_extended : enable\n"
+	"uniform highp vec4 src0;\n"
+	"uniform highp vec4 src1;\n"
+	"void main() {\n"
+	"        gl_FragColor = src0;\n"
+	"        gl_SecondaryFragColorEXT = src1;\n"
+	"}\n"
+	;
 #ifdef PIGLIT_USE_OPENGL
 static const char *vs_text =
 	"#version 120\n"
@@ -334,15 +352,26 @@ test(void)
 	}
 
 	prog = glCreateProgram();
-	vs = piglit_compile_shader_text(GL_VERTEX_SHADER, vs_text);
+	if (use_gles2_shader)
+		vs = piglit_compile_shader_text(GL_VERTEX_SHADER, vs_text_gles2);
+	else
+		vs = piglit_compile_shader_text(GL_VERTEX_SHADER, vs_text);
 
-	fs = piglit_compile_shader_text(GL_FRAGMENT_SHADER, use_gpu_shader4 ? fs_text_gpu4 : fs_text);
+	if (use_gpu_shader4)
+		fs = piglit_compile_shader_text(GL_FRAGMENT_SHADER, fs_text_gpu4);
+	else if (use_gles2_shader)
+		fs = piglit_compile_shader_text(GL_FRAGMENT_SHADER, fs_text_gles2);
+	else
+		fs = piglit_compile_shader_text(GL_FRAGMENT_SHADER, fs_text);
+
 	glAttachShader(prog, vs);
 	glAttachShader(prog, fs);
 	piglit_check_gl_error(GL_NO_ERROR);
 
-	glBindFragDataLocationIndexed(prog, 0, 0, "col0");
-	glBindFragDataLocationIndexed(prog, 0, 1, "col1");
+	if (!use_gles2_shader) {
+		glBindFragDataLocationIndexed(prog, 0, 0, "col0");
+		glBindFragDataLocationIndexed(prog, 0, 1, "col1");
+	}
 
 	create_fbo();
 
@@ -406,10 +435,13 @@ piglit_init(int argc, char**argv)
 	int major, minor;
 	piglit_get_glsl_version(NULL, &major, &minor);
 	int vers = 100 * major + minor;
-	if (vers < 130) {
-		piglit_require_extension("GL_EXT_gpu_shader4");
+	if (vers < 130 &&
+	    piglit_is_extension_supported("GL_EXT_gpu_shader4"))
 		use_gpu_shader4 = true;
-	} else
+	else if (vers < 130 &&
+		   piglit_is_extension_supported("GL_ARB_ES2_compatibility"))
+		use_gles2_shader = true;
+	else
 		piglit_require_GLSL_version(130);
 
 #else // PIGLIT_USE_OPENGL_ES3
