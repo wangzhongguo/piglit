@@ -42,7 +42,7 @@ static float tex_data[16*16*4], res_data[16*16*4];
 static const char *fstext = {
 	"uniform sampler2D fb;"
 	"void main() {"
-	"  gl_FragColor = sqrt(texture2D(fb, gl_FragCoord.xy / 16.0));"
+	"  gl_FragColor = texture2D(fb, gl_FragCoord.xy / 16.0) * 0.5;"
 	"}"
 };
 
@@ -93,7 +93,7 @@ void piglit_init(int argc, char **argv)
 		tex_data[i] = (rand() % 256) / 255.f;
 		res_data[i] = tex_data[i];
 		for (j = 0; j < PASSES; j++)
-			res_data[i] = sqrt(res_data[i]);
+			res_data[i] = res_data[i] * 0.5;
 	}
 
 	glEnable(GL_TEXTURE_2D);
