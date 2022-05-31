@@ -21,6 +21,8 @@ void main() {
     gl_FragColor.z = iter == 0 ? vecX.z - vecY.z : 15.0;
     if(b)
         gl_FragColor.x = 1.0;
+    else
+        gl_FragColor.x = 0.0;
 }
 
 [test]
