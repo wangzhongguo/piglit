@@ -126,9 +126,6 @@ test_TextureImageNDEXT(void* data)
 
 	pass = memcmp(expected_pixels, got_pixels, image_size) == 0 && pass;
 
-	free(expected_pixels);
-	free(got_pixels);
-
 	/* The GL_EXT_direct_state_access spec says:
 	 *
 	 *    INVALID_OPERATION is generated [...] if the target parameter does
@@ -141,6 +138,9 @@ test_TextureImageNDEXT(void* data)
 				    GL_RGBA, GL_FLOAT, got_pixels);
 		pass = piglit_check_gl_error(GL_INVALID_OPERATION) && pass;
 	}
+
+	free(expected_pixels);
+	free(got_pixels);
 
 	glDeleteTextures(1, &tex);
 
