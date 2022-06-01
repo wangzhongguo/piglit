@@ -43,7 +43,7 @@ static enum piglit_result check_no_error(bool debug, bool robust)
 		None
 	};
 	static bool is_dispatch_init = false;
-	GLXContext ctx;
+	GLXContext ctx = NULL;
 	enum piglit_result result = PIGLIT_SKIP;
 
 	printf("info: debug=%s, robustness=%s\n", BOOLSTR(debug), BOOLSTR(robust));
