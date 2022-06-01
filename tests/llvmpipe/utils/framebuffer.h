@@ -31,7 +31,7 @@ class FrameBuffer
 {
 public:
    FrameBuffer()
-      : mWidth(0), mHeight(0), mTexture(0), mFrameBuffer(0)
+      : mWidth(0), mHeight(0), mTexture(0), mFrameBuffer(0), mChannelType(0), mClamped(false)
    {
       mInternalFormat = GL_RGBA;
       mFormat = GL_BGRA;
