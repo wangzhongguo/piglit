@@ -134,10 +134,7 @@ if(PIGLIT_BUILD_CL_TESTS)
 endif(PIGLIT_BUILD_CL_TESTS)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-	if(X11_FOUND AND OPENGL_gl_LIBRARY)
-		# Assume the system has GLX. In the future, systems may exist
-		# with libGL and libX11 but no GLX, but that world hasn't
-		# arrived yet.
+	if(X11_FOUND AND OPENGL_gl_LIBRARY AND PIGLIT_BUILD_GLX_TESTS)
 		set(PIGLIT_HAS_GLX True)
 		add_definitions(-DPIGLIT_HAS_GLX)
 	endif()
