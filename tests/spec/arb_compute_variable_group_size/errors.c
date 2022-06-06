@@ -135,7 +135,8 @@ use_fixed_work_group_size(void *data)
 static enum piglit_result
 use_invalid_work_group_count_values(void *data)
 {
-	GLint prog, v[3];
+	GLuint prog;
+	GLint64 v[3];
 
 	/* The ARB_compute_variable_group_size spec says:
 	 *
@@ -148,13 +149,29 @@ use_invalid_work_group_count_values(void *data)
 	glUseProgram(prog);
 
 	/* Use values greater than the maximum work group count. */
-	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &v[0]);
-	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &v[1]);
-	glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &v[2]);
+	glGetInteger64i_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &v[0]);
+	glGetInteger64i_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &v[1]);
+	glGetInteger64i_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &v[2]);
 
-	glDispatchComputeGroupSizeARB(v[0] + 1, v[1] + 1, v[2] + 1, 1, 1, 1);
-	if (!piglit_check_gl_error(GL_INVALID_VALUE))
-		return PIGLIT_FAIL;
+	/* Test 1 dimension at a time. */
+	if (v[0] < UINT32_MAX) {
+		glDispatchComputeGroupSizeARB(v[0] + 1, 1, 1, 1, 1, 1);
+		if (!piglit_check_gl_error(GL_INVALID_VALUE))
+			return PIGLIT_FAIL;
+	}
+
+	if (v[1] < UINT32_MAX) {
+		glDispatchComputeGroupSizeARB(1, v[1] + 1, 1, 1, 1, 1);
+		if (!piglit_check_gl_error(GL_INVALID_VALUE))
+			return PIGLIT_FAIL;
+	}
+
+	if (v[2] < UINT32_MAX) {
+		glDispatchComputeGroupSizeARB(1, 1, v[2] + 1, 1, 1, 1);
+		if (!piglit_check_gl_error(GL_INVALID_VALUE))
+			return PIGLIT_FAIL;
+	}
+
 	return PIGLIT_PASS;
 }
 
