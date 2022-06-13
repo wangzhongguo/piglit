@@ -19,6 +19,10 @@
         return canvas.getContext("2d").getImageData(0, 0, image.naturalWidth, image.naturalHeight);
       }
 
+      function show_image(src) {
+        document.getElementById("diffOutput").innerHTML = '<img src="' + src + '">'
+      }
+
       function compare_images() {
         var diff = document.createElement("canvas");
         var ref = document.getElementById("refimg");
@@ -85,10 +89,11 @@
             </tr>
           % for image in value.images:
             <tr>
-              <td><img width="380px" id="diffimg"/></td>
-              <td><img src="file://${image['image_ref'] if 'image_ref' in image else None}" id="refimg" width="380px" onload="compare_images()" crossorigin="Anonymous"/></td>
-              <td><img src="file://${image['image_render'] if 'image_render' in image else None}" id="rendimg" width="380px" onload="compare_images()" crossorigin="Anonymous"/></td>
+              <td><img width="380px" id="diffimg" onclick="show_image(this.src)"/></td>
+              <td><img src="file://${image['image_ref'] if 'image_ref' in image else None}" id="refimg" width="380px" onload="compare_images()" onclick="show_image(this.src)" crossorigin="Anonymous"/></td>
+              <td><img src="file://${image['image_render'] if 'image_render' in image else None}" id="rendimg" width="380px" onload="compare_images()" onclick="show_image(this.src)" crossorigin="Anonymous"/></td>
             </tr>
+	    <tr><td colspan="3" id="diffOutput"></td></tr>
           % endfor
           </table>
         </td>
