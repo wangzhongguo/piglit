@@ -2,6 +2,8 @@
 GLSL >= 4.00
 GL_AMD_gpu_shader_half_float
 
+[vertex shader passthrough]
+
 [fragment shader]
 #version 400
 #extension GL_AMD_gpu_shader_half_float : require
@@ -17,7 +19,9 @@ void main()
 #endif
 }
 
-
 [test]
+clear color 0.0 0.0 1.0 0.0
+clear
+
 draw rect -1 -1 2 2
 relative probe rgba (0.5, 0.5) (0.0, 1.0, 0.0, 0.0)
