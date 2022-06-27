@@ -26,14 +26,14 @@ float16_t test_uint64_to_f16() {
 
 int64_t test_f16_to_int64() {
 
-	float16_t a = 1.0;
+	float16_t a = 1.0hf;
 
 	return int64_t(a);
 }
 
 uint64_t test_f16_to_uint64() {
 
-	float16_t a = 2.0;
+	float16_t a = 2.0hf;
 
 	return uint64_t(a);
 }

@@ -46,35 +46,35 @@ float16_t test_double_to_f16() {
 
 bool test_f16_to_bool() {
 
-	float16_t a = 0.0;
+	float16_t a = 0.0hf;
 
 	return bool(a);
 }
 
 int test_f16_to_int() {
 
-	float16_t a = 2.0;
+	float16_t a = 2.0hf;
 
 	return int(a);
 }
 
 uint test_f16_to_uint() {
 
-	float16_t a = 3.0;
+	float16_t a = 3.0hf;
 
 	return uint(a);
 }
 
 float test_f16_to_float() {
 
-	float16_t a = 0.345;
+	float16_t a = 0.345hf;
 
 	return float(a);
 }
 
 double test_f16_to_double() {
 
-	float16_t a = 0.345;
+	float16_t a = 0.345hf;
 
 	return double(a);
 }
