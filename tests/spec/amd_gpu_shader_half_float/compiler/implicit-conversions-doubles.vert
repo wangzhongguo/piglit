@@ -1,13 +1,14 @@
 // [config]
 // expect_result: pass
 // glsl_version: 4.00
-// require_extensions: GL_AMD_gpu_shader_half_float
+// require_extensions: GL_AMD_gpu_shader_half_float GL_ARB_shading_language_420pack
 // [end config]
 //
 // Tests use of half float implicit conversions to doubles
 
 #version 400
 #extension GL_AMD_gpu_shader_half_float : enable
+#extension GL_ARB_shading_language_420pack : enable
 
 double test_float16_t_to_double() {
 
