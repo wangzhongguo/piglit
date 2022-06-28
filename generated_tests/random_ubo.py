@@ -1705,10 +1705,10 @@ class block_member(object):
         'i64vec3': "GL_INT64_VEC3_ARB",
         'i64vec4': "GL_INT64_VEC4_ARB",
 
-        'uint':  "GL_UNSIGNED_INT64_ARB",
-        'uvec2': "GL_UNSIGNED_INT64_VEC2_ARB",
-        'uvec3': "GL_UNSIGNED_INT64_VEC3_ARB",
-        'uvec4': "GL_UNSIGNED_INT64_VEC4_ARB",
+        'uint':  "GL_UNSIGNED_INT",
+        'uvec2': "GL_UNSIGNED_INT_VEC2",
+        'uvec3': "GL_UNSIGNED_INT_VEC3",
+        'uvec4': "GL_UNSIGNED_INT_VEC4",
 
         'uint64_t': "GL_UNSIGNED_INT64_ARB",
         'u64vec2': "GL_UNSIGNED_INT64_VEC2_ARB",
