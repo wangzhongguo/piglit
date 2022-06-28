@@ -66,7 +66,7 @@ ALL_TYPES = [ "mat2x2",  "mat3x3",  "mat4x4",
               "dmat2x2", "dmat3x3", "dmat4x4"] + ALL400_TYPES + INT64_TYPES
 
 def align(offset, alignment):
-    return ((offset + alignment - 1) / alignment) * alignment
+    return ((offset + alignment - 1) // alignment) * alignment
 
 
 def isscalar(type):
