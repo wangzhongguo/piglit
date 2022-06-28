@@ -82,6 +82,9 @@ piglit_make_generated_tests(
 	templates/gen_uniform_initializer_tests/vs-initializer-set-by-other-stage.shader_test.mako
 	)
 piglit_make_generated_tests(
+	ubo_tests.list
+	random_ubo-arb_uniform_buffer_object.py)
+piglit_make_generated_tests(
 	interpolation-qualifier-built-in-variable.list
 	interpolation-qualifier-built-in-variable.py
 	templates/interpolation-qualifier-built-in-variable/fs-vs-unused.shader_test.mako
@@ -274,6 +277,7 @@ add_custom_target(gen-gl-tests
 			texture_lod_tests.list
 			shader_bit_encoding_tests.list
 			uniform-initializer_tests.list
+			ubo_tests.list
 			interpolation-qualifier-built-in-variable.list
 			builtin_uniform_tests_fp64.list
 			constant_array_size_tests_fp64.list
