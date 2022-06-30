@@ -33,6 +33,7 @@ from os import path
 from time import time
 import requests
 from requests.adapters import HTTPAdapter, Retry
+from framework.replay.local_file_adapter import LocalFileAdapter
 from requests.utils import requote_uri
 
 from framework import core, exceptions
@@ -120,8 +121,11 @@ def download(url: str, file_path: str, headers, attempts=2) -> None:
         raise_on_redirect=False
     )
     session = requests.Session()
-    adapter = HTTPAdapter(max_retries=retries)
     for protocol in ["http://", "https://"]:
+        adapter = HTTPAdapter(max_retries=retries)
+        session.mount(protocol, adapter)
+    for protocol in ["file://"]:
+        adapter = LocalFileAdapter()
         session.mount(protocol, adapter)
 
     with session.get(url,
