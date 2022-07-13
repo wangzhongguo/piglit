@@ -644,8 +644,8 @@ void
 piglit_wfl_framework_teardown(struct piglit_wfl_framework *wfl_fw)
 {
 	waffle_make_current(wfl_fw->display, NULL, NULL);
-	waffle_window_destroy(wfl_fw->window);
 	waffle_context_destroy(wfl_fw->context);
+	waffle_window_destroy(wfl_fw->window);
 	waffle_config_destroy(wfl_fw->config);
 	waffle_display_disconnect(wfl_fw->display);
 
