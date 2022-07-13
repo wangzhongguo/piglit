@@ -636,6 +636,9 @@ compute_tex_combine(int tex_unit, const float prev_color[4], float result[4])
 	case GL_SRC_ALPHA:
 		term2[3] = alpha_src2[3];
 		break;
+	case GL_ONE_MINUS_SRC_ALPHA:
+		term2[3] = 1.0 - alpha_src2[3];
+		break;
 	default:
 		problem("bad alphaOperand2");
 		return;
