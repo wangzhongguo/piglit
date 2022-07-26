@@ -23,9 +23,11 @@
 
 import os
 import errno
+import random
 import random_ubo
 
-def do_test(requirements, packing):
+def do_test(requirements, packing, seed=0):
+    random.seed(seed, version=2)
     path = os.path.join("spec", "arb_uniform_buffer_object", "execution")
 
     try:
