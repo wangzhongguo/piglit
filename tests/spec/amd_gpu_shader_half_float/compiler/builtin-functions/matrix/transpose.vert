@@ -34,7 +34,7 @@ f16mat2x3 test_mat2x3() {
 
 	float16_t c = 0.123HF;
 	
-	return transpose(mat3x2(c));
+	return transpose(f16mat3x2(c));
 }
 
 f16mat3x2 test_mat3x2() {
