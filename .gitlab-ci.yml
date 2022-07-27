@@ -11,7 +11,7 @@ variables:
   FDO_UPSTREAM_REPO: mesa/piglit
   FDO_DISTRIBUTION_TAG: "2021-12-13-use-stable"
   FDO_DISTRIBUTION_VERSION: bullseye-slim
-  WINDOWS_TAG: "2020-08-18"
+  WINDOWS_TAG: "2022-07-27-win2022"
   WINDOWS_IMAGE: "$CI_REGISTRY_IMAGE/windows/x64_build:$WINDOWS_TAG"
   WINDOWS_UPSTREAM_IMAGE: "$CI_REGISTRY/$UPSTREAM_REPO/windows/x64_build:$WINDOWS_TAG"
   GIT_DEPTH: 100
@@ -63,7 +63,7 @@ windows:
   tags:
     - windows
     - shell
-    - "1809"
+    - "2022"
   script:
     - .\.gitlab-ci\windows\container.ps1 $CI_REGISTRY $CI_REGISTRY_USER $CI_REGISTRY_PASSWORD $WINDOWS_IMAGE $WINDOWS_UPSTREAM_IMAGE
 
@@ -73,7 +73,7 @@ windows:
   tags:
     - windows
     - docker
-    - "1809"
+    - "2022"
   needs: [windows]
   image: $WINDOWS_IMAGE
 
