@@ -3924,6 +3924,11 @@ with profile.test_list.group_manager(
     g(['arb_seamless_cubemap-three-faces-average'])
 
 with profile.test_list.group_manager(
+        PiglitGLTest,
+        grouptools.join('spec', 'amd_gpu_shader_half_float')) as g:
+    g(['amd_gpu_shader_half_float-explicit-offset-bufferstorage'], 'explicit-offset-bufferstorage')
+
+with profile.test_list.group_manager(
         PiglitGLTest, grouptools.join('spec', 'AMD_pinned_memory')) as g:
     g(['amd_pinned_memory', 'offset=0'], 'offset=0')
     g(['amd_pinned_memory', 'increment-offset'], 'increment-offset')
