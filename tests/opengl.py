@@ -4290,21 +4290,8 @@ with profile.test_list.group_manager(
         PiglitGLTest,
         grouptools.join('spec', 'nv_alpha_to_coverage_dither_control')) as g:
     g(['nv_alpha_to_coverage_dither_control-error'])
-    g(['nv_alpha_to_coverage_dither_control','-1'])
-    g(['nv_alpha_to_coverage_dither_control','0'])
-    g(['nv_alpha_to_coverage_dither_control','1'])
-    g(['nv_alpha_to_coverage_dither_control','2'])
-    g(['nv_alpha_to_coverage_dither_control','3'])
-    g(['nv_alpha_to_coverage_dither_control','4'])
-    g(['nv_alpha_to_coverage_dither_control','5'])
-    g(['nv_alpha_to_coverage_dither_control','6'])
-    g(['nv_alpha_to_coverage_dither_control','7'])
-    g(['nv_alpha_to_coverage_dither_control','8'])
-    g(['nv_alpha_to_coverage_dither_control','9'])
-    g(['nv_alpha_to_coverage_dither_control','8', '0', '0'])
-    g(['nv_alpha_to_coverage_dither_control','8', '0', '1'])
-    g(['nv_alpha_to_coverage_dither_control','8', '1', '0'])
-    g(['nv_alpha_to_coverage_dither_control','8', '1', '1'])
+    for samples in [0, 2, 4, 8, 16]:
+        g(['nv_alpha_to_coverage_dither_control', str(samples)])
 
 with profile.test_list.group_manager(
         PiglitGLTest,
