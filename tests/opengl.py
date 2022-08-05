@@ -1890,8 +1890,8 @@ with profile.test_list.group_manager(
 with profile.test_list.group_manager(
         PiglitGLTest,
         grouptools.join('spec', 'ARB_framebuffer_object')) as g:
-    g(['same-attachment-glFramebufferTexture2D-GL_DEPTH_STENCIL_ATTACHMENT'])
-    g(['same-attachment-glFramebufferRenderbuffer-GL_DEPTH_STENCIL_ATTACHMENT'])
+    g(['same-attachment-tex2d-depth_stencil'])
+    g(['same-attachment-renderbuffer-depth_stencil'])
     g(['arb_framebuffer_object-get-attachment-parameter-default-framebuffer'], run_concurrent=False)
     g(['fbo-alpha'])
     g(['fbo-blit-stretch'], run_concurrent=False)
@@ -2213,7 +2213,7 @@ with profile.test_list.group_manager(
           'samplemask {} all'.format(num_samples))
 
     g(['arb_sample_shading-builtin-gl-sample-mask-mrt-alpha'])
-    g(['arb_sample_shading-builtin-gl-sample-mask-mrt-alpha-to-coverage-combinations'])
+    g(['arb_sample_shading-builtin-gl-sample-mask-mrt-alpha-to-coverage'])
 
 # Group ARB_debug_output
 with profile.test_list.group_manager(
