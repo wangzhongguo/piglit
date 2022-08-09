@@ -24,7 +24,7 @@
 # SPDX-License-Identifier: MIT
 
 import argparse
-
+from typing import Any
 
 
 class FileContentType(argparse.FileType):
@@ -36,7 +36,7 @@ class FileContentType(argparse.FileType):
             mode="r", bufsize=bufsize, encoding=encoding, errors=errors
         )
 
-    def __call__(self, string: str):
+    def __call__(self, string: str) -> Any:
         with super().__call__(string) as open_file:
             return open_file.read()
 

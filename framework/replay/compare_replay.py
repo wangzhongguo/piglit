@@ -28,7 +28,7 @@ import shutil
 try:
     import simplejson as json
 except ImportError:
-    import json
+    import json  # type: ignore
 
 from glob import glob
 from os import path

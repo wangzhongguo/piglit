@@ -28,6 +28,7 @@ import hashlib
 import hmac
 import xml.etree.ElementTree as ET
 
+from typing import Dict
 from email.utils import formatdate
 from os import path
 from time import time
@@ -106,7 +107,7 @@ def get_authorization_headers(url, resource):
     return headers
 
 
-def download(url: str, file_path: str, headers, attempts=2) -> None:
+def download(url: str, file_path: str, headers: Dict[str, str], attempts: int = 2) -> None:
     """Downloads a URL content into a file
 
     :param url: URL to download
@@ -124,8 +125,8 @@ def download(url: str, file_path: str, headers, attempts=2) -> None:
         adapter = HTTPAdapter(max_retries=retries)
         session.mount(protocol, adapter)
     for protocol in ["file://"]:
-        adapter = LocalFileAdapter()
-        session.mount(protocol, adapter)
+        file_adapter = LocalFileAdapter()
+        session.mount(protocol, file_adapter)
 
     with session.get(url,
                      allow_redirects=True,

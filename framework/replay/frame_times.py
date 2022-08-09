@@ -27,7 +27,7 @@ from framework.replay.backends.apitrace import APITraceBackend
 try:
     import simplejson as json
 except ImportError:
-    import json
+    import json  # type: ignore
 
 from os import path
 

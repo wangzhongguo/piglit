@@ -1,4 +1,5 @@
 # coding=utf-8
+# mypy: ignore-errors
 #
 # Copyright (c) 2014,2016 Intel Corporation
 # Copyright © 2020 Valve Corporation.
