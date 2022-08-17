@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Copyright (c) 2019 Collabora Ltd
+# Copyright © 2019, 2022 Collabora Ltd
 # Copyright © 2020 Valve Corporation.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
@@ -27,13 +27,13 @@ import yaml
 
 from os import path
 
+from typing import Any, Generator, Optional, Union
 from framework import exceptions
 
 
 __all__ = ['download_url',
            'load_yaml',
            'trace_checksum',
-           'trace_devices',
            'traces']
 
 
@@ -45,19 +45,15 @@ def load_yaml(y):
             'Cannot use the provided stream. Is it YAML?')
 
 
-def trace_devices(trace):
+def trace_checksum(trace: Any, device_name: Optional[str]) -> str:
+    '''returns checksum of trace'''
     try:
-        return [e['device'] for e in trace['expectations']]
-    except KeyError:
-        return []
+        data = trace[device_name]
+        for item, val in data.items():
+            if item == "checksum":
+                return val
+        return ''
 
-
-def trace_checksum(trace, device_name):
-    try:
-        expectation = next(e for e in trace['expectations']
-                           if e['device'] == device_name)
-
-        return expectation['checksum']
     except StopIteration:
         return ''
     except KeyError:
@@ -71,40 +67,42 @@ def download_url(y):
         return None
 
 
-def traces(y, trace_extensions=None, device_name=None, checksum=False):
+def traces(
+    y: Any,
+    trace_extensions: Optional[str] = None,
+    device_name: Optional[str] = None,
+    checksum: Union[str, bool] = False
+) -> Generator[dict, None, None]:
 
-    def _trace_extension(trace_path):
+    def _trace_extension(trace_path: str) -> str:
         name, extension = path.splitext(trace_path)
 
         return extension
-
-    traces = y.get('traces', []) or []
+    traces = y.get('traces', {}) or {}
 
     if trace_extensions is not None:
         extensions = trace_extensions.split(',')
 
-        def _filter_trace_extension(trace):
+        def _filter_trace_extension(trace: str) -> bool:
             try:
-                return _trace_extension(trace['path']) in extensions
+                return _trace_extension(trace) in extensions
             except KeyError:
                 return False
 
-        traces = [t for t in traces if _filter_trace_extension(t)]
-    if device_name is not None:
-        traces = [t for t in traces if device_name in trace_devices(t)]
+        traces = {t: data for t, data in traces.items() if _filter_trace_extension(t)}
 
-    traces = list(traces)
+    for trace_file, devdata in traces.items():
+        for dev in devdata.keys():
+            if device_name and (device_name != dev):
+                continue
 
-    if checksum:
-        for t in traces:
+            found_trace = {"path": trace_file}
+            if not checksum:
+                yield found_trace
+                break
+
             try:
-                yield {'path': t['path'],
-                       'checksum': trace_checksum(t, device_name)}
-            except KeyError:
-                yield {}
-    else:
-        for t in traces:
-            try:
-                yield {'path': t['path']}
+                found_trace["checksum"] = trace_checksum(devdata, device_name)
+                yield found_trace
             except KeyError:
                 yield {}
