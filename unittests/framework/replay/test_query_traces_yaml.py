@@ -46,21 +46,32 @@ b:
          {"a": 1, "b": {"c": 2}}],
 ]
 
-TRACES_DATA = {"traces":
-              [{"path": "glmark2/desktop-blur-radius=5:effect=blur:passes=1:separable=true:windows=4.rdc",
-                "expectations": [{"device": "gl-vmware-llvmpipe",
-                                  "checksum": "8867f3a41f180626d0d4b7661ff5c0f4"}]},
-               {"path": "glxgears/glxgears-2.trace",
-                "expectations": [{"device": "gl-vmware-llvmpipe",
-                                  "checksum": "f8eba0fec6e3e0af9cb09844bc73bdc7"},
-                                 {"device": "gl-virgl",
-                                  "checksum": "f8eba0fec6e3e0af9cb09844bc73bdc7"}]},
-               {"path": "pathfinder/demo.trace",
-                "expectations": [{"device": "gl-vmware-llvmpipe",
-                                  "checksum": "e624d76c70cc3c532f4f54439e13659a"}]},
-               {"path": "KhronosGroup-Vulkan-Tools/amd/polaris10/vkcube.gfxr",
-                "expectations": [{"device": "vk-amd-polaris10",
-                                  "checksum": "917cbbf4f09dd62ea26d247a1c70c16e"}]},]}
+TRACES_DATA = {"traces": {
+        "glmark2/desktop-blur-radius=5:effect=blur:passes=1:separable=true:windows=4.rdc": {
+            "gl-vmware-llvmpipe": {
+                "checksum": "8867f3a41f180626d0d4b7661ff5c0f4"
+            }
+        },
+         "glxgears/glxgears-2.trace": {
+            "gl-vmware-llvmpipe": {
+                "checksum": "f8eba0fec6e3e0af9cb09844bc73bdc7"
+            },
+            "gl-virgl": {
+                "checksum": "f8eba0fec6e3e0af9cb09844bc73bdc7"
+            }
+        },
+         "pathfinder/demo.trace": {
+            "gl-vmware-llvmpipe": {
+                "checksum": "e624d76c70cc3c532f4f54439e13659a"
+            }
+        },
+         "KhronosGroup-Vulkan-Tools/amd/polaris10/vkcube.gfxr": {
+            "vk-amd-polaris10": {
+                "checksum": "917cbbf4f09dd62ea26d247a1c70c16e"
+            }
+        }
+    }
+}
 
 @pytest.mark.raises(exception=exceptions.PiglitFatalError)
 def test_load_yaml_PiglitFatalError():
@@ -78,36 +89,10 @@ def test_load_yaml_basic():
 
 
 @pytest.mark.raises(exception=TypeError)
-@pytest.mark.parametrize("trace", [
-    ([]),
-    ({"expectations": "one"}),
-    ({"expectations": ["one", "another"]}),
-])
-def test_trace_devices_TypeError(trace):
-    """query_traces_yaml.trace_devicess: Raise TypeError on invalid trace"""
-    d = qty.trace_devices(trace)
-
-
-@pytest.mark.parametrize("trace, expected", [
-    ({}, []),
-    ({"one": 1}, []),
-    ({"expectations": [{"one": 1}]}, []),
-    ({"expectations": [{"device": "gl-vmware-lvmpipe"}]},
-     ["gl-vmware-lvmpipe"]),
-    ({"expectations": [{"device": "gl-vmware-lvmpipe"},
-                       {"device": "vk-intel-anv", "checksum": "a checksum"}]},
-     ["gl-vmware-lvmpipe", "vk-intel-anv"]),
-])
-def test_trace_devices_basic(trace, expected):
-    """query_traces_yaml.trace_devicess: Get devices from some basic traces"""
-    assert expected == qty.trace_devices(trace)
-
-
-@pytest.mark.raises(exception=TypeError)
 @pytest.mark.parametrize("trace, device", [
     ([], None),
-    ({"expectations": "one"}, None),
-    ({"expectations": ["one", "another"]}, None),
+    ({"one"}, None),
+    ({"one", "another"}, None),
 ])
 def test_trace_checksum_TypeError(trace, device):
     """query_traces_yaml.trace_checksum: Raise TypeError on invalid trace"""
@@ -117,17 +102,12 @@ def test_trace_checksum_TypeError(trace, device):
 @pytest.mark.parametrize("trace, device, expected", [
     ({}, None, ''),
     ({"one": 1}, None, ''),
-    ({"expectations": [{"one": 1}]}, None, ''),
-    ({"expectations": [{"device": "gl-vmware-lvmpipe"}]}, "gl-vmware-lvmpipe", ''),
-    ({"expectations": [{"device": "gl-vmware-lvmpipe", "checksum": "a checksum"}]},
+    ({"gl-vmware-lvmpipe": {}}, "gl-vmware-lvmpipe", ''),
+    ({"gl-vmware-lvmpipe": {"checksum": "a checksum"}},
      "gl-vmware-lvmpipe", "a checksum"),
-    ({"expectations": [{"device": "gl-vmware-lvmpipe", "checksum": "a checksum"},
-                       {"device": "vk-intel-anv", "checksum": "another checksum"}]},
-     "vk-intel-anv", "another checksum"),
-    ({"expectations": [{"device": "gl-vmware-lvmpipe", "checksum": "a checksum"},
-                       {"device": "vk-intel-anv", "checksum": "another checksum"},
-                       {"device": "vk-intel-anv", "checksum": "yet another checksum"}]},
-     "vk-intel-anv", "another checksum"),
+    ({"gl-vmware-lvmpipe": {"checksum": "a checksum"},
+      "vk-intel-anv": {"checksum": "another checksum"}},
+     "vk-intel-anv", "another checksum")
 ])
 def test_trace_checksum_basic(trace, device, expected):
     """query_traces_yaml.trace_checksum: Get checksum from some basic traces"""
@@ -165,7 +145,7 @@ def test_traces_AttributeError(yaml, ext, device, checksum):
     t = list(qty.traces(yaml, ext, device, checksum))
 
 
-@pytest.mark.raises(exception=TypeError)
+@pytest.mark.raises(exception=AttributeError)
 @pytest.mark.parametrize("yaml, ext, device, checksum", [
     ({"traces": "one"}, ".trace", "gl-vmware-llvmpipe", True),
     ({"traces": ["one"]}, ".trace", "gl-vmware-llvmpipe", True),
@@ -178,7 +158,7 @@ def test_traces_TypeError(yaml, ext, device, checksum):
 
 @pytest.mark.parametrize("yaml, ext, device, checksum, expected", [
     ({}, ".trace", "gl-vmware-llvmpipe", True, []),
-    ({"traces": [{}]}, ".trace", "gl-vmware-llvmpipe", True, []),
+    ({"traces": {}}, ".trace", "gl-vmware-llvmpipe", True, []),
     (TRACES_DATA, "", "gl-virgl", False, []),
     (TRACES_DATA, ".rdc", "gl-virgl", False, []),
     (TRACES_DATA, ".trace", "gl-virgl", False,

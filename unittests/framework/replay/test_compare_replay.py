@@ -1,6 +1,7 @@
 # coding=utf-8
 #
 # Copyright © 2020 Valve Corporation.
+# Copyright © 2022 Collabora Ltd.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -91,23 +92,34 @@ class TestCompareReplay(object):
         if yaml_file == 'empty.yml':
             return {}
         elif yaml_file == 'no-device.yml':
-            return {"traces":
-              [{"path": "glmark2/desktop-blur-radius=5:effect=blur:passes=1:separable=true:windows=4.rdc",
-                "expectations": [{"device": "gl-vmware-llvmpipe",
-                                  "checksum": "8867f3a41f180626d0d4b7661ff5c0f4"}]},]}
+            return {"traces": {
+                "glmark2/desktop-blur-radius=5:effect=blur:passes=1:separable=true:windows=4.rdc": {
+                    "gl-vmware-llvmpipe": {
+                        "checksum": "8867f3a41f180626d0d4b7661ff5c0f4"
+                    }
+                }
+            }}
         elif yaml_file == 'one-trace.yml':
-            return {"traces":
-              [{"path": "KhronosGroup-Vulkan-Tools/amd/polaris10/vkcube.gfxr",
-                "expectations": [{"device": OPTIONS.device_name,
-                                  "checksum": "917cbbf4f09dd62ea26d247a1c70c16e"}]},]}
+            return {"traces": {
+                "KhronosGroup-Vulkan-Tools/amd/polaris10/vkcube.gfxr": {
+                    OPTIONS.device_name: {
+                        "checksum": "917cbbf4f09dd62ea26d247a1c70c16e"
+                    }
+                }
+            }}
         elif yaml_file == 'two-traces.yml':
-            return {"traces":
-              [{"path": "pathfinder/demo.trace",
-                "expectations": [{"device": OPTIONS.device_name,
-                                  "checksum": "e624d76c70cc3c532f4f54439e13659a"}]},
-               {"path": "KhronosGroup-Vulkan-Tools/amd/polaris10/vkcube.gfxr",
-                "expectations": [{"device": OPTIONS.device_name,
-                                  "checksum": "917cbbf4f09dd62ea26d247a1c70c16e"}]},]}
+            return {"traces": {
+                "pathfinder/demo.trace": {
+                    OPTIONS.device_name: {
+                        "checksum": "e624d76c70cc3c532f4f54439e13659a"
+                    }
+                },
+                "KhronosGroup-Vulkan-Tools/amd/polaris10/vkcube.gfxr": {
+                    OPTIONS.device_name: {
+                        "checksum": "917cbbf4f09dd62ea26d247a1c70c16e"
+                    }
+                }
+            }}
         else:
             raise exceptions.PiglitFatalError(
                 'Non treated YAML file: {}'.format(yaml_file))
