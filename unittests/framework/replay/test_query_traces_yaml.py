@@ -69,6 +69,11 @@ TRACES_DATA = {"traces": {
             "vk-amd-polaris10": {
                 "checksum": "917cbbf4f09dd62ea26d247a1c70c16e"
             }
+        },
+         "pathfinder/demo2.trace": {
+            "gl-vmware-llvmpipe": {
+                "label": ["skip"]
+            }
         }
     }
 }

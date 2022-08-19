@@ -92,8 +92,15 @@ def traces(
         traces = {t: data for t, data in traces.items() if _filter_trace_extension(t)}
 
     for trace_file, devdata in traces.items():
-        for dev in devdata.keys():
+        for dev, properties in devdata.items():
             if device_name and (device_name != dev):
+                continue
+            if (
+                properties
+                and "label" in properties
+                and isinstance(properties["label"], list)
+                and {"skip", "hang", "crash", "fail", "unsupported"}.intersection(properties["label"])
+            ):
                 continue
 
             found_trace = {"path": trace_file}
