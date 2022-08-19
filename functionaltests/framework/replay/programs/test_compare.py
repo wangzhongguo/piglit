@@ -1,6 +1,6 @@
 # coding=utf-8
 #
-# Copyright (c) 2019 Collabora Ltd
+# Copyright © 2019-2022 Collabora Ltd.
 # Copyright © 2019-2020 Valve Corporation.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
@@ -170,10 +170,9 @@ def test_compare_traces_with_and_without_checksum():
     filename = "./tests/traces.yml"
     content = read_from(filename)
     extra = textwrap.dedent('''\
-    - path: trace1/red.testtrace
-      expectations:
-        - device: blah
-          checksum: 000000000000000
+    trace1/red.testtrace:
+      blah:
+        checksum: 000000000000000
     ''')
     content += textwrap.indent(extra, '  ')
     write_to(content, filename)
@@ -190,10 +189,9 @@ def test_compare_only_traces_without_checksum():
     filename = "./tests/traces.yml"
     content = textwrap.dedent('''\
     traces:
-      - path: trace1/red.testtrace
-        expectations:
-          - device: blah
-            checksum: 000000000000000
+      trace1/red.testtrace:
+        blah:
+          checksum: 000000000000000
     ''')
     write_to(content, filename)
 
