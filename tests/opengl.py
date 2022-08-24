@@ -3568,7 +3568,8 @@ with profile.test_list.group_manager(
                     'gl_ClipDistance[5]-no-subscript',
                     'gl_ClipDistance[6]-no-subscript',
                     'gl_ClipDistance[7]-no-subscript',
-                    'gl_ClipDistance[8]-no-subscript']:
+                    'gl_ClipDistance[8]-no-subscript',
+                    'gl_CullDistance']:
         g(['ext_transform_feedback-builtin-varyings', varying],
           'builtin-varyings {}'.format(varying), run_concurrent=False)
 

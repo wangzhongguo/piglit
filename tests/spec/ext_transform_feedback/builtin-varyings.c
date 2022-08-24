@@ -433,6 +433,32 @@ struct test_desc {
 		GL_FLOAT, /* expected_type */
 		1, /* expected_size */
 	},
+	{
+		"gl_CullDistance", /* name */
+		130, /* version */
+
+		"#version 130\n" /* vs */
+		"#extension GL_ARB_cull_distance : enable\n" /* vs */
+		"in vec4 vertex_pos;\n"
+		"in float vertex_num;\n"
+		"out float gl_CullDistance[8];\n"
+		"void main() {\n"
+		"  gl_Position = vertex_pos;\n"
+		"  float scale = 1.0/256.0;\n"
+		"  for(int i = 0; i < 8; ++i)\n"
+		"    gl_CullDistance[i] = (float(i) + 8.0 * vertex_num) * scale;\n"
+		"}\n",
+
+		8, /* num_varyings */
+		{"gl_CullDistance[0]", "gl_CullDistance[1]", /* varyings */
+		 "gl_CullDistance[2]", "gl_CullDistance[3]",
+		 "gl_CullDistance[4]", "gl_CullDistance[5]",
+		 "gl_CullDistance[6]", "gl_CullDistance[7]"},
+
+		8, /* expected_num_output_components */
+		GL_FLOAT, /* expected_type */
+		1, /* expected_size */
+	},
 };
 
 const struct test_desc *test_to_run;
@@ -480,6 +506,9 @@ piglit_init(int argc, char **argv)
 	/* Set up test */
 	piglit_require_vertex_shader();
 	piglit_require_GLSL_version(test_to_run->version);
+	if (strcmp("gl_CullDistance", test_to_run->name) == 0) {
+		piglit_require_extension("GL_ARB_cull_distance");
+	}
 	piglit_require_transform_feedback();
 	vs = piglit_compile_shader_text(GL_VERTEX_SHADER, test_to_run->vs);
 	prog = glCreateProgram();
