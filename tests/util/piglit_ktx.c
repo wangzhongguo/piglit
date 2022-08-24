@@ -630,9 +630,6 @@ piglit_ktx_load_noncubeface(struct piglit_ktx *self,
 	const struct piglit_ktx_image *img = &self->images[image];
 	int level = image;
 
-	glTexParameteri(info->target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(info->target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
 	switch (info->target) {
 	case GL_TEXTURE_1D:
 		if (piglit_is_gles())
@@ -814,6 +811,17 @@ piglit_ktx_load_texture(struct piglit_ktx *self,
 	}
 
 	glBindTexture(info->target, *tex_name);
+
+	/* Set the max miplevel according to what's in the KTX file. For
+	 * mipmapped textures missing some miplevels (i.e., the last miplevel
+	 * is not a single pixel), this allows the textures to be considered
+	 * "mipmap complete" for sampling operations. Setting this parameter
+	 * also can act as an allocation hint to the driver, and thus help
+	 * mipmapped textures in general.
+	 */
+	glTexParameteri(info->target, GL_TEXTURE_MAX_LEVEL,
+			info->num_miplevels - 1);
+
 	my_gl_error = glGetError();
 	if (my_gl_error)
 		goto fail;
