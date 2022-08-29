@@ -2167,6 +2167,15 @@ with profile.test_list.group_manager(
        'uniform namespace is per-program')
     g(['arb_separate_shader_object-xfb-rendezvous_by_location'],
        'Transform feedback with rendezvous by location')
+    g(['arb_separate_shader_object-xfb-explicit-location-array', 'vs'],
+      'xfb-explicit-location-array_vs',
+      run_concurrent=False)
+    g(['arb_separate_shader_object-xfb-explicit-location-array', 'gs'],
+      'xfb-explicit-location-array_gs',
+      run_concurrent=False)
+    g(['arb_separate_shader_object-xfb-explicit-location-array', 'gs_max'],
+      'xfb-explicit-location-array_gs_max',
+      run_concurrent=False)
 
 # Group ARB_sampler_objects
 with profile.test_list.group_manager(
