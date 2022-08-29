@@ -252,6 +252,8 @@ class TestCompareReplay(object):
         assert s.endswith('PIGLIT: '
                           '{"images": [{'
                           '"image_desc": "' + self.trace_path + '", '
+                          '"checksum_ref": "' + self.exp_checksum + '", '
+                          '"checksum_render": "' + self.exp_checksum + '", '
                           '"image_ref": "' + self.exp_checksum + '.png", '
                           '"image_render": "' + self.exp_checksum + '.png"'
                           '}], "result": "pass"}\n')
@@ -280,6 +282,8 @@ class TestCompareReplay(object):
         assert s.endswith('PIGLIT: '
                           '{"images": [{'
                           '"image_desc": "' + self.trace_path + '", '
+                          '"checksum_ref": "' + self.exp_checksum + '", '
+                          '"checksum_render": "' + self.exp_checksum + '", '
                           '"image_ref": "' + self.exp_checksum + '.png", '
                           '"image_render": "' + final_image_pathlib.strpath +
                           '"}], "result": "pass"}\n')
@@ -308,6 +312,8 @@ class TestCompareReplay(object):
         assert s.endswith('PIGLIT: '
                           '{"images": [{'
                           '"image_desc": "' + self.trace_path + '", '
+                          '"checksum_ref": "' + wrong_checksum + '", '
+                          '"checksum_render": "' + self.exp_checksum + '", '
                           '"image_ref": "' + wrong_checksum + '.png", '
                           '"image_render": "' + final_image_pathlib.strpath +
                           '"}], "result": "fail"}\n')
@@ -338,6 +344,8 @@ class TestCompareReplay(object):
         assert s.endswith('PIGLIT: '
                           '{"images": [{'
                           '"image_desc": "' + trace_path + '", '
+                          '"checksum_ref": "' + third_exp_checksum + '", '
+                          '"checksum_render": null, '
                           '"image_ref": "' + third_exp_checksum + '.png", '
                           '"image_render": null}], "result": "crash"}\n')
 
@@ -367,5 +375,7 @@ class TestCompareReplay(object):
         assert s.endswith('PIGLIT: '
                           '{"images": [{'
                           '"image_desc": "' + trace_path + '", '
+                          '"checksum_ref": "' + third_exp_checksum + '", '
+                          '"checksum_render": null, '
                           '"image_ref": "' + third_exp_checksum + '.png", '
                           '"image_render": null}], "result": "crash"}\n')

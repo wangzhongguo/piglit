@@ -89,12 +89,16 @@ def _check_trace(trace_path, expected_checksum):
 
     json_result['images'] = [
         {'image_desc': trace_path,
+         'checksum_ref': expected_checksum,
+         'checksum_render': None,
          'image_ref': expected_checksum + '.png',
-         'image_render': expected_checksum + '.png'}]
+         'image_render': None}]
 
     if checksum is None:
-        json_result['images'][0]['image_render'] = None
         return status.CRASH, json_result
+
+    json_result['images'][0]['checksum_render'] = checksum
+    json_result['images'][0]['image_render'] = checksum + '.png'
 
     if checksum == expected_checksum:
         if not OPTIONS.keep_image:
