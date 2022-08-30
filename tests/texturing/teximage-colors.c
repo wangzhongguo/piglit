@@ -863,10 +863,10 @@ test_exact()
 		int j;
 		for (j = 0; j < texture_size; ++j) {
 			for (i = 0; i < tex_width * channels; i++) {
-				GLshort data = ((GLshort *)data)[i];
+				GLshort data_s = ((GLshort *)data)[i];
 				GLshort obss = ((GLshort *)observed)[i];
-				if (!(data == obss ||
-				      (data == -32768 && obss == -32767))) {
+				if (!(data_s == obss ||
+				      (data_s == -32768 && obss == -32767))) {
 					pass = GL_FALSE;
 				}
 			}
