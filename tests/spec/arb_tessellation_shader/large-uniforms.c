@@ -199,7 +199,7 @@ test_uniform_block(const GLenum shader, const int num_blocks, const int size,
 	sum = malloc((strlen(summand_template) + 8) * num_blocks);
 	sum[0] = '\0';
 	for(i = 0; i < num_blocks; ++i) {
-		char summand[40];
+		char summand[44];
 		sprintf(summand, summand_template, i);
 		strcat(sum, summand);
 	}
