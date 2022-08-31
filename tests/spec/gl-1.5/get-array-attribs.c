@@ -93,7 +93,7 @@ void
 piglit_init(int argc, char **argv)
 {
 	bool pass = true;
-	GLubyte dummy[100];
+	GLubyte dummy[100] = {0};
 
 	glVertexPointer(2, GL_FLOAT, 12, dummy);
 	glNormalPointer(GL_FLOAT, 0, dummy);
