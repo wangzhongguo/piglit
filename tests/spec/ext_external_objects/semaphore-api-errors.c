@@ -51,7 +51,7 @@ test_gen_semaphores_value_errors()
 static bool
 test_delete_semaphores_value_errors()
 {
-	GLuint sem;
+	GLuint sem = 0;
 
 	glDeleteSemaphoresEXT(-1, &sem);
 
