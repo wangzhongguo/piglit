@@ -1669,7 +1669,7 @@ vk_clear_color(struct vk_ctx *ctx,
 		barrier->sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 
 		bool is_depth =
-			get_aspect_from_depth_format(att->props.format) != VK_NULL_HANDLE;
+			get_aspect_from_depth_format(att->props.format) != (uintptr_t)VK_NULL_HANDLE;
 
 		barrier->oldLayout = is_depth ?
 			VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL :
