@@ -3,6 +3,8 @@
 set -ex
 
 cmake . \
+      -D CMAKE_C_FLAGS="-Werror -Wno-error=builtin-declaration-mismatch" \
+      -D CMAKE_CXX_FLAGS="-Werror -Wno-error=builtin-declaration-mismatch" \
       -D CMAKE_BUILD_TYPE=Debug \
       -D PIGLIT_BUILD_CL_TESTS=on \
       -D PIGLIT_BUILD_DMA_BUF_TESTS=on \
@@ -13,4 +15,4 @@ cmake . \
       -D PIGLIT_BUILD_WGL_TESTS=off \
       -GNinja
 
-ninja -j${FDO_CI_CONCURRENT:-4}
+ninja -j"${FDO_CI_CONCURRENT:-4}"
