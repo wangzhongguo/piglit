@@ -462,7 +462,7 @@ setup_vertex_element_buffers(void)
          * Setup the vertex buffer objects.
          */
         for (i = 0; i < g_maxVertexAttribs - 1; i++) {
-                char strTemp[16];
+                char strTemp[17];
 
                 if ((i + 1) * MAX_COMPONENTS < NUM_PRIMES) {
                         attrib[0].x = attrib[1].x =
@@ -845,7 +845,7 @@ piglit_display(void)
         for (i = 0; i < g_maxCombinedTextureImageUnits; i++) {
                 GLuint tex;
                 GLuint uniformLoc;
-                char strTemp[16];
+                char strTemp[19];
 
                 glGenTextures(1, &tex);
                 glActiveTexture(GL_TEXTURE0 + i);
@@ -925,7 +925,7 @@ piglit_display(void)
                  * Enable the rest of the attributes.
                  */
                 for (i = 0; i < g_maxVertexAttribs - 1; i++) {
-                        char strTemp[16];
+                        char strTemp[18];
 
                         snprintf(strTemp, sizeof(strTemp), "InValue%u", i);
                         attribLoc = glGetAttribLocation(g_program, strTemp);
