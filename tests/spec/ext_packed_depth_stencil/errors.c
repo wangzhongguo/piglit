@@ -40,7 +40,7 @@ PIGLIT_GL_TEST_CONFIG_END
 static bool
 test_drawpixels(void)
 {
-	GLuint p[1];
+	GLuint p[1] = {0};
 
 	glDrawPixels(1, 1, GL_DEPTH_STENCIL_EXT, GL_UNSIGNED_INT, p);
 	if (!piglit_check_gl_error(GL_INVALID_ENUM))
