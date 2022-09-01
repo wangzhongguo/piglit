@@ -125,6 +125,11 @@ static const Format format_es[] = {
 	{GL_ALPHA,				GL_ALPHA,			GL_UNSIGNED_BYTE}
 };
 
+#ifdef _MSC_VER
+__pragma(warning(suppress:4100 4101))
+#else
+__attribute__((unused))
+#endif
 static const Format format_es_int[] = {
 	{GL_RGBA8UI,			GL_RGBA_INTEGER,	GL_UNSIGNED_BYTE},
 	{GL_RGBA8I,			GL_RGBA_INTEGER,	GL_BYTE},
@@ -159,6 +164,11 @@ static const Format format_es_int[] = {
 	{GL_DEPTH32F_STENCIL8,GL_DEPTH_STENCIL,	GL_FLOAT_32_UNSIGNED_INT_24_8_REV},
 };
 
+#ifdef _MSC_VER
+__pragma(warning(suppress:4100 4101))
+#else
+__attribute__((unused))
+#endif
 static const Format format_core[] = {
 	{GL_RGB,			GL_RGB,			GL_UNSIGNED_BYTE_3_3_2},
 	{GL_RGB,			GL_RGB,			GL_UNSIGNED_BYTE_2_3_3_REV},
@@ -184,6 +194,11 @@ static const Format format_core[] = {
 	{GL_BGRA,			GL_BGRA,		GL_UNSIGNED_INT_2_10_10_10_REV},
 };
 
+#ifdef _MSC_VER
+__pragma(warning(suppress:4100 4101))
+#else
+__attribute__((unused))
+#endif
 static const Format format_core_int[] = {
 	{GL_RGB_INTEGER,	GL_RGB_INTEGER,GL_UNSIGNED_BYTE_3_3_2},
 	{GL_RGB_INTEGER,	GL_RGB_INTEGER,GL_UNSIGNED_BYTE_2_3_3_REV},
@@ -209,11 +224,21 @@ static const Format format_core_int[] = {
 	{GL_DEPTH_STENCIL,GL_DEPTH_STENCIL,GL_FLOAT_32_UNSIGNED_INT_24_8_REV}
 };
 
+#ifdef _MSC_VER
+__pragma(warning(suppress:4100 4101))
+#else
+__attribute__((unused))
+#endif
 static const Format formats_EXT_texture_type_2_10_10_10_REV[] = {
 	{GL_RGBA,GL_RGBA,GL_UNSIGNED_INT_2_10_10_10_REV_EXT},
 	{GL_RGB,GL_RGB,GL_UNSIGNED_INT_2_10_10_10_REV_EXT}
 };
 
+#ifdef _MSC_VER
+__pragma(warning(suppress:4100 4101))
+#else
+__attribute__((unused))
+#endif
 static const Format formats_OES_required_internalformat[] = {
 	{GL_RGB8_OES,GL_RGB,GL_UNSIGNED_INT_2_10_10_10_REV_EXT},
 	{GL_RGB565,GL_RGB,GL_UNSIGNED_INT_2_10_10_10_REV_EXT}
