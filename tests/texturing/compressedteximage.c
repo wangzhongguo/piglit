@@ -117,6 +117,7 @@ display_mipmaps(int x, int y)
 	int i;
 
 	glEnable(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 
 	/* Display all the mipmap levels */
 	for (i = SIZE; i > 0; i /= 2) {
