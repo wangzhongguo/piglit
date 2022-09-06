@@ -90,6 +90,18 @@ static const struct test_desc texsubimage_test_sets[] = {
 		"GL_EXT_texture_compression_latc",
 		GL_UNSIGNED_NORMALIZED,
 		{"GL_EXT_texture_compression_latc"}
+	}, {
+		arb_texture_compression_bptc_unorm,
+		ARRAY_SIZE(arb_texture_compression_bptc_unorm),
+		"GL_ARB_texture_compression_bptc-unorm",
+		GL_UNSIGNED_NORMALIZED,
+		{"GL_ARB_texture_compression_bptc"}
+	}, {
+		arb_texture_compression_bptc_float,
+		ARRAY_SIZE(arb_texture_compression_bptc_float),
+		"GL_ARB_texture_compression_bptc-float",
+		GL_FLOAT,
+		{"GL_ARB_texture_compression_bptc"}
 	}
 };
 
