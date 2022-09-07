@@ -249,7 +249,7 @@ piglit_init(int argc, char **argv)
 	"void  main() {gl_Position = piglit_vertex;}";
 
 	static const char frag[]  = "#version 140\n"
-	"uniform samplerBuffer s;\n"
+	"uniform usamplerBuffer s;\n"
 	"uniform int size, maxSize;\n"
 	"void main()\n"
 	"{\n"
@@ -264,7 +264,7 @@ piglit_init(int argc, char **argv)
 	"#extension GL_ARB_shader_storage_buffer_object: require\n"
 	"#extension GL_ARB_shader_image_size: require\n"
 	"layout(local_size_x = 1) in;\n"
-	"writeonly readonly uniform imageBuffer s;\n"
+	"writeonly readonly uniform uimageBuffer s;\n"
 	"layout(std430, binding=0) writeonly buffer SZ\n"
 	"{\n"
 	"	int size;\n"
