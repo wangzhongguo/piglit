@@ -29,13 +29,12 @@
 
 import subprocess
 import sys
-
 from os import path
 
 from framework import core, exceptions
+
 from .abstract import DumpBackend, dump_handler
 from .register import Registry
-
 
 _LOOP_TIMES = core.get_option('PIGLIT_REPLAY_LOOP_TIMES',
                               ('replay', 'loop_times'),

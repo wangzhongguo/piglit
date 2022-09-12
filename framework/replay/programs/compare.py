@@ -25,11 +25,10 @@
 import argparse
 
 from framework import exceptions
-from framework.replay import compare_replay
-from framework.replay import options
 from framework.programs import parsers as piglit_parsers
-from . import parsers
+from framework.replay import compare_replay, options
 
+from . import parsers
 
 __all__ = ['compare']
 

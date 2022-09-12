@@ -27,8 +27,8 @@ import argparse
 
 from framework import exceptions
 from framework.replay import query_traces_yaml as qty
-from . import parsers
 
+from . import parsers
 
 __all__ = ['query']
 

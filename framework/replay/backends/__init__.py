@@ -46,9 +46,8 @@ find the function that a user actually wants.
 
 """
 
-import os
 import importlib
-
+import os
 from os import path
 
 from .register import Registry

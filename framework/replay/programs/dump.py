@@ -25,11 +25,10 @@
 import argparse
 
 from framework import exceptions
-from framework.replay import backends
-from framework.replay import options
 from framework.programs import parsers as piglit_parsers
-from . import parsers
+from framework.replay import backends, options
 
+from . import parsers
 
 __all__ = ['dump']
 

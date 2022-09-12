@@ -30,7 +30,6 @@ This is as close to a true global function as python gets.
 """
 
 import sys
-
 from urllib.parse import urlparse
 
 __all__ = ['OPTIONS']

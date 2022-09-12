@@ -23,13 +23,13 @@
 #
 # SPDX-License-Identifier: MIT
 
-import yaml
 
 from os import path
-
 from typing import Any, Generator, Optional, Union
-from framework import exceptions
 
+import yaml
+
+from framework import exceptions
 
 __all__ = ['download_url',
            'load_yaml',

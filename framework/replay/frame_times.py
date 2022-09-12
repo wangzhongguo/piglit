@@ -24,6 +24,7 @@
 # SPDX-License-Identifier: MIT
 
 from framework.replay.backends.apitrace import APITraceBackend
+
 try:
     import simplejson as json
 except ImportError:
@@ -36,7 +37,6 @@ from framework.replay import backends
 from framework.replay import query_traces_yaml as qty
 from framework.replay.download_utils import ensure_file
 from framework.replay.options import OPTIONS
-
 
 __all__ = ['from_yaml',
            'trace']

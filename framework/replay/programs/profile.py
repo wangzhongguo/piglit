@@ -26,9 +26,9 @@
 import argparse
 
 from framework import exceptions
-from framework.replay import frame_times
-from framework.replay import options
 from framework.programs import parsers as piglit_parsers
+from framework.replay import frame_times, options
+
 from . import parsers
 
 __all__ = ['profile']

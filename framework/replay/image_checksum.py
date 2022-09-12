@@ -24,8 +24,8 @@
 # SPDX-License-Identifier: MIT
 
 from hashlib import md5
-from PIL import Image
 
+from PIL import Image
 
 __all__ = ['hexdigest_from_image']
 

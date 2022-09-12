@@ -27,7 +27,6 @@ import argparse
 from framework import exceptions
 from framework.replay import image_checksum
 
-
 __all__ = ['checksum']
 
 

@@ -34,7 +34,6 @@ import abc
 import functools
 import subprocess
 import sys
-
 from os import path
 
 from framework import core

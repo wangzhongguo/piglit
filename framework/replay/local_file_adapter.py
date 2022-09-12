@@ -1,5 +1,6 @@
-from urllib.request import url2pathname
 import os
+from urllib.request import url2pathname
+
 import requests
 
 

@@ -9,7 +9,7 @@
 # with older commits using the same tag.
 variables:
   FDO_UPSTREAM_REPO: mesa/piglit
-  FDO_DISTRIBUTION_TAG: "2022-08-09-add-linting"
+  FDO_DISTRIBUTION_TAG: "2022-09-11-add-isort"
   FDO_DISTRIBUTION_VERSION: bullseye-slim
   WINDOWS_TAG: "2022-07-27-win2022"
   WINDOWS_IMAGE: "$CI_REGISTRY_IMAGE/windows/x64_build:$WINDOWS_TAG"
@@ -86,6 +86,7 @@ linting:
   script:
     - codespell -f -S ".mypy_cache" -L "lod,LOD,inout,nd,ND,valu,VALU,tese,ba,te,nin"
     - export CHECKPATH=framework/replay # restrict Python checks only on framework/replay for now
+    - isort --check-only $CHECKPATH
     - flake8 --max-line-length=120 --show-source $CHECKPATH
     - mypy --ignore-missing-imports --disallow-incomplete-defs $CHECKPATH
     - pylint --fail-under=8.5 $CHECKPATH

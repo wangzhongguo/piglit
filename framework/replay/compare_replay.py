@@ -25,6 +25,7 @@
 
 import os
 import shutil
+
 try:
     import simplejson as json
 except ImportError:
@@ -33,14 +34,12 @@ except ImportError:
 from glob import glob
 from os import path
 
-from framework import core
-from framework import status
+from framework import core, status
 from framework.replay import backends
 from framework.replay import query_traces_yaml as qty
 from framework.replay.download_utils import ensure_file
 from framework.replay.image_checksum import hexdigest_from_image
 from framework.replay.options import OPTIONS
-
 
 __all__ = ['from_yaml',
            'trace']

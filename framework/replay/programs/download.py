@@ -25,10 +25,9 @@
 import argparse
 
 from framework import exceptions
-from framework.replay import download_utils
-from framework.replay import options
-from . import parsers
+from framework.replay import download_utils, options
 
+from . import parsers
 
 __all__ = ['download']
 

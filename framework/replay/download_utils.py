@@ -27,19 +27,18 @@ import base64
 import hashlib
 import hmac
 import xml.etree.ElementTree as ET
-
-from typing import Dict
 from email.utils import formatdate
 from os import path
 from time import time
+from typing import Dict
+
 import requests
 from requests.adapters import HTTPAdapter, Retry
-from framework.replay.local_file_adapter import LocalFileAdapter
 from requests.utils import requote_uri
 
 from framework import core, exceptions
+from framework.replay.local_file_adapter import LocalFileAdapter
 from framework.replay.options import OPTIONS
-
 
 __all__ = ['ensure_file']
 

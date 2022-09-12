@@ -30,9 +30,9 @@
 from os import path
 
 from framework import exceptions
+
 from .abstract import DumpBackend, dump_handler
 from .register import Registry
-
 
 __all__ = [
     'REGISTRY',

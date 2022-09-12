@@ -34,7 +34,7 @@
 
 from .compare_replay import *
 from .download_utils import *
+from .frame_times import *
 from .image_checksum import *
 from .options import *
 from .query_traces_yaml import *
-from .frame_times import *

@@ -33,6 +33,7 @@ apt-get install -y \
   gettext \
   git \
   glslang-tools \
+  isort \
   jq \
   libdrm-dev \
   libegl1-mesa-dev \
