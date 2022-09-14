@@ -29,10 +29,7 @@ try:
     from lxml import etree
 except ImportError:
     import xml.etree.ElementTree as etree
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 
 from framework import grouptools, results, exceptions
 from framework.core import PIGLIT_CONFIG

@@ -34,10 +34,7 @@ import threading
 import collections
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 
 from framework.core import PIGLIT_CONFIG
 from framework import grouptools

@@ -28,10 +28,7 @@
 import glob
 import os
 import sys
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 
 from framework import core, options
 from framework import status

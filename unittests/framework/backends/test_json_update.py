@@ -22,10 +22,7 @@
 """Tests for JSON backend version updates."""
 
 import os
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 try:
     import mock
 except ImportError:

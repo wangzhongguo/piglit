@@ -23,14 +23,9 @@
 #
 # SPDX-License-Identifier: MIT
 
+import json  # type: ignore
 import os
 import shutil
-
-try:
-    import simplejson as json
-except ImportError:
-    import json  # type: ignore
-
 from glob import glob
 from os import path
 

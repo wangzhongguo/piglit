@@ -39,8 +39,6 @@ First of all, you need to make sure that the following are installed:
 Optionally, you can install the following:
 
   - lxml. An accelerated python xml library using libxml2 (http://lxml.de/)
-  - simplejson. A fast C based implementation of the python json library.
-    (https://simplejson.readthedocs.org/en/latest/)
   - jsonstreams. A JSON stream writer for python.
     (https://jsonstreams.readthedocs.io/en/stable/)
   - VkRunner. A shader script testing tool for Vulkan.

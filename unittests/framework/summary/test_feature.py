@@ -21,10 +21,7 @@
 
 """Tests for the feature summary module."""
 
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 try:
     import mock
 except ImportError:

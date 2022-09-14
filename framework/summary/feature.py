@@ -22,10 +22,7 @@
 # OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 
 from framework import profile, status
 

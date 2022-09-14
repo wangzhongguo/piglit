@@ -27,10 +27,7 @@ import os
 import shutil
 import sys
 
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 
 try:
     import jsonstreams
@@ -77,7 +74,7 @@ class JSONBackend(FileBackend):
     """ Piglit's native JSON backend
 
     This writes out to piglit's native json backend. This class uses the python
-    json module or the simplejson.
+    json module.
 
     This class is atomic, writes either completely fail or completely succeed.
     To achieve this it writes individual files for each test and for the
