@@ -24,12 +24,7 @@
 import itertools
 import os
 import textwrap
-# pylint: disable=import-error
-try:
-    from unittest import mock
-except ImportError:
-    import mock
-# pylint: enable=import-error
+from unittest import mock
 
 import pytest
 

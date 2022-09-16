@@ -28,10 +28,7 @@ take more than ~30 seconds should be marked as "very_slow".
 """
 
 import importlib
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 import pytest
 

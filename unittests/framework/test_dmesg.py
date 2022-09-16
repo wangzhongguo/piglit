@@ -29,10 +29,7 @@ which allows us to test all classes on all platforms, including windows.
 import collections
 import re
 import sys
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 import pytest
 

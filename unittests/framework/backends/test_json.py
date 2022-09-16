@@ -26,10 +26,7 @@ from __future__ import (
 )
 import os
 import json
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 import jsonschema
 import pytest

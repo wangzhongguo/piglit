@@ -23,10 +23,7 @@
 
 import subprocess
 import textwrap
-try:
-    from unittest import mock
-except ImportError:
-    import mock
+from unittest import mock
 
 import pytest
 

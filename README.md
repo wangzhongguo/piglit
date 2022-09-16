@@ -49,8 +49,6 @@ For testing the python framework using `py.test unittests/framework`
     test suite.
   - tox. A tool for testing python packages against multiple configurations of
     python (https://tox.readthedocs.org/en/latest/index.html)
-  - mock. A python module for mocking other python modules. Required only for
-    unittests (https://github.com/testing-cabal/mock)
   - psutil. A portable process library for python
   - jsonschema. A JSON validator library for python
   - pytest-mock. A mock plugin for pytest

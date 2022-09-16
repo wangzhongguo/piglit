@@ -24,10 +24,7 @@
 import itertools
 import os
 import subprocess
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 import pytest
 

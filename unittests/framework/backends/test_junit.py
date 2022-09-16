@@ -27,10 +27,7 @@ try:
     from lxml import etree
 except ImportError:
     import xml.etree.ElementTree as etree
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 import pytest
 

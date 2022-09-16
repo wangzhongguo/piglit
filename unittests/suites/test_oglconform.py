@@ -22,10 +22,7 @@
 """Tests for the oglconform integration."""
 
 import io
-try:
-    import mock
-except ImportError:
-    from unittest import mock
+from unittest import mock
 
 import pytest
 
