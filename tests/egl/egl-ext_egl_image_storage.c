@@ -30,7 +30,7 @@
 
 PIGLIT_GL_TEST_CONFIG_BEGIN
 
-	config.supports_gl_es_version = 31;
+	config.supports_gl_es_version = 30;
 
 PIGLIT_GL_TEST_CONFIG_END
 
@@ -100,6 +100,113 @@ test_invalid_params(EGLImageKHR egl_image)
 	if (!piglit_check_gl_error(GL_INVALID_OPERATION)) {
 		piglit_report_result(PIGLIT_FAIL);
 	}
+}
+
+static bool
+test_invalid_target_dmabuf(EGLDisplay dpy)
+{
+	/*
+	 * EXT_EGL_image_storage
+	 *
+	 * If the EGL image was created using EGL_EXT_image_dma_buf_import,
+	 * then the following applies:
+	 *
+	 *    - <target> must be GL_TEXTURE_2D or GL_TEXTURE_EXTERNAL_OES.
+	 *    Otherwise, the error INVALID_OPERATION is generated.
+	 */
+
+	if (!piglit_is_egl_extension_supported(dpy,
+			"EGL_MESA_image_dma_buf_export") &&
+			!piglit_is_egl_extension_supported(dpy,
+			"EGL_EXT_image_dma_buf_import")) {
+		piglit_logi("dma_buf export and/or import ext not available\n");
+		return true;
+	}
+
+	int w = 32, h = 32;
+
+	GLuint tex;
+	glGenTextures(1, &tex);
+	glBindTexture(GL_TEXTURE_3D, tex);
+	glTexStorage3D(GL_TEXTURE_3D, 1, GL_RGBA8, w, h, 1);
+
+	EGLImage img = eglCreateImage(dpy, eglGetCurrentContext(),
+		EGL_GL_TEXTURE_3D, (EGLClientBuffer)(uintptr_t)tex, NULL);
+	if (!img) {
+		piglit_loge("failed to create EGLImage\n");
+		return false;
+	}
+	glDeleteTextures(1, &tex);
+
+	PFNEGLEXPORTDMABUFIMAGEQUERYMESAPROC dmabuf_query;
+	PFNEGLEXPORTDMABUFIMAGEMESAPROC dmabuf_export;
+
+	dmabuf_query =
+		(PFNEGLEXPORTDMABUFIMAGEQUERYMESAPROC) eglGetProcAddress(
+			"eglExportDMABUFImageQueryMESA");
+	dmabuf_export =
+		(PFNEGLEXPORTDMABUFIMAGEMESAPROC) eglGetProcAddress(
+			"eglExportDMABUFImageMESA");
+
+	if (!dmabuf_query || !dmabuf_export) {
+		piglit_loge("could not find extension entrypoints\n");
+		return false;
+	}
+
+	int fourcc = -1;
+	int num_planes = -1;
+	EGLuint64KHR modifier;
+	int fd = -1;
+	EGLint stride = -1;
+	EGLint offset = -1;
+
+	/* Query the image properties, verify fourcc and num planes. */
+	if (!dmabuf_query(dpy, img, &fourcc, &num_planes, &modifier) ||
+			!piglit_check_egl_error(EGL_SUCCESS)) {
+		piglit_loge("failed to query EGLImage dmabuf params\n");
+		return false;
+	}
+
+	/* Export the image, verify success. */
+	if (!dmabuf_export(dpy, img, &fd, &stride, &offset) ||
+			!piglit_check_egl_error(EGL_SUCCESS)) {
+		piglit_loge("failed to export EGLImage dmabuf\n");
+		return false;
+	}
+
+	eglDestroyImage(dpy, img);
+	
+	const EGLAttrib attrs[] = {
+		EGL_IMAGE_PRESERVED, EGL_TRUE,
+		EGL_WIDTH, w,
+		EGL_HEIGHT, h,
+		EGL_LINUX_DRM_FOURCC_EXT, fourcc,
+		EGL_DMA_BUF_PLANE0_FD_EXT, fd,
+		EGL_DMA_BUF_PLANE0_OFFSET_EXT, offset,
+		EGL_DMA_BUF_PLANE0_PITCH_EXT, stride,
+		EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT, modifier,
+		EGL_DMA_BUF_PLANE0_MODIFIER_HI_EXT, modifier >> 32,
+		EGL_NONE, EGL_NONE
+	};
+
+	img = eglCreateImage(eglGetCurrentDisplay(), EGL_NO_CONTEXT,
+		EGL_LINUX_DMA_BUF_EXT, (EGLClientBuffer)0, attrs);
+
+	if (!piglit_check_egl_error(EGL_SUCCESS)) {
+		piglit_loge("failed to import dmabuf EGLImage\n");
+		return false;
+	}
+
+	glGenTextures(1, &tex);
+	glBindTexture(GL_TEXTURE_3D, tex);
+	glEGLImageTargetTexStorageEXT(GL_TEXTURE_3D, img, NULL);
+
+	bool ret = piglit_check_gl_error(GL_INVALID_OPERATION);
+
+	eglDestroyImage(dpy, img);
+	glDeleteTextures(1, &tex);
+
+	return ret;
 }
 
 void
@@ -207,6 +314,11 @@ piglit_init(int argc, char **argv)
 	glDeleteTextures(1, &texture_a);
 	glDeleteTextures(1, &texture_b);
 	peglDestroyImageKHR(dpy, egl_image);
+
+	if (!test_invalid_target_dmabuf(dpy)) {
+		fprintf(stderr, "failed to test dma-buf storage\n");
+		piglit_report_result(PIGLIT_FAIL);
+	}
 
 	piglit_report_result(PIGLIT_PASS);
 }
