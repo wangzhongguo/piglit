@@ -31,6 +31,7 @@
 class Test {
 public:
    Test()
+      : mErrorX(0), mErrorY(0)
    {
       mDraw.width  = piglit_width;
       mDraw.height = piglit_height;
