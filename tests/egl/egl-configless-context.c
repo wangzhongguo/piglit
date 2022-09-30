@@ -311,14 +311,23 @@ run_tests(struct state *state)
 			"warning: not testing binding draw and read surfaces "
 			"with different configs\n");
 	} else {
+		bool khr = piglit_is_egl_extension_supported(state->egl_dpy,
+				"EGL_KHR_no_config_context");
 		status = eglMakeCurrent(state->egl_dpy,
 					shallow->surface,
 					other_window->surface,
 					state->ctx);
-		if (status) {
+
+		/* The Khronos extension (implicitly) allows this */
+		if (status && !khr) {
 			fprintf(stderr,
 				"Binding incompatible surfaces together "
 				"unexpectedly succeeded\n");
+			piglit_report_result(PIGLIT_WARN);
+		} else if (!status && khr) {
+			fprintf(stderr,
+				"Binding incompatible surfaces together "
+				"unexpectedly failed\n");
 			piglit_report_result(PIGLIT_FAIL);
 		}
 	}
