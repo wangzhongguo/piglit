@@ -2248,6 +2248,14 @@ with profile.test_list.group_manager(
     g(['arb_occlusion_query2-api'], 'api')
     g(['arb_occlusion_query2-render'], 'render')
 
+# Group EXT_debug_label
+with profile.test_list.group_manager(
+        PiglitGLTest,
+        grouptools.join('spec', 'EXT_debug_label')) as g:
+    g(['ext_debug_label-object-label_gl'], 'object-label_gl')
+    g(['ext_debug_label-object-label_gles2'], 'object-label_gles2')
+    g(['ext_debug_label-object-label_gles3'], 'object-label_gles3')
+
 # Group EXT_external_objects tests
 with profile.test_list.group_manager(
         PiglitGLTest,
