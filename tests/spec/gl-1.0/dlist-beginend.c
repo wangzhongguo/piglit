@@ -312,6 +312,42 @@ test_illegal_begin_mode(void * unused)
 	return pass ? PIGLIT_PASS : PIGLIT_FAIL;
 }
 
+static enum piglit_result
+test_reproducer_7335(void * unused)
+{
+	GLuint list;
+	bool pass;
+
+	list = glGenLists(1);
+	glNewList(list, GL_COMPILE_AND_EXECUTE);
+	glBegin(GL_QUADS);
+	glColor4fv(green);
+	glVertex2f(-1, -1);
+	glVertex2f( 1, -1);
+	glVertex2f( 1, 1);
+	glVertex2f(-1, 1);
+	glEnd();
+	/* In mesa bug 7335 _mesa_End() incorrectly restores the wrong GL dispatch table.
+	 * This causes only the first command (glPushMatrix) of the following commands to
+	 * be dispatched (the others are dropped).
+	 */
+	glPushMatrix();
+	glPopMatrix();
+	glEndList();
+
+	glCallList(list);
+
+	/* This should cause a GL_STACK_UNDERFLOW, unless the glPopMatrix
+	 * was dropped from the display list.
+	 */
+	glPopMatrix();
+	pass = piglit_check_gl_error(GL_STACK_UNDERFLOW);
+
+	glDeleteLists(list, 1);
+
+	return pass ? PIGLIT_PASS : PIGLIT_FAIL;
+}
+
 
 static const struct piglit_subtest tests[] = {
 	{
@@ -354,6 +390,12 @@ static const struct piglit_subtest tests[] = {
 		"illegal glBegin mode in display list",
 		"illegal-begin-mode",
 		test_illegal_begin_mode,
+		NULL
+	},
+	{
+		"incorrect dlist with glthread (bug 7335)",
+		"incorrect-dlist-glthread",
+		test_reproducer_7335,
 		NULL
 	},
 	{ 0 },
