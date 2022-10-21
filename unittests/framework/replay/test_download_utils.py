@@ -195,3 +195,17 @@ class TestDownloadUtils(object):
         get_request = requests_mock.request_history[1]
         assert(get_request.method == 'GET')
         assert(requests_mock.request_history[1].headers['Authorization'].startswith('AWS Key'))
+
+    def test_jwt_authorization(self, requests_mock):
+        """download_utils.ensure_file: Check we send the authentication headers to the server"""
+        # reset minio_host from previous tests
+        OPTIONS.download['minio_host'] = ''
+        OPTIONS.download['jwt'] = 'jwt'
+
+        assert not self.trace_file.check()
+        download_utils.ensure_file(self.trace_path)
+        TestDownloadUtils.check_same_file(self.trace_file, "remote")
+
+        get_request = requests_mock.request_history[0]
+        assert(get_request.method == 'GET')
+        assert(requests_mock.request_history[0].headers['Authorization'].startswith('Bearer'))

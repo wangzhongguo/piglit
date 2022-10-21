@@ -31,6 +31,7 @@ from email.utils import formatdate
 from os import path
 from time import time
 from typing import Dict
+from urllib.parse import urlparse
 
 import requests
 from requests.adapters import HTTPAdapter, Retry
@@ -89,7 +90,7 @@ def get_minio_credentials(url):
             minio_credentials['SessionToken'])
 
 
-def get_authorization_headers(url, resource):
+def get_minio_authorization_headers(url, resource):
     minio_key, minio_secret, minio_token = get_minio_credentials(url)
 
     date = formatdate(timeval=None, localtime=False, usegmt=True)
@@ -103,6 +104,17 @@ def get_authorization_headers(url, resource):
                'Date': date,
                'Authorization': 'AWS %s:%s' % (minio_key, signature),
                'x-amz-security-token': minio_token}
+    return headers
+
+
+def get_jwt_authorization_headers(url, resource):
+    date = formatdate(timeval=None, localtime=False, usegmt=True)
+    jwt = OPTIONS.download['jwt']
+    host = urlparse(url).netloc
+
+    headers = {'Host': host,
+               'Date': date,
+               'Authorization': 'Bearer %s' % (jwt)}
     return headers
 
 
@@ -177,7 +189,9 @@ def ensure_file(file_path):
         assert OPTIONS.download['minio_bucket']
         assert OPTIONS.download['role_session_name']
         assert OPTIONS.download['jwt']
-        headers = get_authorization_headers(url, file_path)
+        headers = get_minio_authorization_headers(url, file_path)
+    elif OPTIONS.download['jwt']:
+        headers = get_jwt_authorization_headers(url, file_path)
     else:
         headers = None
 
