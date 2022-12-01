@@ -660,6 +660,7 @@ with profile.test_list.group_manager(
     g(['infinite-spot-light'])
     g(['line-aa-width'])
     g(['line-smooth-coverage'])
+    g(['line-smooth-stipple'])
     g(['line-flat-clip-color'])
     g(['lineloop'])
     g(['lineloop', '-dlist'], 'lineloop-dlist')
