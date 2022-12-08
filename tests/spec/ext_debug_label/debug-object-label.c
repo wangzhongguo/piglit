@@ -99,9 +99,6 @@ test_object_label_types()
 	GLuint texture;
 	GLuint renderbuffer;
 	GLuint framebuffer;
-#ifdef PIGLIT_USE_OPENGL
-	GLuint displayList;
-#endif
 
 	/* Test BUFFER */
 	glGenBuffers(1, &buffer);
