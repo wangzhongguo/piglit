@@ -9,7 +9,7 @@
 # with older commits using the same tag.
 variables:
   FDO_UPSTREAM_REPO: mesa/piglit
-  FDO_DISTRIBUTION_TAG: "2022-09-11-add-isort"
+  FDO_DISTRIBUTION_TAG: "2022-12-08-where-is-the-mako"
   FDO_DISTRIBUTION_VERSION: bullseye-slim
   WINDOWS_TAG: "2022-07-27-win2022"
   WINDOWS_IMAGE: "$CI_REGISTRY_IMAGE/windows/x64_build:$WINDOWS_TAG"
@@ -18,7 +18,7 @@ variables:
 
 include:
   - project: 'freedesktop/ci-templates'
-    ref: 34f4ade99434043f88e164933f570301fd18b125
+    ref: ffe4d1b10aab7534489f0c4bbc4c5899df17d3f2
     file: '/templates/debian.yml'
 
 stages:
