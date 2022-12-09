@@ -209,6 +209,8 @@ piglit_display(void)
 	glUniform1i(2, piglit_width);
 	glDrawArrays(GL_TRIANGLES, 6, 6);
 
+	glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+
 	glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(GLint) *
 		piglit_width * piglit_height, &sample_mask[0]);
 
